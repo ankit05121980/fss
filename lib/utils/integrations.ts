@@ -12,6 +12,14 @@ import type { LucideIcon } from "lucide-react";
 export type ConnectorStatus = "CONNECTED" | "AVAILABLE" | "OPTIONAL";
 export type ConnectorMethod = "API" | "FILE" | "DB";
 
+export interface ConfigField {
+  label: string;
+  placeholder: string;
+  type?: "text" | "password";
+  required?: boolean;
+  hint?: string;
+}
+
 export interface Connector {
   id: string;
   name: string;
@@ -24,6 +32,10 @@ export interface Connector {
   /** Hours since last successful sync (relative to DEMO_NOW); null when not connected. */
   lastSyncHours: number | null;
   productionPath: string;
+  /** Auth/integration pattern shown in the configure dialog. */
+  authType: string;
+  /** Standard credentials/details required before the first sync. */
+  configFields: ConfigField[];
   icon: LucideIcon;
 }
 
@@ -43,6 +55,15 @@ export const CONNECTORS: Connector[] = [
     cadence: "Every 15 min",
     lastSyncHours: null,
     productionPath: "Scheduled API / SuiteAnalytics integration",
+    authType: "Token-Based Authentication (TBA / OAuth 1.0)",
+    configFields: [
+      { label: "Account ID", placeholder: "e.g. 1234567", required: true },
+      { label: "Environment", placeholder: "Production / Sandbox", required: true },
+      { label: "Consumer Key", placeholder: "Integration consumer key", required: true },
+      { label: "Consumer Secret", placeholder: "••••••••", type: "password", required: true },
+      { label: "Token ID", placeholder: "Access token id", required: true },
+      { label: "Token Secret", placeholder: "••••••••", type: "password", required: true },
+    ],
     icon: Database,
   },
   {
@@ -56,6 +77,13 @@ export const CONNECTORS: Connector[] = [
     cadence: "Hourly",
     lastSyncHours: null,
     productionPath: "API / DB / file-based feed",
+    authType: "API key + warehouse scope",
+    configFields: [
+      { label: "Base URL", placeholder: "https://wms.fss.example/api", required: true },
+      { label: "API Key", placeholder: "••••••••", type: "password", required: true },
+      { label: "Warehouse / Site ID", placeholder: "e.g. NJ-EDISON-01", required: true },
+      { label: "Sync interval (min)", placeholder: "60", hint: "How often to pull movements" },
+    ],
     icon: Warehouse,
   },
   {
@@ -69,6 +97,13 @@ export const CONNECTORS: Connector[] = [
     cadence: "Every 10 min",
     lastSyncHours: null,
     productionPath: "API / export feed, scheduled",
+    authType: "API token (Bearer)",
+    configFields: [
+      { label: "API Token", placeholder: "••••••••", type: "password", required: true },
+      { label: "Organization ID", placeholder: "eupry-org-id", required: true },
+      { label: "Sensor group IDs", placeholder: "Comma-separated, e.g. reefer-01, reefer-02" },
+      { label: "Poll interval (min)", placeholder: "10", hint: "Excursion detection cadence" },
+    ],
     icon: Thermometer,
   },
   {
@@ -82,6 +117,13 @@ export const CONNECTORS: Connector[] = [
     cadence: "Near real-time",
     lastSyncHours: null,
     productionPath: "Carrier APIs / EDI / visibility-platform feeds",
+    authType: "Carrier API key / EDI (AS2)",
+    configFields: [
+      { label: "Provider", placeholder: "e.g. Maersk, DHL, project44", required: true },
+      { label: "API Endpoint", placeholder: "https://api.carrier.example/v1", required: true },
+      { label: "API Key", placeholder: "••••••••", type: "password", required: true },
+      { label: "EDI / AS2 Station ID", placeholder: "Optional — for EDI feeds" },
+    ],
     icon: Truck,
   },
   {
@@ -95,6 +137,15 @@ export const CONNECTORS: Connector[] = [
     cadence: "Daily",
     lastSyncHours: null,
     productionPath: "Master-data / GLN registry integration",
+    authType: "Database connection",
+    configFields: [
+      { label: "Host", placeholder: "registry-db.fss.internal", required: true },
+      { label: "Port", placeholder: "5432", required: true },
+      { label: "Database", placeholder: "partner_registry", required: true },
+      { label: "Username", placeholder: "lumenore_ro", required: true },
+      { label: "Password", placeholder: "••••••••", type: "password", required: true },
+      { label: "Schema", placeholder: "public" },
+    ],
     icon: Network,
   },
   {
@@ -108,6 +159,12 @@ export const CONNECTORS: Connector[] = [
     cadence: "—",
     lastSyncHours: null,
     productionPath: "API connector (production option)",
+    authType: "Private App token / OAuth 2.0",
+    configFields: [
+      { label: "Portal ID", placeholder: "e.g. 21345678", required: true },
+      { label: "Private App Token", placeholder: "••••••••", type: "password", required: true },
+      { label: "Object scopes", placeholder: "companies, contacts, deals" },
+    ],
     icon: Users,
   },
 ];

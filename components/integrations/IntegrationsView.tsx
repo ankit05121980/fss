@@ -25,6 +25,16 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartCard } from "@/components/shared/ChartCard";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const STATUS_META: Record<ConnectorStatus, { label: string; variant: NonNullable<BadgeProps["variant"]> }> = {
   CONNECTED: { label: "Connected", variant: "success" },
@@ -54,6 +64,7 @@ export function IntegrationsView() {
   );
   const [upload, setUpload] = React.useState<UploadResult | null>(null);
   const [dragging, setDragging] = React.useState(false);
+  const [configuring, setConfiguring] = React.useState<Connector | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   async function handleFile(file: File) {
@@ -235,25 +246,12 @@ export function IntegrationsView() {
                         <RefreshCw className="size-4" /> Sync now
                       </Button>
                     )}
-                    {c.status === "AVAILABLE" && (
+                    {(c.status === "AVAILABLE" || c.status === "OPTIONAL") && (
                       <Button
                         variant="outline"
                         size="sm"
                         className="w-full"
-                        onClick={() => {
-                          setStatus(c.id, "CONNECTED", 0);
-                          toast(`${c.name} configured & connected (demo)`, "success");
-                        }}
-                      >
-                        <Settings2 className="size-4" /> Configure
-                      </Button>
-                    )}
-                    {c.status === "OPTIONAL" && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-full"
-                        onClick={() => toast(`${c.name} is an optional production enrichment`, "info")}
+                        onClick={() => setConfiguring(c)}
                       >
                         <Settings2 className="size-4" /> Configure
                       </Button>
@@ -301,7 +299,82 @@ export function IntegrationsView() {
           APIs stay unchanged.
         </p>
       </ChartCard>
+
+      <ConfigureDialog
+        connector={configuring}
+        onOpenChange={(open) => !open && setConfiguring(null)}
+        onSave={(c) => {
+          setStatus(c.id, "CONNECTED", 0);
+          toast(`${c.name} configured & connected (demo)`, "success");
+          setConfiguring(null);
+        }}
+      />
     </div>
+  );
+}
+
+function ConfigureDialog({
+  connector,
+  onOpenChange,
+  onSave,
+}: {
+  connector: Connector | null;
+  onOpenChange: (open: boolean) => void;
+  onSave: (c: Connector) => void;
+}) {
+  return (
+    <Dialog open={!!connector} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[88vh] max-w-lg overflow-y-auto">
+        {connector && (
+          <>
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <connector.icon className="text-brand-blue size-5" />
+                Configure {connector.name}
+              </DialogTitle>
+              <DialogDescription>
+                {connector.category} · {connector.method} · {connector.authType}. These details are
+                required before the first sync.
+              </DialogDescription>
+            </DialogHeader>
+
+            <form
+              id="configure-form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                onSave(connector);
+              }}
+              className="grid grid-cols-1 gap-3 sm:grid-cols-2"
+            >
+              {connector.configFields.map((f) => (
+                <div key={f.label} className="space-y-1">
+                  <Label className="text-xs">
+                    {f.label}
+                    {f.required && <span className="text-danger"> *</span>}
+                  </Label>
+                  <Input type={f.type ?? "text"} placeholder={f.placeholder} autoComplete="off" />
+                  {f.hint && <p className="text-muted-foreground text-[11px]">{f.hint}</p>}
+                </div>
+              ))}
+            </form>
+
+            <div className="bg-muted/50 text-muted-foreground rounded-md px-3 py-2 text-[11px]">
+              Credentials are read-only and used solely to pull data into the unified model. Lumenore
+              never writes back to your systems of record.
+            </div>
+
+            <DialogFooter>
+              <Button variant="outline" size="sm" onClick={() => onOpenChange(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" form="configure-form" size="sm">
+                Save &amp; connect
+              </Button>
+            </DialogFooter>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }
 
