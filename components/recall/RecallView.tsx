@@ -199,6 +199,7 @@ export function RecallView() {
         <ChartCard
           title="Impacted trading partners"
           description="Partners holding or handling recalled product"
+          dataFlow="recall-partners"
         >
           {heroRecall && heroRecall.impactedPartners.length > 0 ? (
             <ul className="space-y-2">

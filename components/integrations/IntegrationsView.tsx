@@ -108,6 +108,7 @@ export function IntegrationsView() {
       <ChartCard
         title="Upload data file"
         description="Bring data in directly from Excel or CSV — Lumenore maps it into the unified model."
+        dataFlow="integration-upload"
       >
         <input
           ref={inputRef}
