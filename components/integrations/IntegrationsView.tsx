@@ -25,6 +25,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartCard } from "@/components/shared/ChartCard";
+import { ConnectorLogo } from "@/components/integrations/ConnectorLogo";
 import {
   Dialog,
   DialogContent,
@@ -208,15 +209,12 @@ export function IntegrationsView() {
         </div>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {connectors.map((c) => {
-            const Icon = c.icon;
             const meta = STATUS_META[c.status];
             return (
               <Card key={c.id} className="flex flex-col">
                 <CardHeader className="flex flex-row items-start justify-between gap-2 space-y-0 pb-2">
                   <div className="flex items-center gap-2.5">
-                    <span className="bg-secondary text-secondary-foreground flex size-9 items-center justify-center rounded-lg">
-                      <Icon className="size-5" />
-                    </span>
+                    <ConnectorLogo id={c.id} className="size-9" />
                     <div>
                       <CardTitle className="text-sm">{c.name}</CardTitle>
                       <p className="text-muted-foreground text-xs">{c.category}</p>
@@ -329,7 +327,7 @@ function ConfigureDialog({
           <>
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
-                <connector.icon className="text-brand-blue size-5" />
+                <ConnectorLogo id={connector.id} className="size-7" />
                 Configure {connector.name}
               </DialogTitle>
               <DialogDescription>
