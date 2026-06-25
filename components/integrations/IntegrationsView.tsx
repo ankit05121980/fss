@@ -237,14 +237,15 @@ export function IntegrationsView() {
                     )}
                     {c.status === "AVAILABLE" && (
                       <Button
+                        variant="outline"
                         size="sm"
                         className="w-full"
                         onClick={() => {
                           setStatus(c.id, "CONNECTED", 0);
-                          toast(`${c.name} connected (demo)`, "success");
+                          toast(`${c.name} configured & connected (demo)`, "success");
                         }}
                       >
-                        <Plug className="size-4" /> Connect
+                        <Settings2 className="size-4" /> Configure
                       </Button>
                     )}
                     {c.status === "OPTIONAL" && (
