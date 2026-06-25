@@ -1,7 +1,6 @@
-import { Bot } from "lucide-react";
-
 import { PageHeader } from "@/components/shared/PageHeader";
-import { EmptyState } from "@/components/shared/EmptyState";
+import { AskMeView } from "@/components/askme/AskMeView";
+import { Badge } from "@/components/ui/badge";
 
 export const metadata = { title: "AskMe" };
 
@@ -11,12 +10,10 @@ export default function AskMePage() {
       <PageHeader
         title="AskMe"
         subtitle="Conversational compliance intelligence over the unified data model."
-      />
-      <EmptyState
-        icon={Bot}
-        title="AskMe"
-        description="The conversational assistant and its nine reference intents arrive in a later build phase."
-      />
+      >
+        <Badge variant="muted">Deterministic engine · 9 intents</Badge>
+      </PageHeader>
+      <AskMeView />
     </>
   );
 }

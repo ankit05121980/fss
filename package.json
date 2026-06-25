@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "seed:check": "tsx scripts/check-seed.ts"
+    "seed:check": "tsx scripts/check-seed.ts",
+    "askme:check": "tsx scripts/check-askme.ts"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.2.0",
