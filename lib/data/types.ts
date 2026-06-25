@@ -434,8 +434,14 @@ export interface CoverageTrendPoint {
   [key: string]: string | number;
 }
 
+export interface KpiTrend {
+  spark: number[];
+  delta: number;
+}
+
 export interface ExecutiveAnalytics {
   kpis: ExecutiveKpis;
+  kpiTrends: Record<string, KpiTrend>;
   complianceTrend: TrendPoint[];
   coverageTrend: CoverageTrendPoint[];
   riskHeatmap: HeatmapCell[];

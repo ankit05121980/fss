@@ -47,13 +47,20 @@ export function ExecutiveView() {
       />
     );
 
-  const { kpis } = data;
+  const { kpis, kpiTrends } = data;
   const complianceStatus =
     kpis.overallComplianceScore >= 85
       ? "success"
       : kpis.overallComplianceScore >= 70
         ? "info"
         : "warning";
+
+  const delta = (key: string, goodWhenUp: boolean) => {
+    const t = kpiTrends?.[key];
+    if (!t) return undefined;
+    const direction: "up" | "down" | "flat" = t.delta > 0 ? "up" : t.delta < 0 ? "down" : "flat";
+    return { value: t.delta, direction, goodWhenUp };
+  };
 
   return (
     <div className="space-y-6">
@@ -64,8 +71,10 @@ export function ExecutiveView() {
             value: kpis.overallComplianceScore,
             icon: ShieldCheck,
             status: complianceStatus,
-            hint: "/ 100",
+            hint: "vs prior wk",
             href: "/insights",
+            sparkline: kpiTrends?.overall.spark,
+            delta: delta("overall", true),
           },
           {
             label: "Traceability Coverage",
@@ -73,6 +82,8 @@ export function ExecutiveView() {
             icon: PackageCheck,
             status: kpis.traceabilityCoveragePct >= 85 ? "success" : "warning",
             href: "/traceability",
+            sparkline: kpiTrends?.traceability.spark,
+            delta: delta("traceability", true),
           },
           {
             label: "Serialization Coverage",
@@ -80,6 +91,8 @@ export function ExecutiveView() {
             icon: BadgeCheck,
             status: kpis.serializationCoveragePct >= 90 ? "success" : "warning",
             href: "/traceability",
+            sparkline: kpiTrends?.serialization.spark,
+            delta: delta("serialization", true),
           },
           {
             label: "Authorized Partners",
@@ -87,6 +100,8 @@ export function ExecutiveView() {
             icon: Users,
             status: kpis.authorizedPartnerPct >= 90 ? "success" : "warning",
             href: "/partners",
+            sparkline: kpiTrends?.authorized.spark,
+            delta: delta("authorized", true),
           },
           {
             label: "Recall Readiness",
@@ -94,6 +109,8 @@ export function ExecutiveView() {
             icon: Activity,
             status: kpis.recallReadinessScore >= 95 ? "success" : "warning",
             href: "/recall",
+            sparkline: kpiTrends?.recall.spark,
+            delta: delta("recall", true),
           },
           {
             label: "Open Compliance Risks",
@@ -101,6 +118,8 @@ export function ExecutiveView() {
             icon: AlertTriangle,
             status: kpis.openComplianceRisks > 20 ? "danger" : "warning",
             href: "/control-tower",
+            sparkline: kpiTrends?.openRisks.spark,
+            delta: delta("openRisks", false),
           },
           {
             label: "Active Excursions",
@@ -108,6 +127,8 @@ export function ExecutiveView() {
             icon: ThermometerSun,
             status: kpis.activeExcursions > 0 ? "danger" : "success",
             href: "/cold-chain",
+            sparkline: kpiTrends?.excursions.spark,
+            delta: delta("excursions", false),
           },
         ]}
       />

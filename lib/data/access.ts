@@ -400,6 +400,33 @@ export function getExecutiveKpis(): ExecutiveKpis {
   };
 }
 
+/** Deterministic mini-series (sparkline) ending exactly at `end`, with delta. */
+function kpiSpark(end: number, swing: number): import("@/lib/data/types").KpiTrend {
+  const pts = 8;
+  const spark: number[] = [];
+  for (let i = 0; i < pts; i += 1) {
+    const t = i / (pts - 1);
+    const base = end * (0.86 + 0.14 * t);
+    const wave = Math.sin(i * 1.25) * swing;
+    spark.push(round(Math.max(0, base + wave), 2));
+  }
+  spark[pts - 1] = end;
+  return { spark, delta: round(spark[pts - 1] - spark[pts - 3], 1) };
+}
+
+export function getExecutiveKpiTrends(): Record<string, import("@/lib/data/types").KpiTrend> {
+  const k = getExecutiveKpis();
+  return {
+    overall: kpiSpark(k.overallComplianceScore, 1.4),
+    traceability: kpiSpark(k.traceabilityCoveragePct, 1.2),
+    serialization: kpiSpark(k.serializationCoveragePct, 0.9),
+    authorized: kpiSpark(k.authorizedPartnerPct, 0.8),
+    recall: kpiSpark(k.recallReadinessScore, 0.6),
+    openRisks: kpiSpark(k.openComplianceRisks, Math.max(1, k.openComplianceRisks * 0.05)),
+    excursions: kpiSpark(k.activeExcursions, Math.max(0.3, k.activeExcursions * 0.1)),
+  };
+}
+
 export function getControlTowerKpis(): ControlTowerKpis {
   const ds = getDataset();
   const ships = ds.shipments;

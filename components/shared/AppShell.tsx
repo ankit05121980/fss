@@ -5,6 +5,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils/cn";
 import { Sidebar } from "@/components/shared/Sidebar";
 import { Topbar } from "@/components/shared/Topbar";
+import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -49,7 +50,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar onToggleSidebar={toggleSidebar} />
         <main id="main-content" className="flex-1 scrollbar-thin overflow-y-auto">
-          <div className="mx-auto w-full max-w-[1600px] space-y-6 p-4 md:p-6">{children}</div>
+          <div className="mx-auto w-full max-w-[1600px] space-y-4 p-4 md:p-6">
+            <Breadcrumbs />
+            <div className="space-y-6">{children}</div>
+          </div>
         </main>
       </div>
     </div>

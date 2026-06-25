@@ -225,6 +225,7 @@ export function PartnersView() {
           searchPlaceholder="Filter partners…"
           pageSize={10}
           initialSorting={[{ id: "riskScore", desc: true }]}
+          exportFilename="lumenore-trading-partners"
         />
       </ChartCard>
     </div>

@@ -11,9 +11,10 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowDown, ArrowUp, ChevronsUpDown, Search } from "lucide-react";
+import { ArrowDown, ArrowUp, ChevronsUpDown, Download, Search } from "lucide-react";
 
 import { cn } from "@/lib/utils/cn";
+import { exportCsv } from "@/lib/utils/csv";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -35,6 +36,8 @@ interface DataTableProps<TData> {
   emptyTitle?: string;
   emptyDescription?: string;
   initialSorting?: SortingState;
+  /** When set, shows an "Export CSV" button that exports the filtered rows. */
+  exportFilename?: string;
 }
 
 export function DataTable<TData>({
@@ -47,6 +50,7 @@ export function DataTable<TData>({
   emptyTitle = "No results",
   emptyDescription = "No records match the current filters.",
   initialSorting = [],
+  exportFilename,
 }: DataTableProps<TData>) {
   const [sorting, setSorting] = React.useState<SortingState>(initialSorting);
   const [globalFilter, setGlobalFilter] = React.useState("");
@@ -69,18 +73,45 @@ export function DataTable<TData>({
   const rows = table.getRowModel().rows;
   const totalRows = table.getFilteredRowModel().rows.length;
 
+  function handleExport() {
+    const exportColumns = columns
+      .map((c) => {
+        const key = (c as { accessorKey?: string }).accessorKey;
+        const header = typeof c.header === "string" ? c.header : key;
+        return key ? { key, label: header ?? key } : null;
+      })
+      .filter((c): c is { key: string; label: string } => c !== null);
+    const exportRows = table.getFilteredRowModel().rows.map((r) => {
+      const obj: Record<string, unknown> = {};
+      for (const col of exportColumns) obj[col.key] = (r.original as Record<string, unknown>)[col.key];
+      return obj;
+    });
+    exportCsv(exportFilename ?? "export", exportColumns, exportRows);
+  }
+
   return (
     <div className="space-y-3">
-      {enableSearch && (
-        <div className="relative max-w-xs">
-          <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-          <input
-            value={globalFilter}
-            onChange={(e) => setGlobalFilter(e.target.value)}
-            placeholder={searchPlaceholder}
-            aria-label="Filter table"
-            className="border-input bg-card placeholder:text-muted-foreground focus-visible:ring-ring h-9 w-full rounded-md border pr-3 pl-9 text-sm shadow-sm focus-visible:ring-2 focus-visible:outline-none"
-          />
+      {(enableSearch || exportFilename) && (
+        <div className="flex items-center justify-between gap-2">
+          {enableSearch ? (
+            <div className="relative max-w-xs flex-1">
+              <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+              <input
+                value={globalFilter}
+                onChange={(e) => setGlobalFilter(e.target.value)}
+                placeholder={searchPlaceholder}
+                aria-label="Filter table"
+                className="border-input bg-card placeholder:text-muted-foreground focus-visible:ring-ring h-9 w-full rounded-md border pr-3 pl-9 text-sm shadow-sm focus-visible:ring-2 focus-visible:outline-none"
+              />
+            </div>
+          ) : (
+            <span />
+          )}
+          {exportFilename && (
+            <Button variant="outline" size="sm" onClick={handleExport} className="shrink-0">
+              <Download className="size-4" /> Export CSV
+            </Button>
+          )}
         </div>
       )}
 
