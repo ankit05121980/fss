@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /**
  * Deterministic-reconciliation check for the Lumenore dataset.
  *

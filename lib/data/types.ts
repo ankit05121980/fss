@@ -421,3 +421,62 @@ export interface PredictiveBundle {
   partnerScores: PartnerRiskScore[];
   alerts: PredictiveAlert[];
 }
+
+// -----------------------------------------------------------------------------
+// Analytics API response envelopes
+// -----------------------------------------------------------------------------
+
+export interface CoverageTrendPoint {
+  date: string;
+  traceability: number;
+  serialization: number;
+}
+
+export interface ExecutiveAnalytics {
+  kpis: ExecutiveKpis;
+  complianceTrend: TrendPoint[];
+  coverageTrend: CoverageTrendPoint[];
+  riskHeatmap: HeatmapCell[];
+  violationsByCategory: NamedValue[];
+}
+
+export interface ControlTowerAnalytics {
+  kpis: ControlTowerKpis;
+  shipments: Shipment[];
+  carrierPerformance: CarrierPerformance[];
+  portCongestion: PortCongestion[];
+  delayByMode: NamedValue[];
+  locations: LocationNode[];
+}
+
+export interface ColdShipmentSummary {
+  id: string;
+  productName: string;
+  status: ShipmentStatus;
+  primaryMode: Mode;
+  hasExcursion: boolean;
+  delayHours: number;
+  excursionCount: number;
+  maxTemp: number;
+  readingCount: number;
+  tempMaxC: number;
+  tempMinC: number;
+}
+
+export interface EnrichedRecall extends Recall {
+  impactedPartners: TradingPartner[];
+}
+
+export interface RecallAnalytics {
+  kpis: RecallKpis;
+  recalls: EnrichedRecall[];
+  locations: LocationNode[];
+}
+
+export interface PartnerAnalytics {
+  kpis: PartnerKpis;
+  partners: TradingPartner[];
+  riskMatrix: PartnerRiskPoint[];
+  custodyGaps: CustodyGap[];
+  unauthorizedInteractions: CustodyEvent[];
+}

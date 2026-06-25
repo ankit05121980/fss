@@ -24,7 +24,6 @@ import type {
   Product,
   Recall,
   RiskEvent,
-  RiskType,
   SerializedUnit,
   Severity,
   Shipment,
