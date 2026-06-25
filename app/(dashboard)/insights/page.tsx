@@ -1,7 +1,5 @@
-import { Lightbulb } from "lucide-react";
-
 import { PageHeader } from "@/components/shared/PageHeader";
-import { EmptyState } from "@/components/shared/EmptyState";
+import { InsightsView } from "@/components/insights/InsightsView";
 
 export const metadata = { title: "Do You Know" };
 
@@ -12,11 +10,7 @@ export default function InsightsPage() {
         title="Do You Know"
         subtitle="Automatically generated, data-derived business insights."
       />
-      <EmptyState
-        icon={Lightbulb}
-        title="Do You Know"
-        description="Computed insight cards arrive in a later build phase."
-      />
+      <InsightsView />
     </>
   );
 }
