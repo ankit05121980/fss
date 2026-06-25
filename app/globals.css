@@ -226,6 +226,38 @@
 .leaflet-container {
   background: var(--muted);
   font-family: var(--font-sans), system-ui, sans-serif;
+  /* Contain Leaflet's internal high z-index panes/controls (up to ~1000) in
+     their own stacking context so portalled overlays (dropdowns, selects,
+     dialogs, tooltips) always render above the map. */
+  z-index: 0;
+  isolation: isolate;
+}
+
+/* Themed, branded Leaflet popups */
+.leaflet-popup-content-wrapper {
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--popover);
+  color: var(--popover-foreground);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+}
+.leaflet-popup-tip {
+  background: var(--popover);
+  border: 1px solid var(--border);
+}
+.leaflet-popup-content {
+  margin: 0.6rem 0.75rem;
+}
+.leaflet-container a.leaflet-popup-close-button {
+  color: var(--muted-foreground);
+}
+.leaflet-bar a {
+  background: var(--card);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+.leaflet-bar a:hover {
+  background: var(--accent);
 }
 
 /* Thin, themed scrollbars */

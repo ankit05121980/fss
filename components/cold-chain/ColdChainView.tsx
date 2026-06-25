@@ -122,8 +122,11 @@ export function ColdChainView() {
           lat: loc.lat,
           lng: loc.lng,
           label: loc.name,
-          sublabel: loc.type === "CUSTOMS" ? "Excursion origin" : loc.type,
-          color: loc.type === "CUSTOMS" ? "#C62828" : "#2E75B6",
+          type: loc.type,
+          country: loc.country,
+          sublabel: loc.type === "CUSTOMS" ? "Excursion origin" : undefined,
+          color: loc.type === "CUSTOMS" ? "#C62828" : undefined,
+          highlight: loc.type === "CUSTOMS",
         });
       }
     }
@@ -137,6 +140,7 @@ export function ColdChainView() {
         ],
         color: ordered[i + 1].mode === "OCEAN" ? "#1F3864" : "#2E75B6",
         emphasized: ordered[i + 1].mode === "OCEAN",
+        mode: ordered[i + 1].mode as MapRoute["mode"],
       });
     }
   }

@@ -83,8 +83,8 @@ export function ControlTowerView() {
         lat: l.lat,
         lng: l.lng,
         label: l.name,
-        sublabel: l.type,
-        color: "#1F3864",
+        type: l.type,
+        country: l.country,
       };
     });
     return { markers: mks, routes: rts };
@@ -267,6 +267,12 @@ export function ControlTowerView() {
                 style={{ borderColor: "#1F3864" }}
               />{" "}
               Ocean lane
+            </span>
+            <span className="border-border ml-1 inline-flex items-center gap-2 border-l pl-3">
+              <span title="Ocean">{"\u{1F6A2}"} Ocean</span>
+              <span title="Air">{"\u2708\uFE0F"} Air</span>
+              <span title="Truck">{"\u{1F69B}"} Road</span>
+              <span title="Rail">{"\u{1F686}"} Rail</span>
             </span>
           </div>
         </ChartCard>

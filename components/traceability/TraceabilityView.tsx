@@ -158,8 +158,9 @@ function TraceDetail({ trace }: { trace: TraceResult }) {
         lat: loc.lat,
         lng: loc.lng,
         label: loc.name,
-        sublabel: loc.type,
-        color: loc.id === currentLocation?.id ? "#1F3864" : "#2E75B6",
+        type: loc.type,
+        country: loc.country,
+        highlight: loc.id === currentLocation?.id,
       });
     }
   }

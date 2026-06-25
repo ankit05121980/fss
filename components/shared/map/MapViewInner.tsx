@@ -4,9 +4,11 @@ import "leaflet/dist/leaflet.css";
 
 import * as React from "react";
 import L from "leaflet";
+import { useTheme } from "next-themes";
 import { MapContainer, Marker, Polyline, Popup, TileLayer, useMap } from "react-leaflet";
 
-import type { Mode } from "@/lib/data/types";
+import { LOCATION_TYPE_META, MODE_META } from "@/lib/utils/constants";
+import type { LocationType, Mode } from "@/lib/data/types";
 
 export interface MapMarker {
   id: string;
@@ -14,7 +16,12 @@ export interface MapMarker {
   lng: number;
   label: string;
   sublabel?: string;
-  color: string;
+  type?: LocationType;
+  country?: string;
+  /** Optional explicit pin colour (defaults to the location-type colour). */
+  color?: string;
+  /** Emphasize this node with a ring (e.g. current location / excursion origin). */
+  highlight?: boolean;
 }
 
 export interface MapRoute {
@@ -34,13 +41,45 @@ export interface MapViewProps {
   center?: [number, number];
 }
 
-function circleIcon(color: string): L.DivIcon {
+// Recognizable transport / facility glyphs (render reliably across platforms).
+const TYPE_EMOJI: Record<LocationType, string> = {
+  MANUFACTURER: "\u{1F3ED}", // factory
+  WAREHOUSE: "\u{1F3EC}", // department store
+  PORT: "\u2693", // anchor
+  CUSTOMS: "\u{1F6C3}", // customs
+  "3PL": "\u{1F4E6}", // package
+  DC: "\u{1F3E2}", // office building
+  HOSPITAL: "\u{1F3E5}", // hospital
+};
+
+const MODE_EMOJI: Record<Mode, string> = {
+  OCEAN: "\u{1F6A2}", // ship
+  AIR: "\u2708\uFE0F", // airplane
+  TRUCK: "\u{1F69B}", // truck
+  RAIL: "\u{1F686}", // train
+};
+
+function markerIcon(marker: MapMarker): L.DivIcon {
+  const color = marker.color ?? (marker.type ? LOCATION_TYPE_META[marker.type].color : "#2E75B6");
+  const emoji = marker.type ? TYPE_EMOJI[marker.type] : "\u{1F4CD}";
+  const ring = marker.highlight
+    ? "box-shadow:0 0 0 4px rgba(46,117,182,0.30),0 1px 4px rgba(0,0,0,0.45);"
+    : "box-shadow:0 1px 4px rgba(0,0,0,0.45);";
   return L.divIcon({
     className: "lumenore-marker",
-    html: `<span style="display:block;width:14px;height:14px;border-radius:9999px;background:${color};border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,0.25),0 1px 3px rgba(0,0,0,0.4)"></span>`,
-    iconSize: [14, 14],
-    iconAnchor: [7, 7],
-    popupAnchor: [0, -8],
+    html: `<div style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:9999px;background:${color};border:2px solid #fff;${ring}font-size:15px;line-height:1">${emoji}</div>`,
+    iconSize: [30, 30],
+    iconAnchor: [15, 15],
+    popupAnchor: [0, -16],
+  });
+}
+
+function modeBadge(mode: Mode): L.DivIcon {
+  return L.divIcon({
+    className: "lumenore-mode",
+    html: `<div title="${MODE_META[mode].label}" style="display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:9999px;background:#fff;border:1px solid rgba(0,0,0,0.15);box-shadow:0 1px 3px rgba(0,0,0,0.35);font-size:13px;line-height:1">${MODE_EMOJI[mode]}</div>`,
+    iconSize: [24, 24],
+    iconAnchor: [12, 12],
   });
 }
 
@@ -53,7 +92,7 @@ function FitBounds({ markers }: { markers: MapMarker[] }) {
       return;
     }
     const bounds = L.latLngBounds(markers.map((m) => [m.lat, m.lng] as [number, number]));
-    map.fitBounds(bounds, { padding: [40, 40], maxZoom: 6 });
+    map.fitBounds(bounds, { padding: [44, 44], maxZoom: 6 });
   }, [map, markers]);
   return null;
 }
@@ -65,8 +104,15 @@ export default function MapViewInner({
   zoom = 3,
   center = [40, -30],
 }: MapViewProps) {
+  const { resolvedTheme } = useTheme();
+  const dark = resolvedTheme === "dark";
+  // CARTO basemaps — clean, label-rich, free, no token required.
+  const tileUrl = dark
+    ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+    : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+
   return (
-    <div className="border-border overflow-hidden rounded-lg border" style={{ height }}>
+    <div className="overflow-hidden rounded-lg border border-border" style={{ height }}>
       <MapContainer
         center={center}
         zoom={zoom}
@@ -75,32 +121,56 @@ export default function MapViewInner({
         worldCopyJump
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          key={dark ? "dark" : "light"}
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+          url={tileUrl}
+          subdomains="abcd"
         />
-        {routes.map((route) => (
-          <Polyline
-            key={route.id}
-            positions={route.points}
-            pathOptions={{
-              color: route.color,
-              weight: route.emphasized ? 4 : 2.5,
-              opacity: route.emphasized ? 0.95 : 0.7,
-              dashArray: route.emphasized ? "1 8" : undefined,
-              lineCap: "round",
-            }}
-          />
-        ))}
+
+        {routes.map((route) => {
+          const mid = route.points[Math.floor(route.points.length / 2)] ?? route.points[0];
+          const start = route.points[0];
+          const end = route.points[route.points.length - 1];
+          const midpoint: [number, number] = start && end
+            ? [(start[0] + end[0]) / 2, (start[1] + end[1]) / 2]
+            : mid;
+          return (
+            <React.Fragment key={route.id}>
+              <Polyline
+                positions={route.points}
+                pathOptions={{
+                  color: route.color,
+                  weight: route.emphasized ? 4 : 2.5,
+                  opacity: route.emphasized ? 0.95 : 0.75,
+                  dashArray: route.emphasized ? "1 8" : undefined,
+                  lineCap: "round",
+                }}
+              />
+              {route.mode && (
+                <Marker position={midpoint} icon={modeBadge(route.mode)} interactive={false} keyboard={false} />
+              )}
+            </React.Fragment>
+          );
+        })}
+
         {markers.map((m) => (
-          <Marker key={m.id} position={[m.lat, m.lng]} icon={circleIcon(m.color)}>
+          <Marker key={m.id} position={[m.lat, m.lng]} icon={markerIcon(m)}>
             <Popup>
-              <div className="text-xs">
-                <p className="font-semibold">{m.label}</p>
-                {m.sublabel && <p className="text-muted-foreground">{m.sublabel}</p>}
+              <div className="space-y-0.5 text-xs">
+                <p className="text-sm font-semibold text-popover-foreground">{m.label}</p>
+                {m.type && (
+                  <p className="text-muted-foreground">{LOCATION_TYPE_META[m.type].label}</p>
+                )}
+                {m.country && <p className="text-muted-foreground">{m.country}</p>}
+                {!m.type && m.sublabel && <p className="text-muted-foreground">{m.sublabel}</p>}
+                <p className="pt-1 font-mono text-[11px] text-muted-foreground">
+                  {m.lat.toFixed(4)}, {m.lng.toFixed(4)}
+                </p>
               </div>
             </Popup>
           </Marker>
         ))}
+
         <FitBounds markers={markers} />
       </MapContainer>
     </div>

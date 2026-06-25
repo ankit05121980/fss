@@ -101,7 +101,9 @@ export function RecallView() {
     lat: l.lat,
     lng: l.lng,
     label: l.name,
-    sublabel: i === usNodes.length - 1 ? "Outstanding units in field" : "Located",
+    type: l.type,
+    country: l.country,
+    sublabel: i === usNodes.length - 1 ? "Outstanding units in field" : "Located product",
     color: i === usNodes.length - 1 ? "#C62828" : "#2E7D32",
   }));
 

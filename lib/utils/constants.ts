@@ -167,6 +167,20 @@ export const MODE_META: Record<Mode, { label: string }> = {
   RAIL: { label: "Rail" },
 };
 
+// Friendly, human-readable names for location node types.
+export const LOCATION_TYPE_META: Record<
+  import("@/lib/data/types").LocationType,
+  { label: string; color: string }
+> = {
+  MANUFACTURER: { label: "Manufacturing Site", color: "#1F3864" },
+  WAREHOUSE: { label: "Warehouse", color: "#2E75B6" },
+  PORT: { label: "Sea / Air Port", color: "#0277BD" },
+  CUSTOMS: { label: "Customs Clearance", color: "#ED6C02" },
+  "3PL": { label: "3PL Warehouse", color: "#2E7D32" },
+  DC: { label: "Distribution Center", color: "#2E75B6" },
+  HOSPITAL: { label: "Hospital / Dispenser", color: "#1F3864" },
+};
+
 // Concrete hex colors for map markers / leaflet polylines (cannot use CSS vars).
 export const STATUS_HEX: Record<ShipmentStatus, string> = {
   IN_TRANSIT: "#0277BD",
