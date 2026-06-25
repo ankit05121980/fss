@@ -14,7 +14,7 @@ import {
   Thermometer,
 } from "lucide-react";
 
-import { useTrace } from "@/lib/hooks/useAnalytics";
+import { useShipmentJourney, useTrace } from "@/lib/hooks/useAnalytics";
 import { fmtDate, fmtDateTime } from "@/lib/utils/date";
 import { fmtTemp } from "@/lib/utils/format";
 import { HERO, MODE_HEX, MODE_META } from "@/lib/utils/constants";
@@ -29,6 +29,8 @@ import { Timeline, type TimelineItem } from "@/components/shared/Timeline";
 import { TrendChart } from "@/components/charts/TrendChart";
 import { MapView, type MapMarker, type MapRoute } from "@/components/shared/MapView";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { JourneyView } from "@/components/traceability/JourneyView";
 
 const EXAMPLES = [
   { label: `Serial ${HERO.serial}`, q: HERO.serial, type: "serial" },
@@ -244,6 +246,13 @@ function TraceDetail({ trace }: { trace: TraceResult }) {
         </CardContent>
       </Card>
 
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList>
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="journey">End-to-End Journey</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="space-y-6">
       {/* Detail cards */}
       <div className="grid gap-4 lg:grid-cols-3">
         <Card>
@@ -407,6 +416,33 @@ function TraceDetail({ trace }: { trace: TraceResult }) {
           />
         </ChartCard>
       )}
+        </TabsContent>
+
+        <TabsContent value="journey">
+          <JourneyTab shipmentId={shipment?.id ?? null} />
+        </TabsContent>
+      </Tabs>
     </div>
+  );
+}
+
+function JourneyTab({ shipmentId }: { shipmentId: string | null }) {
+  const { data, isLoading, isError } = useShipmentJourney(shipmentId);
+  if (isLoading) return <Skeleton className="h-96 w-full" />;
+  if (isError || !data)
+    return (
+      <EmptyState
+        icon={AlertTriangle}
+        title="Journey unavailable"
+        description="The end-to-end journey could not be loaded for this item."
+      />
+    );
+  return (
+    <ChartCard
+      title="End-to-end shipment journey"
+      description="Stage-by-stage flow with custody, ownership, dwell time, temperature and exceptions"
+    >
+      <JourneyView journey={data} />
+    </ChartCard>
   );
 }

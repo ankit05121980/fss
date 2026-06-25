@@ -704,6 +704,143 @@ export function getShipmentDetail(id: string): ShipmentDetail | null {
 }
 
 // -----------------------------------------------------------------------------
+// End-to-end shipment journey (stage-by-stage flow)
+// -----------------------------------------------------------------------------
+
+export function getShipmentJourney(id: string): import("@/lib/data/types").ShipmentJourney | null {
+  const ds = getDataset();
+  const shipment = getShipment(id);
+  if (!shipment) return null;
+  const locById = new Map(ds.locations.map((l) => [l.id, l]));
+  const partnerName = (pid: string) => ds.tradingPartners.find((p) => p.id === pid)?.name ?? pid;
+
+  const events = ds.shipmentEvents
+    .filter((e) => e.shipmentId === id)
+    .sort((a, b) => parseISO(a.timestamp).getTime() - parseISO(b.timestamp).getTime());
+  const custody = ds.custodyEvents
+    .filter((c) => c.shipmentId === id)
+    .sort((a, b) => parseISO(a.timestamp).getTime() - parseISO(b.timestamp).getTime());
+  const ownership = ds.ownershipEvents
+    .filter((o) => o.shipmentId === id)
+    .sort((a, b) => parseISO(a.timestamp).getTime() - parseISO(b.timestamp).getTime());
+  const temps = getTemperatureReadings(id);
+  const risks = getRiskEvents({ shipmentId: id });
+  const now = DEMO_NOW.getTime();
+
+  // Build ordered, de-duplicated node sequence from events.
+  interface Acc {
+    locationId: string;
+    legMode?: import("@/lib/data/types").Mode;
+    arrivalMs: number;
+    events: import("@/lib/data/types").JourneyStageEvent[];
+  }
+  const ordered: Acc[] = [];
+  for (const e of events) {
+    const last = ordered[ordered.length - 1];
+    if (last && last.locationId === e.locationId) {
+      last.events.push({ eventType: e.eventType, timestamp: e.timestamp, mode: e.mode, note: e.note });
+      continue;
+    }
+    ordered.push({
+      locationId: e.locationId,
+      legMode: e.mode,
+      arrivalMs: parseISO(e.timestamp).getTime(),
+      events: [{ eventType: e.eventType, timestamp: e.timestamp, mode: e.mode, note: e.note }],
+    });
+  }
+
+  const stages: import("@/lib/data/types").JourneyStage[] = ordered.map((acc, i) => {
+    const loc = locById.get(acc.locationId);
+    const next = ordered[i + 1];
+    const arrivalMs = acc.arrivalMs;
+    const departureMs = next ? next.arrivalMs : undefined;
+    const prevArrivalMs = i > 0 ? ordered[i - 1].arrivalMs : arrivalMs;
+
+    // Custody handoff landing in this stage window (prevArrival, departure]
+    const windowEnd = departureMs ?? now;
+    const custodyHere = custody.filter((c) => {
+      const t = parseISO(c.timestamp).getTime();
+      return t > prevArrivalMs - 1 && t <= windowEnd;
+    });
+    const handoff = custodyHere[custodyHere.length - 1];
+
+    // Current owner at arrival
+    let owner: string | undefined;
+    for (const o of ownership) {
+      if (parseISO(o.timestamp).getTime() <= arrivalMs) owner = partnerName(o.newOwnerId);
+    }
+    if (!owner && ownership[0]) owner = partnerName(ownership[0].previousOwnerId);
+
+    // Temperature stats at this node
+    const stageTemps = temps.filter((t) => t.locationId === acc.locationId);
+    const temp = stageTemps.length
+      ? {
+          min: round(Math.min(...stageTemps.map((t) => t.temperatureC)), 1),
+          max: round(Math.max(...stageTemps.map((t) => t.temperatureC)), 1),
+          avg: round(stageTemps.reduce((a, t) => a + t.temperatureC, 0) / stageTemps.length, 1),
+          excursion: stageTemps.some((t) => t.excursion),
+          count: stageTemps.length,
+        }
+      : undefined;
+
+    // Risks within stage window
+    const stageRisks = risks
+      .filter((r) => {
+        const t = parseISO(r.timestamp).getTime();
+        return t > prevArrivalMs - 1 && t <= windowEnd;
+      })
+      .map((r) => ({ type: r.type, severity: r.severity, description: r.description }));
+
+    const status: import("@/lib/data/types").JourneyStageStatus =
+      arrivalMs > now
+        ? "UPCOMING"
+        : departureMs && departureMs <= now
+          ? "COMPLETE"
+          : "CURRENT";
+
+    return {
+      index: i,
+      locationId: acc.locationId,
+      locationName: loc?.name ?? acc.locationId,
+      locationType: loc?.type ?? "WAREHOUSE",
+      country: loc?.country ?? "",
+      lat: loc?.lat ?? 0,
+      lng: loc?.lng ?? 0,
+      legMode: acc.legMode,
+      arrivalTs: new Date(arrivalMs).toISOString(),
+      departureTs: departureMs ? new Date(departureMs).toISOString() : undefined,
+      dwellHours: departureMs ? round((departureMs - arrivalMs) / (1000 * 60 * 60), 0) : undefined,
+      custodyFrom: handoff ? partnerName(handoff.fromPartyId) : undefined,
+      custodyTo: handoff ? partnerName(handoff.toPartyId) : undefined,
+      custodyValid: handoff ? handoff.valid : undefined,
+      owner,
+      temp,
+      events: acc.events,
+      risks: stageRisks,
+      status,
+    };
+  });
+
+  let currentStageIndex = stages.findIndex((s) => s.status === "CURRENT");
+  if (currentStageIndex < 0) {
+    const lastComplete = [...stages].reverse().find((s) => s.status === "COMPLETE");
+    currentStageIndex = lastComplete ? lastComplete.index : 0;
+  }
+
+  return {
+    shipmentId: shipment.id,
+    productName: getProduct(shipment.productId)?.name ?? shipment.productId,
+    batchNumber: shipment.batchNumber,
+    primaryMode: shipment.primaryMode,
+    status: shipment.status,
+    originName: locById.get(shipment.originId)?.name ?? shipment.originId,
+    destinationName: locById.get(shipment.destinationId)?.name ?? shipment.destinationId,
+    currentStageIndex,
+    stages,
+  };
+}
+
+// -----------------------------------------------------------------------------
 // AskMe helpers (reused by the engine)
 // -----------------------------------------------------------------------------
 

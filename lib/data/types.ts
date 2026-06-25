@@ -502,3 +502,58 @@ export interface PartnerAnalytics {
   custodyGaps: CustodyGap[];
   unauthorizedInteractions: CustodyEvent[];
 }
+
+// -----------------------------------------------------------------------------
+// End-to-end shipment journey (stage-by-stage flow)
+// -----------------------------------------------------------------------------
+
+export type JourneyStageStatus = "COMPLETE" | "CURRENT" | "UPCOMING";
+
+export interface JourneyStageEvent {
+  eventType: string;
+  timestamp: string;
+  mode: Mode;
+  note?: string;
+}
+
+export interface JourneyStageTemp {
+  min: number;
+  max: number;
+  avg: number;
+  excursion: boolean;
+  count: number;
+}
+
+export interface JourneyStage {
+  index: number;
+  locationId: string;
+  locationName: string;
+  locationType: LocationType;
+  country: string;
+  lat: number;
+  lng: number;
+  legMode?: Mode;
+  arrivalTs?: string;
+  departureTs?: string;
+  dwellHours?: number;
+  custodyFrom?: string;
+  custodyTo?: string;
+  custodyValid?: boolean;
+  owner?: string;
+  temp?: JourneyStageTemp;
+  events: JourneyStageEvent[];
+  risks: { type: RiskType; severity: Severity; description: string }[];
+  status: JourneyStageStatus;
+}
+
+export interface ShipmentJourney {
+  shipmentId: string;
+  productName: string;
+  batchNumber: string;
+  primaryMode: Mode;
+  status: ShipmentStatus;
+  originName: string;
+  destinationName: string;
+  currentStageIndex: number;
+  stages: JourneyStage[];
+}

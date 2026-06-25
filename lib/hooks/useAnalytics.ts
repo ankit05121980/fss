@@ -71,6 +71,15 @@ export function useShipmentDetail(id: string | null) {
   });
 }
 
+export function useShipmentJourney(shipmentId: string | null) {
+  return useQuery({
+    queryKey: ["journey", shipmentId],
+    queryFn: () =>
+      fetchJson<import("@/lib/data/types").ShipmentJourney>(`/api/shipments/${shipmentId}/journey`),
+    enabled: !!shipmentId,
+  });
+}
+
 export function useTrace(query: string | null, type?: string) {
   return useQuery({
     queryKey: ["trace", query, type ?? "auto"],

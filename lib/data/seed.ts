@@ -791,14 +791,32 @@ function buildShipments(rng: Rng, batches: Batch[], partners: TradingPartner[]):
       : Math.min(DEMO_NOW.getTime(), new Date(etaAt).getTime());
     const span = Math.max(endMs - departMs, HOUR_MS * 6);
 
-    // Build shipment events along the route
-    const eventIds: string[] = [];
+    // Per-node timestamps along the route. The hero uses an explicit, monotonic
+    // timeline encoding realistic leg durations + the ~18h customs hold so the
+    // end-to-end journey reads naturally; other shipments spread evenly across
+    // their transit window.
     const totalLegs = route.length;
+    const nodeTimes: number[] = [];
+    if (isHero) {
+      // mfg, warehouse, Hamburg, (ocean) Newark port, customs hold, 3PL, DC, hospital(ETA)
+      const heroOffsetDays = [-12, -11, -10, -3.5, -3, -1.8, -0.8, 1];
+      for (let r = 0; r < route.length; r += 1) {
+        nodeTimes.push(DEMO_NOW.getTime() + (heroOffsetDays[r] ?? r - 12) * DAY_MS);
+      }
+    } else {
+      for (let r = 0; r < route.length; r += 1) {
+        const frac = route.length === 1 ? 0 : r / (route.length - 1);
+        nodeTimes.push(departMs + frac * span);
+      }
+    }
+
+    const eventIds: string[] = [];
+    const legTimes: { locationId: string; ms: number }[] = [];
     for (let r = 0; r < route.length; r += 1) {
-      const frac = route.length === 1 ? 0 : r / (route.length - 1);
-      let ts = departMs + frac * span;
+      const ts = nodeTimes[r];
       const node = LOCATIONS.find((l) => l.id === route[r])!;
       const mode = legMode(primaryMode, r, totalLegs);
+      legTimes.push({ locationId: node.id, ms: ts });
 
       let eventType = "ARRIVAL";
       let note: string | undefined;
@@ -807,12 +825,12 @@ function buildShipments(rng: Rng, batches: Batch[], partners: TradingPartner[]):
       else if (node.type === "CUSTOMS") eventType = "CUSTOMS_ENTRY";
       else if (node.type === "3PL") eventType = "CROSS_DOCK";
       else if (node.type === "DC") eventType = "DC_RECEIPT";
-      else if (node.type === "HOSPITAL") eventType = "DELIVERED";
+      else if (node.type === "HOSPITAL")
+        eventType = status === "DELIVERED" ? "DELIVERED" : "SCHEDULED_DELIVERY";
 
       // Hero customs delay annotation
       if (isHero && node.type === "CUSTOMS") {
         note = `Held ${delayHours}h in customs clearance — documentation & inspection delay`;
-        ts = DEMO_NOW.getTime() - 3 * DAY_MS; // customs ~3 days ago
       }
 
       const evId = `evt-${String(++eventSeq).padStart(4, "0")}`;
@@ -924,9 +942,12 @@ function buildShipments(rng: Rng, batches: Batch[], partners: TradingPartner[]):
         let temp = gaussian(rng, 5, 0.8, 2.2, 7.6);
         let excursion = false;
         const sensorOk = chance(rng, 0.985);
-        // Location: by default follow the route fraction.
-        const frac = (t - departMs) / span;
-        let locationId = route[Math.min(route.length - 1, Math.floor(frac * route.length))];
+        // Location: the node that is active at time t (last leg reached).
+        let locationId = legTimes[0]?.locationId ?? route[0];
+        for (const lt of legTimes) {
+          if (lt.ms <= t) locationId = lt.locationId;
+          else break;
+        }
         // Hero excursion: spike toward 10C in the ~18h window following the
         // customs delay, anchored at the Newark customs node (root cause).
         if (isHero && customsMs && t >= customsMs && t <= customsMs + 18 * HOUR_MS) {
