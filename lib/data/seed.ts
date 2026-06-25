@@ -371,6 +371,12 @@ function buildShipments(
   let riskSeq = 0;
   let unauthorizedTransferPlaced = false;
 
+  // SHP-007 (predicted excursion) must carry a cold-chain product so the
+  // excursion-risk prediction is meaningful.
+  const coldBatch =
+    batches.find((b) => b.batchNumber !== HERO.batchNumber && COLD_CHAIN_PRODUCT_IDS.has(b.productId)) ??
+    batches[1];
+
   // Pre-assign modes: SHP-001 ocean (hero), SHP-007 ocean (predicted excursion).
   // 12 ocean total, 2 rail, remainder air/truck.
   const modes: Mode[] = [];
@@ -418,7 +424,7 @@ function buildShipments(
     const primaryMode: Mode = order[i];
 
     // Batch / product
-    const batch = isHero ? batches[0] : pick(rng, batches.slice(1));
+    const batch = isHero ? batches[0] : isPredExcursion ? coldBatch : pick(rng, batches.slice(1));
     const productId = batch.productId;
     const isCold = COLD_CHAIN_PRODUCT_IDS.has(productId);
 

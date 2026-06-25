@@ -113,3 +113,19 @@ export function useCarriers() {
 export function useShipments() {
   return useQuery({ queryKey: ["shipments"], queryFn: () => fetchJson<Shipment[]>("/api/shipments") });
 }
+
+export function usePredictive() {
+  return useQuery({
+    queryKey: ["predictive"],
+    queryFn: () => fetchJson<import("@/lib/data/types").PredictiveBundle>("/api/predictive"),
+    retry: false,
+  });
+}
+
+export function useInsights() {
+  return useQuery({
+    queryKey: ["insights"],
+    queryFn: () => fetchJson<import("@/lib/data/types").Insight[]>("/api/insights"),
+    retry: false,
+  });
+}

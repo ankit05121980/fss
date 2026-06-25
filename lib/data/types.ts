@@ -430,6 +430,8 @@ export interface CoverageTrendPoint {
   date: string;
   traceability: number;
   serialization: number;
+  // Index signature lets this DTO flow into generic chart components.
+  [key: string]: string | number;
 }
 
 export interface ExecutiveAnalytics {

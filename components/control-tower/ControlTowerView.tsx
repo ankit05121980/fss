@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { PredictiveAlertsStrip } from "@/components/predictive/PredictiveAlertsStrip";
 
 const MODES: Mode[] = ["OCEAN", "AIR", "TRUCK", "RAIL"];
 const STATUSES: ShipmentStatus[] = ["IN_TRANSIT", "DELAYED", "DELIVERED", "CUSTOMS_HOLD"];
@@ -160,6 +161,8 @@ export function ControlTowerView() {
           { label: "Carrier Score", value: kpis.carrierPerformanceScore, icon: Gauge, status: kpis.carrierPerformanceScore >= 80 ? "success" : "warning", hint: "/ 100" },
         ]}
       />
+
+      <PredictiveAlertsStrip context="control-tower" />
 
       {/* Filters */}
       <Card>
