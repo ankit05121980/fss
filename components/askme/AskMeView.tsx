@@ -34,7 +34,7 @@ const nextId = () => `msg-${++idCounter}`;
 
 export function AskMeView() {
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
-  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const endRef = React.useRef<HTMLDivElement>(null);
 
   const ask = useMutation({
     mutationFn: (question: string) =>
@@ -47,7 +47,7 @@ export function AskMeView() {
 
   const scrollToBottom = React.useCallback(() => {
     requestAnimationFrame(() => {
-      scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+      endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
     });
   }, []);
 
@@ -86,52 +86,65 @@ export function AskMeView() {
   const useLlm = process.env.NEXT_PUBLIC_USE_LLM === "true";
 
   return (
-    <div className="flex h-[calc(100dvh-180px)] min-h-[520px] flex-col gap-4">
-      <div ref={scrollRef} className="flex-1 scrollbar-thin space-y-4 overflow-y-auto rounded-lg">
-        {messages.length === 0 ? (
-          <WelcomePanel onPick={submitQuestion} useLlm={useLlm} />
-        ) : (
-          messages.map((msg) => <MessageBubble key={msg.id} message={msg} />)
-        )}
-      </div>
-
-      {messages.length > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {ASKME_EXAMPLES.slice(0, 5).map((ex) => (
-            <button
-              key={ex.intent}
-              type="button"
-              onClick={() => submitQuestion(ex.text)}
-              className="border-border bg-secondary text-secondary-foreground hover:border-brand-blue hover:bg-accent rounded-full border px-3 py-1 text-xs font-medium transition-colors"
-            >
-              {ex.text}
-            </button>
+    <div className="flex flex-col">
+      {/* Conversation — flows in the page's single scroll container */}
+      {messages.length === 0 ? (
+        <WelcomePanel onPick={submitQuestion} useLlm={useLlm} />
+      ) : (
+        <div className="mx-auto w-full max-w-3xl space-y-5 pb-4">
+          {messages.map((msg) => (
+            <MessageBubble key={msg.id} message={msg} />
           ))}
+          <div ref={endRef} />
         </div>
       )}
 
-      <form onSubmit={onSubmit} className="flex items-center gap-2">
-        <div className="relative flex-1">
-          <Bot className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-          <input
-            name="q"
-            autoComplete="off"
-            placeholder="Ask about shipments, traceability, excursions, carriers, custody, recalls, partners…"
-            aria-label="Ask a question"
-            className="border-input bg-card focus-visible:ring-ring h-11 w-full rounded-lg border pr-3 pl-10 text-sm shadow-sm focus-visible:ring-2 focus-visible:outline-none"
-          />
+      {/* Composer — pinned to the bottom of the viewport while messages scroll */}
+      <div className="bg-background/95 border-border sticky bottom-0 z-10 -mx-4 mt-2 border-t px-4 pt-3 pb-4 backdrop-blur md:-mx-6 md:px-6">
+        <div className="mx-auto w-full max-w-3xl space-y-2.5">
+          {messages.length > 0 && (
+            <div className="scrollbar-thin flex gap-2 overflow-x-auto pb-1">
+              {ASKME_EXAMPLES.map((ex) => (
+                <button
+                  key={ex.intent}
+                  type="button"
+                  onClick={() => submitQuestion(ex.text)}
+                  className="border-border bg-secondary text-secondary-foreground hover:border-brand-blue hover:bg-accent shrink-0 rounded-full border px-3 py-1 text-xs font-medium transition-colors"
+                >
+                  {ex.text}
+                </button>
+              ))}
+            </div>
+          )}
+
+          <form onSubmit={onSubmit} className="flex items-center gap-2">
+            <div className="relative flex-1">
+              <Bot className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+              <input
+                name="q"
+                autoComplete="off"
+                placeholder="Ask about shipments, traceability, excursions, carriers, custody, recalls, partners…"
+                aria-label="Ask a question"
+                className="border-input bg-card focus-visible:ring-ring h-11 w-full rounded-lg border pr-3 pl-10 text-sm shadow-sm focus-visible:ring-2 focus-visible:outline-none"
+              />
+            </div>
+            <Button type="submit" size="lg" className="h-11" disabled={ask.isPending}>
+              <Send className="size-4" />
+              <span className="hidden sm:inline">Ask</span>
+            </Button>
+          </form>
+          <p className="text-muted-foreground text-center text-[11px]">
+            Deterministic engine · answers reconcile with the dashboards
+          </p>
         </div>
-        <Button type="submit" size="lg" className="h-11" disabled={ask.isPending}>
-          <Send className="size-4" /> Ask
-        </Button>
-      </form>
+      </div>
     </div>
   );
 }
 
 function WelcomePanel({ onPick, useLlm }: { onPick: (q: string) => void; useLlm: boolean }) {
   return (
-    <div className="border-border bg-muted/30 flex h-full flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
+    <div className="border-border bg-muted/30 mx-auto flex min-h-[52vh] w-full max-w-3xl flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
       <span className="bg-primary text-primary-foreground mb-3 flex size-12 items-center justify-center rounded-full">
         <Sparkles className="size-6" />
       </span>
