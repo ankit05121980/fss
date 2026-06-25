@@ -14,7 +14,8 @@ import {
   Thermometer,
 } from "lucide-react";
 
-import { useShipmentJourney, useTrace } from "@/lib/hooks/useAnalytics";
+import { useMapContext, useShipmentJourney, useTrace } from "@/lib/hooks/useAnalytics";
+import { toMapCircles, toMapTraffic } from "@/lib/utils/map-context";
 import { fmtDate, fmtDateTime } from "@/lib/utils/date";
 import { fmtTemp } from "@/lib/utils/format";
 import { HERO, MODE_HEX, MODE_META } from "@/lib/utils/constants";
@@ -142,6 +143,7 @@ function TraceSkeleton() {
 
 function TraceDetail({ trace }: { trace: TraceResult }) {
   const { shipment, product, batch, unit, currentLocation } = trace;
+  const { data: context } = useMapContext();
 
   // Build journey map markers + routes from ordered events.
   const seen = new Set<string>();
@@ -310,10 +312,16 @@ function TraceDetail({ trace }: { trace: TraceResult }) {
 
         <ChartCard
           title="Shipment journey"
-          description="Ocean lanes emphasized"
+          description="Ocean lanes emphasized · environmental conditions & other traffic"
           className="lg:row-span-1"
         >
-          <MapView markers={markers} routes={routes} height={300} />
+          <MapView
+            markers={markers}
+            routes={routes}
+            circles={context ? toMapCircles(context.environmental) : []}
+            traffic={context ? toMapTraffic(context.traffic) : []}
+            height={300}
+          />
         </ChartCard>
       </div>
 

@@ -71,6 +71,14 @@ export function useShipmentDetail(id: string | null) {
   });
 }
 
+export function useMapContext() {
+  return useQuery({
+    queryKey: ["map-context"],
+    queryFn: () => fetchJson<import("@/lib/data/types").MapContext>("/api/map-context"),
+    staleTime: 30 * 60 * 1000,
+  });
+}
+
 export function useShipmentJourney(shipmentId: string | null) {
   return useQuery({
     queryKey: ["journey", shipmentId],

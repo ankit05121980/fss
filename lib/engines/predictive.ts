@@ -7,6 +7,7 @@
 // =============================================================================
 
 import {
+  eventsAffectingShipment,
   getCarrierPerformance,
   getCustodyGaps,
   getPartners,
@@ -126,6 +127,20 @@ function scoreShipment(shipment: Shipment): ScoredShipment {
   if (isCold && carrierPerf && carrierPerf.performanceScore < 60) {
     exc += 8;
     excDrivers.push({ factor: "Lower-performing carrier", weight: 8 });
+  }
+
+  // --- Environmental conditions (shown on the map; cited here for alignment) ---
+  const envWeight = { HIGH: 14, MEDIUM: 9, LOW: 5 } as const;
+  for (const ev of eventsAffectingShipment(shipment)) {
+    const w = envWeight[ev.severity];
+    if (ev.affects.includes("DELAY")) {
+      delay += w;
+      delayDrivers.push({ factor: `${ev.label}`, weight: w });
+    }
+    if (ev.affects.includes("EXCURSION") && isCold) {
+      exc += Math.round(w * 0.9);
+      excDrivers.push({ factor: `${ev.label}`, weight: Math.round(w * 0.9) });
+    }
   }
 
   // --- Recall exposure ---

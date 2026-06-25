@@ -731,6 +731,128 @@ export function getShipmentDetail(id: string): ShipmentDetail | null {
 }
 
 // -----------------------------------------------------------------------------
+// Map context — environmental conditions & ambient traffic (deterministic)
+// -----------------------------------------------------------------------------
+
+const ENVIRONMENTAL_EVENTS: import("@/lib/data/types").MapContextEvent[] = [
+  {
+    id: "env-storm-atlantic",
+    kind: "WEATHER",
+    label: "North Atlantic Storm System",
+    description: "Severe storm with high seas across the trans-Atlantic shipping corridor.",
+    impact: "Slows ocean transit and stresses reefer power — raises delay & excursion risk.",
+    lat: 47,
+    lng: -38,
+    radiusKm: 1100,
+    severity: "HIGH",
+    affects: ["DELAY", "EXCURSION"],
+  },
+  {
+    id: "env-congestion-newark",
+    kind: "CONGESTION",
+    label: "Customs Congestion — Newark",
+    description: "Customs inspection backlog at the Port of Newark clearance facility.",
+    impact: "Extended customs dwell time — the primary driver of the hero excursion.",
+    lat: 40.709,
+    lng: -74.1726,
+    radiusKm: 90,
+    severity: "HIGH",
+    affects: ["DELAY", "EXCURSION"],
+  },
+  {
+    id: "env-heat-ne",
+    kind: "HEAT",
+    label: "Heatwave — US Northeast",
+    description: "Ambient temperatures of 34–38°C across the US Northeast distribution region.",
+    impact: "Raises cold-chain excursion risk during cross-dock and last-mile handling.",
+    lat: 40.4,
+    lng: -74.2,
+    radiusKm: 340,
+    severity: "MEDIUM",
+    affects: ["EXCURSION"],
+  },
+  {
+    id: "env-fog-hamburg",
+    kind: "FOG",
+    label: "Fog — Port of Hamburg",
+    description: "Dense morning fog reducing throughput at the origin port.",
+    impact: "Minor loading delays at origin.",
+    lat: 53.5413,
+    lng: 9.9326,
+    radiusKm: 70,
+    severity: "LOW",
+    affects: ["DELAY"],
+  },
+  {
+    id: "env-congestion-la",
+    kind: "CONGESTION",
+    label: "Port Congestion — Los Angeles",
+    description: "Vessel queue and berth waiting at the Port of Los Angeles.",
+    impact: "Berth waiting time on Pacific lanes.",
+    lat: 33.7395,
+    lng: -118.2597,
+    radiusKm: 80,
+    severity: "MEDIUM",
+    affects: ["DELAY"],
+  },
+];
+
+const AMBIENT_TRAFFIC: import("@/lib/data/types").TrafficLane[] = [
+  { id: "tl-1", label: "Shanghai → Los Angeles", points: [[31.23, 121.47], [35, -160], [33.74, -118.26]], intensity: "HIGH" },
+  { id: "tl-2", label: "Rotterdam → Newark", points: [[51.95, 4.14], [50, -30], [40.69, -74.17]], intensity: "MEDIUM" },
+  { id: "tl-3", label: "Singapore → Rotterdam", points: [[1.26, 103.84], [12, 60], [30, 32], [38, 8], [51.95, 4.14]], intensity: "MEDIUM" },
+  { id: "tl-4", label: "Los Angeles → Chicago", points: [[33.74, -118.26], [39, -104], [41.88, -87.63]], intensity: "LOW" },
+  { id: "tl-5", label: "Newark → Atlanta", points: [[40.69, -74.17], [37, -78], [33.75, -84.39]], intensity: "LOW" },
+  { id: "tl-6", label: "Mumbai → Rotterdam", points: [[19.07, 72.87], [12, 55], [30, 32], [38, 8], [51.95, 4.14]], intensity: "LOW" },
+];
+
+function haversineKm(aLat: number, aLng: number, bLat: number, bLng: number): number {
+  const R = 6371;
+  const dLat = ((bLat - aLat) * Math.PI) / 180;
+  const dLng = ((bLng - aLng) * Math.PI) / 180;
+  const s =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((aLat * Math.PI) / 180) * Math.cos((bLat * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(s));
+}
+
+export function getEnvironmentalContext(): import("@/lib/data/types").MapContextEvent[] {
+  return ENVIRONMENTAL_EVENTS;
+}
+
+export function getAmbientTraffic(): import("@/lib/data/types").TrafficLane[] {
+  return AMBIENT_TRAFFIC;
+}
+
+export function getMapContext(): import("@/lib/data/types").MapContext {
+  return { environmental: ENVIRONMENTAL_EVENTS, traffic: AMBIENT_TRAFFIC };
+}
+
+/** Environmental events that affect a given shipment (used by maps + predictive). */
+export function eventsAffectingShipment(
+  shipment: Shipment,
+): import("@/lib/data/types").MapContextEvent[] {
+  const ds = getDataset();
+  const locById = new Map(ds.locations.map((l) => [l.id, l]));
+  // Key coordinates along this shipment's path.
+  const nodeIds = new Set<string>([shipment.originId, shipment.destinationId]);
+  for (const evId of shipment.events) {
+    const ev = ds.shipmentEvents.find((e) => e.id === evId);
+    if (ev) nodeIds.add(ev.locationId);
+  }
+  const coords = [...nodeIds]
+    .map((id) => locById.get(id))
+    .filter((l): l is NonNullable<typeof l> => !!l)
+    .map((l) => [l.lat, l.lng] as [number, number]);
+
+  return ENVIRONMENTAL_EVENTS.filter((ev) => {
+    // Ocean shipments cross the trans-Atlantic storm corridor.
+    if (ev.id === "env-storm-atlantic" && shipment.primaryMode === "OCEAN") return true;
+    return coords.some(([lat, lng]) => haversineKm(lat, lng, ev.lat, ev.lng) <= ev.radiusKm);
+  });
+}
+
+// -----------------------------------------------------------------------------
 // End-to-end shipment journey (stage-by-stage flow)
 // -----------------------------------------------------------------------------
 

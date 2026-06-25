@@ -5,10 +5,10 @@ import "leaflet/dist/leaflet.css";
 import * as React from "react";
 import L from "leaflet";
 import { useTheme } from "next-themes";
-import { MapContainer, Marker, Polyline, Popup, TileLayer, useMap } from "react-leaflet";
+import { Circle, MapContainer, Marker, Polyline, Popup, TileLayer, useMap } from "react-leaflet";
 
 import { LOCATION_TYPE_META, MODE_META } from "@/lib/utils/constants";
-import type { LocationType, Mode } from "@/lib/data/types";
+import type { LocationType, Mode, Severity } from "@/lib/data/types";
 
 export interface MapMarker {
   id: string;
@@ -33,9 +33,29 @@ export interface MapRoute {
   mode?: Mode;
 }
 
+export interface MapCircle {
+  id: string;
+  lat: number;
+  lng: number;
+  radiusKm: number;
+  color: string;
+  label: string;
+  sublabel?: string;
+  impact?: string;
+  severity?: Severity;
+}
+
+export interface MapTraffic {
+  id: string;
+  label?: string;
+  points: [number, number][];
+}
+
 export interface MapViewProps {
   markers: MapMarker[];
   routes?: MapRoute[];
+  circles?: MapCircle[];
+  traffic?: MapTraffic[];
   height?: number | string;
   zoom?: number;
   center?: [number, number];
@@ -100,6 +120,8 @@ function FitBounds({ markers }: { markers: MapMarker[] }) {
 export default function MapViewInner({
   markers,
   routes = [],
+  circles = [],
+  traffic = [],
   height = 380,
   zoom = 3,
   center = [40, -30],
@@ -126,6 +148,50 @@ export default function MapViewInner({
           url={tileUrl}
           subdomains="abcd"
         />
+
+        {/* Ambient (other) traffic — muted background lanes */}
+        {traffic.map((t) => (
+          <Polyline
+            key={t.id}
+            positions={t.points}
+            pathOptions={{ color: "#94a3b8", weight: 1.5, opacity: 0.5, dashArray: "2 7", lineCap: "round" }}
+          >
+            {t.label && (
+              <Popup>
+                <div className="text-xs">
+                  <p className="font-semibold">Other traffic</p>
+                  <p className="text-muted-foreground">{t.label}</p>
+                </div>
+              </Popup>
+            )}
+          </Polyline>
+        ))}
+
+        {/* Environmental conditions — weather / congestion / heat zones */}
+        {circles.map((c) => (
+          <Circle
+            key={c.id}
+            center={[c.lat, c.lng]}
+            radius={c.radiusKm * 1000}
+            pathOptions={{
+              color: c.color,
+              weight: 1.5,
+              opacity: 0.7,
+              fillColor: c.color,
+              fillOpacity: 0.12,
+              dashArray: "5 6",
+            }}
+          >
+            <Popup>
+              <div className="space-y-0.5 text-xs">
+                <p className="text-popover-foreground text-sm font-semibold">{c.label}</p>
+                {c.sublabel && <p className="text-muted-foreground">{c.sublabel}</p>}
+                {c.impact && <p className="text-muted-foreground">{c.impact}</p>}
+                {c.severity && <p className="text-muted-foreground">Severity: {c.severity}</p>}
+              </div>
+            </Popup>
+          </Circle>
+        ))}
 
         {routes.map((route) => {
           const mid = route.points[Math.floor(route.points.length / 2)] ?? route.points[0];

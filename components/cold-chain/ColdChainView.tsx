@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import type { ColumnDef } from "@tanstack/react-table";
 import { AlertTriangle, Activity, Snowflake, ThermometerSun } from "lucide-react";
 
-import { useColdChain } from "@/lib/hooks/useAnalytics";
+import { useColdChain, useMapContext } from "@/lib/hooks/useAnalytics";
+import { toMapCircles, toMapTraffic } from "@/lib/utils/map-context";
 import { fmtDate } from "@/lib/utils/date";
 import { fmtHours, fmtPct, fmtTemp } from "@/lib/utils/format";
 import { HERO, MODE_META } from "@/lib/utils/constants";
@@ -25,6 +26,7 @@ import { ChartSkeleton, KpiStripSkeleton } from "@/components/shared/LoadingSkel
 export function ColdChainView() {
   const router = useRouter();
   const { data, isLoading, isError } = useColdChain();
+  const { data: context } = useMapContext();
 
   const columns = React.useMemo<ColumnDef<ColdShipmentSummary, unknown>[]>(
     () => [
@@ -241,9 +243,19 @@ export function ColdChainView() {
       <div className="grid gap-4 lg:grid-cols-2">
         <ChartCard
           title="Route overlay"
-          description="Hero journey — customs node (excursion origin) in red"
+          description="Hero journey with environmental conditions — customs node (excursion origin) in red"
         >
-          <MapView markers={heroMarkers} routes={heroRoutes} height={320} />
+          <MapView
+            markers={heroMarkers}
+            routes={heroRoutes}
+            circles={context ? toMapCircles(context.environmental) : []}
+            traffic={context ? toMapTraffic(context.traffic) : []}
+            height={320}
+          />
+          <p className="text-muted-foreground mt-2 text-[11px]">
+            Heat, storm and congestion zones along the route correlate with the excursion and feed
+            predicted excursion risk.
+          </p>
         </ChartCard>
         <ChartCard title="Excursion trend" description="Excursion readings detected per week">
           <AreaTrend

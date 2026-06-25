@@ -11,7 +11,13 @@ const MapViewInner = dynamic(() => import("@/components/shared/map/MapViewInner"
   loading: () => <Skeleton className="w-full rounded-lg" style={{ height: 380 }} />,
 });
 
-export type { MapMarker, MapRoute, MapViewProps } from "@/components/shared/map/MapViewInner";
+export type {
+  MapMarker,
+  MapRoute,
+  MapCircle,
+  MapTraffic,
+  MapViewProps,
+} from "@/components/shared/map/MapViewInner";
 
 export function MapView(props: MapViewProps) {
   return <MapViewInner {...props} />;

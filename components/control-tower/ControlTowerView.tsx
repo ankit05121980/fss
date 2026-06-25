@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Activity, Clock, Gauge, Package, Ship, Truck } from "lucide-react";
 
-import { useControlTower } from "@/lib/hooks/useAnalytics";
+import { useControlTower, useMapContext } from "@/lib/hooks/useAnalytics";
+import { toMapCircles, toMapTraffic } from "@/lib/utils/map-context";
 import { fmtCompact, fmtHours, fmtPct } from "@/lib/utils/format";
 import { fromNow } from "@/lib/utils/date";
 import { MODE_META, STATUS_HEX } from "@/lib/utils/constants";
@@ -39,7 +40,9 @@ const STATUSES: ShipmentStatus[] = ["IN_TRANSIT", "DELAYED", "DELIVERED", "CUSTO
 export function ControlTowerView() {
   const router = useRouter();
   const { data, isLoading, isError } = useControlTower();
+  const { data: context } = useMapContext();
 
+  const [layers, setLayers] = React.useState({ traffic: true, weather: true, congestion: true });
   const [mode, setMode] = React.useState<string>("ALL");
   const [status, setStatus] = React.useState<string>("ALL");
   const [carrier, setCarrier] = React.useState<string>("ALL");
@@ -253,8 +256,30 @@ export function ControlTowerView() {
           className="lg:col-span-2"
           contentClassName="pt-0"
           dataFlow="ct-map"
+          action={
+            <div className="flex flex-wrap gap-1.5">
+              <LayerToggle label="Other traffic" on={layers.traffic} onClick={() => setLayers((l) => ({ ...l, traffic: !l.traffic }))} />
+              <LayerToggle label="Weather" on={layers.weather} onClick={() => setLayers((l) => ({ ...l, weather: !l.weather }))} />
+              <LayerToggle label="Congestion" on={layers.congestion} onClick={() => setLayers((l) => ({ ...l, congestion: !l.congestion }))} />
+            </div>
+          }
         >
-          <MapView markers={markers} routes={routes} height={380} zoom={2} />
+          <MapView
+            markers={markers}
+            routes={routes}
+            circles={
+              context
+                ? toMapCircles(
+                    context.environmental.filter((e) =>
+                      e.kind === "CONGESTION" ? layers.congestion : layers.weather,
+                    ),
+                  )
+                : []
+            }
+            traffic={context && layers.traffic ? toMapTraffic(context.traffic) : []}
+            height={380}
+            zoom={2}
+          />
           <div className="text-muted-foreground mt-3 flex flex-wrap gap-3 text-xs">
             {STATUSES.map((s) => (
               <span key={s} className="inline-flex items-center gap-1.5">
@@ -275,7 +300,22 @@ export function ControlTowerView() {
               <span title="Truck">{"\u{1F69B}"} Road</span>
               <span title="Rail">{"\u{1F686}"} Rail</span>
             </span>
+            <span className="border-border ml-1 inline-flex items-center gap-3 border-l pl-3">
+              <span className="inline-flex items-center gap-1.5">
+                <span className="size-2.5 rounded-full" style={{ background: "#2E75B6", opacity: 0.5 }} /> Weather
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <span className="size-2.5 rounded-full" style={{ background: "#ED6C02", opacity: 0.5 }} /> Congestion
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <span className="h-0.5 w-5 border-t border-dashed" style={{ borderColor: "#94a3b8" }} /> Other traffic
+              </span>
+            </span>
           </div>
+          <p className="text-muted-foreground mt-2 text-[11px]">
+            Environmental conditions shown here feed the predictive risk model — see matching drivers
+            on the Predictive page.
+          </p>
         </ChartCard>
 
         <ChartCard title="Port & customs congestion" description="Shipments held + dwell time">
@@ -343,6 +383,23 @@ export function ControlTowerView() {
         />
       </ChartCard>
     </div>
+  );
+}
+
+function LayerToggle({ label, on, onClick }: { label: string; on: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={on}
+      className={
+        on
+          ? "border-brand-blue bg-brand-surface-2 text-brand-navy rounded-full border px-2.5 py-1 text-[11px] font-medium"
+          : "border-border text-muted-foreground hover:bg-accent rounded-full border px-2.5 py-1 text-[11px] font-medium"
+      }
+    >
+      {label}
+    </button>
   );
 }
 

@@ -510,6 +510,38 @@ export interface PartnerAnalytics {
 }
 
 // -----------------------------------------------------------------------------
+// Map context layers (environmental conditions + ambient traffic)
+// -----------------------------------------------------------------------------
+
+export type MapContextKind = "WEATHER" | "CONGESTION" | "HEAT" | "FOG";
+export type ContextImpact = "DELAY" | "EXCURSION";
+
+export interface MapContextEvent {
+  id: string;
+  kind: MapContextKind;
+  label: string;
+  description: string;
+  impact: string;
+  lat: number;
+  lng: number;
+  radiusKm: number;
+  severity: Severity;
+  affects: ContextImpact[];
+}
+
+export interface TrafficLane {
+  id: string;
+  label: string;
+  points: [number, number][];
+  intensity: "LOW" | "MEDIUM" | "HIGH";
+}
+
+export interface MapContext {
+  environmental: MapContextEvent[];
+  traffic: TrafficLane[];
+}
+
+// -----------------------------------------------------------------------------
 // End-to-end shipment journey (stage-by-stage flow)
 // -----------------------------------------------------------------------------
 

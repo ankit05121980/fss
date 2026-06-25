@@ -188,6 +188,17 @@ export const LOCATION_TYPE_META: Record<
   HOSPITAL: { label: "Hospital / Dispenser", color: "#1F3864" },
 };
 
+// Environmental map-context kinds → label + concrete colour (for leaflet circles).
+export const CONTEXT_KIND_META: Record<
+  import("@/lib/data/types").MapContextKind,
+  { label: string; color: string }
+> = {
+  WEATHER: { label: "Storm / weather", color: "#2E75B6" },
+  CONGESTION: { label: "Port / customs congestion", color: "#ED6C02" },
+  HEAT: { label: "Heat zone", color: "#C62828" },
+  FOG: { label: "Fog", color: "#7E8AA0" },
+};
+
 // Concrete hex colors for map markers / leaflet polylines (cannot use CSS vars).
 export const STATUS_HEX: Record<ShipmentStatus, string> = {
   IN_TRANSIT: "#0277BD",
