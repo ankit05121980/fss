@@ -11,7 +11,16 @@
 // =============================================================================
 
 import { DAY_MS, DEMO_NOW, HOUR_MS } from "@/lib/utils/date";
-import { chance, gaussian, mulberry32, pick, randFloat, randInt, round, type Rng } from "@/lib/utils/prng";
+import {
+  chance,
+  gaussian,
+  mulberry32,
+  pick,
+  randFloat,
+  randInt,
+  round,
+  type Rng,
+} from "@/lib/utils/prng";
 import { HERO } from "@/lib/utils/constants";
 import type {
   Batch,
@@ -140,31 +149,155 @@ const PRODUCTS: Product[] = [
   },
 ];
 
-const COLD_CHAIN_PRODUCT_IDS = new Set(
-  PRODUCTS.filter((p) => p.tempMaxC <= 8).map((p) => p.id),
-);
+const COLD_CHAIN_PRODUCT_IDS = new Set(PRODUCTS.filter((p) => p.tempMaxC <= 8).map((p) => p.id));
 
 // Hero journey nodes (real lat/lng) + extra nodes for other shipments.
 const LOCATIONS: LocationNode[] = [
-  { id: "loc-mfg-de", name: "BioNTech Manufacturing — Marburg", type: "MANUFACTURER", lat: 50.8093, lng: 8.7708, country: "Germany" },
-  { id: "loc-whse-de", name: "Frankfurt Manufacturing Warehouse", type: "WAREHOUSE", lat: 50.1109, lng: 8.6821, country: "Germany" },
-  { id: "loc-port-hamburg", name: "Port of Hamburg", type: "PORT", lat: 53.5413, lng: 9.9326, country: "Germany" },
-  { id: "loc-port-newark", name: "Port of Newark", type: "PORT", lat: 40.6895, lng: -74.1745, country: "United States" },
-  { id: "loc-customs-newark", name: "Customs Clearance — Newark", type: "CUSTOMS", lat: 40.709, lng: -74.1726, country: "United States" },
-  { id: "loc-3pl-nj", name: "3PL Warehouse — Edison NJ", type: "3PL", lat: 40.5187, lng: -74.4121, country: "United States" },
-  { id: "loc-dc-nj", name: "Regional Distribution Center — Secaucus NJ", type: "DC", lat: 40.7895, lng: -74.0565, country: "United States" },
-  { id: "loc-hospital-ny", name: "Mount Sinai Hospital Network — New York", type: "HOSPITAL", lat: 40.7903, lng: -73.9527, country: "United States" },
+  {
+    id: "loc-mfg-de",
+    name: "BioNTech Manufacturing — Marburg",
+    type: "MANUFACTURER",
+    lat: 50.8093,
+    lng: 8.7708,
+    country: "Germany",
+  },
+  {
+    id: "loc-whse-de",
+    name: "Frankfurt Manufacturing Warehouse",
+    type: "WAREHOUSE",
+    lat: 50.1109,
+    lng: 8.6821,
+    country: "Germany",
+  },
+  {
+    id: "loc-port-hamburg",
+    name: "Port of Hamburg",
+    type: "PORT",
+    lat: 53.5413,
+    lng: 9.9326,
+    country: "Germany",
+  },
+  {
+    id: "loc-port-newark",
+    name: "Port of Newark",
+    type: "PORT",
+    lat: 40.6895,
+    lng: -74.1745,
+    country: "United States",
+  },
+  {
+    id: "loc-customs-newark",
+    name: "Customs Clearance — Newark",
+    type: "CUSTOMS",
+    lat: 40.709,
+    lng: -74.1726,
+    country: "United States",
+  },
+  {
+    id: "loc-3pl-nj",
+    name: "3PL Warehouse — Edison NJ",
+    type: "3PL",
+    lat: 40.5187,
+    lng: -74.4121,
+    country: "United States",
+  },
+  {
+    id: "loc-dc-nj",
+    name: "Regional Distribution Center — Secaucus NJ",
+    type: "DC",
+    lat: 40.7895,
+    lng: -74.0565,
+    country: "United States",
+  },
+  {
+    id: "loc-hospital-ny",
+    name: "Mount Sinai Hospital Network — New York",
+    type: "HOSPITAL",
+    lat: 40.7903,
+    lng: -73.9527,
+    country: "United States",
+  },
   // Extra nodes
-  { id: "loc-port-shanghai", name: "Port of Shanghai", type: "PORT", lat: 31.2304, lng: 121.4737, country: "China" },
-  { id: "loc-port-rotterdam", name: "Port of Rotterdam", type: "PORT", lat: 51.9496, lng: 4.1453, country: "Netherlands" },
-  { id: "loc-port-la", name: "Port of Los Angeles", type: "PORT", lat: 33.7395, lng: -118.2597, country: "United States" },
-  { id: "loc-air-fra", name: "Frankfurt Air Cargo Hub", type: "PORT", lat: 50.0379, lng: 8.5622, country: "Germany" },
-  { id: "loc-air-jfk", name: "JFK Air Cargo Hub", type: "PORT", lat: 40.6413, lng: -73.7781, country: "United States" },
-  { id: "loc-air-lhr", name: "Heathrow Air Cargo Hub", type: "PORT", lat: 51.47, lng: -0.4543, country: "United Kingdom" },
-  { id: "loc-dc-chicago", name: "Midwest Distribution Center — Chicago", type: "DC", lat: 41.8781, lng: -87.6298, country: "United States" },
-  { id: "loc-3pl-dallas", name: "3PL Warehouse — Dallas TX", type: "3PL", lat: 32.7767, lng: -96.797, country: "United States" },
-  { id: "loc-hospital-atl", name: "Emory Hospital Network — Atlanta", type: "HOSPITAL", lat: 33.749, lng: -84.388, country: "United States" },
-  { id: "loc-mfg-in", name: "Generic Pharma Manufacturing — Mumbai", type: "MANUFACTURER", lat: 19.076, lng: 72.8777, country: "India" },
+  {
+    id: "loc-port-shanghai",
+    name: "Port of Shanghai",
+    type: "PORT",
+    lat: 31.2304,
+    lng: 121.4737,
+    country: "China",
+  },
+  {
+    id: "loc-port-rotterdam",
+    name: "Port of Rotterdam",
+    type: "PORT",
+    lat: 51.9496,
+    lng: 4.1453,
+    country: "Netherlands",
+  },
+  {
+    id: "loc-port-la",
+    name: "Port of Los Angeles",
+    type: "PORT",
+    lat: 33.7395,
+    lng: -118.2597,
+    country: "United States",
+  },
+  {
+    id: "loc-air-fra",
+    name: "Frankfurt Air Cargo Hub",
+    type: "PORT",
+    lat: 50.0379,
+    lng: 8.5622,
+    country: "Germany",
+  },
+  {
+    id: "loc-air-jfk",
+    name: "JFK Air Cargo Hub",
+    type: "PORT",
+    lat: 40.6413,
+    lng: -73.7781,
+    country: "United States",
+  },
+  {
+    id: "loc-air-lhr",
+    name: "Heathrow Air Cargo Hub",
+    type: "PORT",
+    lat: 51.47,
+    lng: -0.4543,
+    country: "United Kingdom",
+  },
+  {
+    id: "loc-dc-chicago",
+    name: "Midwest Distribution Center — Chicago",
+    type: "DC",
+    lat: 41.8781,
+    lng: -87.6298,
+    country: "United States",
+  },
+  {
+    id: "loc-3pl-dallas",
+    name: "3PL Warehouse — Dallas TX",
+    type: "3PL",
+    lat: 32.7767,
+    lng: -96.797,
+    country: "United States",
+  },
+  {
+    id: "loc-hospital-atl",
+    name: "Emory Hospital Network — Atlanta",
+    type: "HOSPITAL",
+    lat: 33.749,
+    lng: -84.388,
+    country: "United States",
+  },
+  {
+    id: "loc-mfg-in",
+    name: "Generic Pharma Manufacturing — Mumbai",
+    type: "MANUFACTURER",
+    lat: 19.076,
+    lng: 72.8777,
+    country: "India",
+  },
 ];
 
 const HERO_ROUTE = [
@@ -179,13 +312,43 @@ const HERO_ROUTE = [
 ];
 
 const CARRIERS: Carrier[] = [
-  { id: "car-a", name: "Atlantic Ocean Lines", modes: ["OCEAN"], onTimePct: 0, performanceScore: 0 },
-  { id: "car-b", name: "Carrier B Freight", modes: ["OCEAN", "TRUCK"], onTimePct: 0, performanceScore: 0 },
+  {
+    id: "car-a",
+    name: "Atlantic Ocean Lines",
+    modes: ["OCEAN"],
+    onTimePct: 0,
+    performanceScore: 0,
+  },
+  {
+    id: "car-b",
+    name: "Carrier B Freight",
+    modes: ["OCEAN", "TRUCK"],
+    onTimePct: 0,
+    performanceScore: 0,
+  },
   { id: "car-c", name: "SkyCargo Air", modes: ["AIR"], onTimePct: 0, performanceScore: 0 },
-  { id: "car-d", name: "TransContinental Trucking", modes: ["TRUCK"], onTimePct: 0, performanceScore: 0 },
+  {
+    id: "car-d",
+    name: "TransContinental Trucking",
+    modes: ["TRUCK"],
+    onTimePct: 0,
+    performanceScore: 0,
+  },
   { id: "car-e", name: "Pacific Maritime", modes: ["OCEAN"], onTimePct: 0, performanceScore: 0 },
-  { id: "car-f", name: "EuroRail Logistics", modes: ["RAIL", "TRUCK"], onTimePct: 0, performanceScore: 0 },
-  { id: "car-g", name: "ABC Logistics", modes: ["TRUCK", "AIR"], onTimePct: 0, performanceScore: 0 },
+  {
+    id: "car-f",
+    name: "EuroRail Logistics",
+    modes: ["RAIL", "TRUCK"],
+    onTimePct: 0,
+    performanceScore: 0,
+  },
+  {
+    id: "car-g",
+    name: "ABC Logistics",
+    modes: ["TRUCK", "AIR"],
+    onTimePct: 0,
+    performanceScore: 0,
+  },
   { id: "car-h", name: "Global Air Freight", modes: ["AIR"], onTimePct: 0, performanceScore: 0 },
 ];
 
@@ -211,24 +374,150 @@ interface PartnerSeed {
 }
 
 const PARTNER_SEEDS: PartnerSeed[] = [
-  { id: "tp-biontech", name: "BioNTech Marburg GmbH", role: "MANUFACTURER", auth: "AUTHORIZED", license: "VALID", riskScore: 12 },
-  { id: "tp-atlantic", name: "Atlantic Ocean Lines", role: "CARRIER", auth: "AUTHORIZED", license: "VALID", riskScore: 25 },
-  { id: "tp-carrierb", name: "Carrier B Freight", role: "CARRIER", auth: "AUTHORIZED", license: "VALID", riskScore: 58 },
-  { id: "tp-skycargo", name: "SkyCargo Air", role: "CARRIER", auth: "AUTHORIZED", license: "VALID", riskScore: 22 },
-  { id: "tp-transcon", name: "TransContinental Trucking", role: "CARRIER", auth: "AUTHORIZED", license: "VALID", riskScore: 30 },
-  { id: "tp-pacific", name: "Pacific Maritime", role: "CARRIER", auth: "AUTHORIZED", license: "VALID", riskScore: 28 },
-  { id: "tp-abc", name: "ABC Logistics", role: "CARRIER", auth: "AUTHORIZED", license: "VALID", riskScore: 70 },
-  { id: "tp-globalair", name: "Global Air Freight", role: "CARRIER", auth: "AUTHORIZED", license: "VALID", riskScore: 24 },
-  { id: "tp-ff-hanseatic", name: "Hanseatic Freight Forwarding", role: "FREIGHT_FORWARDER", auth: "AUTHORIZED", license: "VALID", riskScore: 18 },
-  { id: "tp-cb-newark", name: "Newark Customs Brokers LLC", role: "CUSTOMS_BROKER", auth: "AUTHORIZED", license: "VALID", riskScore: 21 },
-  { id: "tp-3pl-edison", name: "Edison 3PL Solutions", role: "3PL", auth: "AUTHORIZED", license: "VALID", riskScore: 19 },
-  { id: "tp-dist-northeast", name: "Northeast Pharma Distribution", role: "DISTRIBUTOR", auth: "AUTHORIZED", license: "VALID", riskScore: 23 },
-  { id: "tp-disp-nyhealth", name: "Mount Sinai Health Pharmacy", role: "DISPENSER", auth: "AUTHORIZED", license: "VALID", riskScore: 15 },
-  { id: "tp-3pl-quickship", name: "QuickShip 3PL", role: "3PL", auth: "AUTHORIZED", license: "EXPIRED", riskScore: 64 },
-  { id: "tp-dist-valuemeds", name: "ValueMeds Distribution", role: "DISTRIBUTOR", auth: "AUTHORIZED", license: "EXPIRED", riskScore: 60 },
-  { id: "tp-ff-globallink", name: "GlobalLink Forwarders", role: "FREIGHT_FORWARDER", auth: "AUTHORIZED", license: "EXPIRED", riskScore: 55 },
-  { id: "tp-greymarket", name: "GreyMarket Distributors Inc", role: "DISTRIBUTOR", auth: "UNAUTHORIZED", license: "VALID", riskScore: 88 },
-  { id: "tp-divertedco", name: "Diverted Goods Co", role: "3PL", auth: "UNAUTHORIZED", license: "EXPIRING_SOON", riskScore: 82 },
+  {
+    id: "tp-biontech",
+    name: "BioNTech Marburg GmbH",
+    role: "MANUFACTURER",
+    auth: "AUTHORIZED",
+    license: "VALID",
+    riskScore: 12,
+  },
+  {
+    id: "tp-atlantic",
+    name: "Atlantic Ocean Lines",
+    role: "CARRIER",
+    auth: "AUTHORIZED",
+    license: "VALID",
+    riskScore: 25,
+  },
+  {
+    id: "tp-carrierb",
+    name: "Carrier B Freight",
+    role: "CARRIER",
+    auth: "AUTHORIZED",
+    license: "VALID",
+    riskScore: 58,
+  },
+  {
+    id: "tp-skycargo",
+    name: "SkyCargo Air",
+    role: "CARRIER",
+    auth: "AUTHORIZED",
+    license: "VALID",
+    riskScore: 22,
+  },
+  {
+    id: "tp-transcon",
+    name: "TransContinental Trucking",
+    role: "CARRIER",
+    auth: "AUTHORIZED",
+    license: "VALID",
+    riskScore: 30,
+  },
+  {
+    id: "tp-pacific",
+    name: "Pacific Maritime",
+    role: "CARRIER",
+    auth: "AUTHORIZED",
+    license: "VALID",
+    riskScore: 28,
+  },
+  {
+    id: "tp-abc",
+    name: "ABC Logistics",
+    role: "CARRIER",
+    auth: "AUTHORIZED",
+    license: "VALID",
+    riskScore: 70,
+  },
+  {
+    id: "tp-globalair",
+    name: "Global Air Freight",
+    role: "CARRIER",
+    auth: "AUTHORIZED",
+    license: "VALID",
+    riskScore: 24,
+  },
+  {
+    id: "tp-ff-hanseatic",
+    name: "Hanseatic Freight Forwarding",
+    role: "FREIGHT_FORWARDER",
+    auth: "AUTHORIZED",
+    license: "VALID",
+    riskScore: 18,
+  },
+  {
+    id: "tp-cb-newark",
+    name: "Newark Customs Brokers LLC",
+    role: "CUSTOMS_BROKER",
+    auth: "AUTHORIZED",
+    license: "VALID",
+    riskScore: 21,
+  },
+  {
+    id: "tp-3pl-edison",
+    name: "Edison 3PL Solutions",
+    role: "3PL",
+    auth: "AUTHORIZED",
+    license: "VALID",
+    riskScore: 19,
+  },
+  {
+    id: "tp-dist-northeast",
+    name: "Northeast Pharma Distribution",
+    role: "DISTRIBUTOR",
+    auth: "AUTHORIZED",
+    license: "VALID",
+    riskScore: 23,
+  },
+  {
+    id: "tp-disp-nyhealth",
+    name: "Mount Sinai Health Pharmacy",
+    role: "DISPENSER",
+    auth: "AUTHORIZED",
+    license: "VALID",
+    riskScore: 15,
+  },
+  {
+    id: "tp-3pl-quickship",
+    name: "QuickShip 3PL",
+    role: "3PL",
+    auth: "AUTHORIZED",
+    license: "EXPIRED",
+    riskScore: 64,
+  },
+  {
+    id: "tp-dist-valuemeds",
+    name: "ValueMeds Distribution",
+    role: "DISTRIBUTOR",
+    auth: "AUTHORIZED",
+    license: "EXPIRED",
+    riskScore: 60,
+  },
+  {
+    id: "tp-ff-globallink",
+    name: "GlobalLink Forwarders",
+    role: "FREIGHT_FORWARDER",
+    auth: "AUTHORIZED",
+    license: "EXPIRED",
+    riskScore: 55,
+  },
+  {
+    id: "tp-greymarket",
+    name: "GreyMarket Distributors Inc",
+    role: "DISTRIBUTOR",
+    auth: "UNAUTHORIZED",
+    license: "VALID",
+    riskScore: 88,
+  },
+  {
+    id: "tp-divertedco",
+    name: "Diverted Goods Co",
+    role: "3PL",
+    auth: "UNAUTHORIZED",
+    license: "EXPIRING_SOON",
+    riskScore: 82,
+  },
 ];
 
 // -----------------------------------------------------------------------------
@@ -309,7 +598,14 @@ function routeForMode(rng: Rng, mode: Mode): string[] {
       const usPort = pick(rng, ["loc-port-newark", "loc-port-la"]);
       const dc = pick(rng, ["loc-dc-nj", "loc-dc-chicago"]);
       const hospital = pick(rng, ["loc-hospital-ny", "loc-hospital-atl"]);
-      return [origin, usPort, "loc-customs-newark", pick(rng, ["loc-3pl-nj", "loc-3pl-dallas"]), dc, hospital];
+      return [
+        origin,
+        usPort,
+        "loc-customs-newark",
+        pick(rng, ["loc-3pl-nj", "loc-3pl-dallas"]),
+        dc,
+        hospital,
+      ];
     }
     case "AIR": {
       const origin = pick(rng, ["loc-air-fra", "loc-air-lhr"]);
@@ -348,11 +644,7 @@ function severityFor(rng: Rng, bias: number): Severity {
   return "LOW";
 }
 
-function buildShipments(
-  rng: Rng,
-  batches: Batch[],
-  partners: TradingPartner[],
-): ShipmentBuild {
+function buildShipments(rng: Rng, batches: Batch[], partners: TradingPartner[]): ShipmentBuild {
   const shipments: Shipment[] = [];
   const events: ShipmentEvent[] = [];
   const custody: CustodyEvent[] = [];
@@ -374,8 +666,9 @@ function buildShipments(
   // SHP-007 (predicted excursion) must carry a cold-chain product so the
   // excursion-risk prediction is meaningful.
   const coldBatch =
-    batches.find((b) => b.batchNumber !== HERO.batchNumber && COLD_CHAIN_PRODUCT_IDS.has(b.productId)) ??
-    batches[1];
+    batches.find(
+      (b) => b.batchNumber !== HERO.batchNumber && COLD_CHAIN_PRODUCT_IDS.has(b.productId),
+    ) ?? batches[1];
 
   // Pre-assign modes: SHP-001 ocean (hero), SHP-007 ocean (predicted excursion).
   // 12 ocean total, 2 rail, remainder air/truck.
@@ -536,7 +829,15 @@ function buildShipments(
     }
 
     // Custody chain (ordered). Manufacturer -> FF -> carrier -> customs broker -> 3PL -> distributor -> dispenser
-    const chainRoles: TradingPartner["role"][] = ["MANUFACTURER", "FREIGHT_FORWARDER", "CARRIER", "CUSTOMS_BROKER", "3PL", "DISTRIBUTOR", "DISPENSER"];
+    const chainRoles: TradingPartner["role"][] = [
+      "MANUFACTURER",
+      "FREIGHT_FORWARDER",
+      "CARRIER",
+      "CUSTOMS_BROKER",
+      "3PL",
+      "DISTRIBUTOR",
+      "DISPENSER",
+    ];
     const chainPartyIds: string[] = [];
     for (const role of chainRoles) {
       if (role === "CARRIER") {
@@ -590,7 +891,11 @@ function buildShipments(
     }
 
     // Ownership chain: manufacturer -> distributor -> dispenser
-    const owners = ["tp-biontech", pick(rng, authorizedByRole("DISTRIBUTOR")).id, pick(rng, authorizedByRole("DISPENSER")).id];
+    const owners = [
+      "tp-biontech",
+      pick(rng, authorizedByRole("DISTRIBUTOR")).id,
+      pick(rng, authorizedByRole("DISPENSER")).id,
+    ];
     for (let o = 0; o < owners.length - 1; o += 1) {
       ownership.push({
         id: `own-${String(++ownerSeq).padStart(4, "0")}`,
@@ -621,8 +926,7 @@ function buildShipments(
         const sensorOk = chance(rng, 0.985);
         // Location: by default follow the route fraction.
         const frac = (t - departMs) / span;
-        let locationId =
-          route[Math.min(route.length - 1, Math.floor(frac * route.length))];
+        let locationId = route[Math.min(route.length - 1, Math.floor(frac * route.length))];
         // Hero excursion: spike toward 10C in the ~18h window following the
         // customs delay, anchored at the Newark customs node (root cause).
         if (isHero && customsMs && t >= customsMs && t <= customsMs + 18 * HOUR_MS) {
@@ -762,7 +1066,9 @@ function buildSerializedUnits(rng: Rng, shipments: Shipment[]): SerializedUnit[]
       lotNumber: `LOT-${HERO.batchNumber}`,
       batchNumber: HERO.batchNumber,
       expiry: iso(305 * 24),
-      currentLocationId: isTarget ? "loc-3pl-nj" : pick(rng, ["loc-customs-newark", "loc-3pl-nj", "loc-dc-nj", "loc-port-newark"]),
+      currentLocationId: isTarget
+        ? "loc-3pl-nj"
+        : pick(rng, ["loc-customs-newark", "loc-3pl-nj", "loc-dc-nj", "loc-port-newark"]),
       verified: isTarget ? true : chance(rng, 0.92),
     });
   }
@@ -792,7 +1098,9 @@ function reconcileCarriers(carriers: Carrier[], shipments: Shipment[]): void {
   for (const carrier of carriers) {
     const own = shipments.filter((s) => s.carrierId === carrier.id);
     const delivered = own.filter((s) => s.status === "DELIVERED");
-    const delayed = own.filter((s) => s.status === "DELAYED" || s.status === "CUSTOMS_HOLD" || s.delayHours > 0);
+    const delayed = own.filter(
+      (s) => s.status === "DELAYED" || s.status === "CUSTOMS_HOLD" || s.delayHours > 0,
+    );
     const onTimeDelivered = delivered.filter((s) => s.delayHours === 0).length;
     const denom = delivered.length || own.length || 1;
     const onTimePct = round((onTimeDelivered / denom) * 100, 0);

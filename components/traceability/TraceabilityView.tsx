@@ -39,9 +39,11 @@ const EXAMPLES = [
 
 function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex items-start justify-between gap-4 border-b border-border py-2 last:border-0">
-      <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</span>
-      <span className="text-right text-sm font-medium text-foreground">{value}</span>
+    <div className="border-border flex items-start justify-between gap-4 border-b py-2 last:border-0">
+      <span className="text-muted-foreground text-xs font-medium tracking-wide uppercase">
+        {label}
+      </span>
+      <span className="text-foreground text-right text-sm font-medium">{value}</span>
     </div>
   );
 }
@@ -64,16 +66,20 @@ export function TraceabilityView({
 
   return (
     <div className="space-y-6">
-      <form onSubmit={submit} className="flex flex-col gap-3 sm:flex-row sm:items-center" role="search">
+      <form
+        onSubmit={submit}
+        className="flex flex-col gap-3 sm:flex-row sm:items-center"
+        role="search"
+      >
         <div className="relative flex-1">
-          <PackageSearch className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <PackageSearch className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
           <input
             key={initialQuery}
             name="q"
             defaultValue={initialQuery}
             placeholder="Enter a serial (SN0008743), batch (VX-2026-001), shipment (SHP-001) or product…"
             aria-label="Traceability search"
-            className="h-11 w-full rounded-lg border border-input bg-card pl-10 pr-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="border-input bg-card focus-visible:ring-ring h-11 w-full rounded-lg border pr-3 pl-10 text-sm shadow-sm focus-visible:ring-2 focus-visible:outline-none"
           />
         </div>
         <Button type="submit" size="lg" className="h-11">
@@ -82,13 +88,15 @@ export function TraceabilityView({
       </form>
 
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-xs text-muted-foreground">Try:</span>
+        <span className="text-muted-foreground text-xs">Try:</span>
         {EXAMPLES.map((ex) => (
           <button
             key={ex.q}
             type="button"
-            onClick={() => router.push(`/traceability?type=${ex.type}&q=${encodeURIComponent(ex.q)}`)}
-            className="rounded-full border border-border bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground transition-colors hover:border-brand-blue hover:bg-accent"
+            onClick={() =>
+              router.push(`/traceability?type=${ex.type}&q=${encodeURIComponent(ex.q)}`)
+            }
+            className="border-border bg-secondary text-secondary-foreground hover:border-brand-blue hover:bg-accent rounded-full border px-3 py-1 text-xs font-medium transition-colors"
           >
             {ex.label}
           </button>
@@ -193,18 +201,20 @@ function TraceDetail({ trace }: { trace: TraceResult }) {
   return (
     <div className="space-y-6">
       {/* Resolution banner */}
-      <Card className="border-l-4 border-l-brand-blue">
+      <Card className="border-l-brand-blue border-l-4">
         <CardContent className="flex flex-col gap-4 p-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-start gap-4">
-            <span className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-secondary text-secondary-foreground">
+            <span className="bg-secondary text-secondary-foreground flex size-11 shrink-0 items-center justify-center rounded-lg">
               <Box className="size-5" />
             </span>
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-lg font-bold text-foreground">{product?.name ?? trace.query}</h2>
+                <h2 className="text-foreground text-lg font-bold">
+                  {product?.name ?? trace.query}
+                </h2>
                 <Badge variant="secondary">Resolved by {trace.resolvedType}</Badge>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 {unit ? `Serial ${unit.serialNumber} · ` : ""}
                 Batch {batch?.batchNumber} · Shipment {shipment?.id}
               </p>
@@ -274,18 +284,25 @@ function TraceDetail({ trace }: { trace: TraceResult }) {
               label="Current location"
               value={
                 <span className="inline-flex items-center gap-1">
-                  <MapPin className="size-3.5 text-brand-blue" />
+                  <MapPin className="text-brand-blue size-3.5" />
                   {currentLocation?.name ?? "—"}
                 </span>
               }
             />
-            <DetailRow label="Primary mode" value={shipment ? MODE_META[shipment.primaryMode].label : "—"} />
+            <DetailRow
+              label="Primary mode"
+              value={shipment ? MODE_META[shipment.primaryMode].label : "—"}
+            />
             <DetailRow label="Delay" value={shipment ? `${shipment.delayHours}h` : "—"} />
             <DetailRow label="Packages" value={shipment?.packageCount.toLocaleString()} />
           </CardContent>
         </Card>
 
-        <ChartCard title="Shipment journey" description="Ocean lanes emphasized" className="lg:row-span-1">
+        <ChartCard
+          title="Shipment journey"
+          description="Ocean lanes emphasized"
+          className="lg:row-span-1"
+        >
           <MapView markers={markers} routes={routes} height={300} />
         </ChartCard>
       </div>
@@ -307,16 +324,18 @@ function TraceDetail({ trace }: { trace: TraceResult }) {
                 {trace.ownership.map((o) => (
                   <li
                     key={o.id}
-                    className="flex items-center gap-2 rounded-md border border-border bg-muted/40 px-3 py-2 text-sm"
+                    className="border-border bg-muted/40 flex items-center gap-2 rounded-md border px-3 py-2 text-sm"
                   >
-                    <span className="font-medium text-foreground">
+                    <span className="text-foreground font-medium">
                       {trace.partnersById[o.previousOwnerId]?.name ?? o.previousOwnerId}
                     </span>
-                    <ArrowRight className="size-3.5 text-muted-foreground" />
-                    <span className="font-medium text-foreground">
+                    <ArrowRight className="text-muted-foreground size-3.5" />
+                    <span className="text-foreground font-medium">
                       {trace.partnersById[o.newOwnerId]?.name ?? o.newOwnerId}
                     </span>
-                    <span className="ml-auto text-xs text-muted-foreground">{fmtDate(o.timestamp)}</span>
+                    <span className="text-muted-foreground ml-auto text-xs">
+                      {fmtDate(o.timestamp)}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -334,11 +353,11 @@ function TraceDetail({ trace }: { trace: TraceResult }) {
                       invalid ? "border-danger/40 bg-danger/5" : "border-border bg-muted/40"
                     }`}
                   >
-                    <span className="font-medium text-foreground">
+                    <span className="text-foreground font-medium">
                       {trace.partnersById[c.fromPartyId]?.name ?? c.fromPartyId}
                     </span>
-                    <ArrowRight className="size-3.5 text-muted-foreground" />
-                    <span className="font-medium text-foreground">
+                    <ArrowRight className="text-muted-foreground size-3.5" />
+                    <span className="text-foreground font-medium">
                       {trace.partnersById[c.toPartyId]?.name ?? c.toPartyId}
                     </span>
                     {invalid ? (

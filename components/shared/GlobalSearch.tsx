@@ -40,7 +40,7 @@ export function GlobalSearch({ className }: { className?: string }) {
   return (
     <div ref={containerRef} className={cn("relative w-full max-w-md", className)}>
       <form onSubmit={submit} role="search">
-        <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
         <input
           type="search"
           value={value}
@@ -55,17 +55,17 @@ export function GlobalSearch({ className }: { className?: string }) {
           role="combobox"
           aria-controls="global-search-results"
           aria-expanded={open}
-          className="h-9 w-full rounded-md border border-input bg-card pl-9 pr-3 text-sm text-foreground shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="border-input bg-card text-foreground placeholder:text-muted-foreground focus-visible:ring-ring h-9 w-full rounded-md border pr-3 pl-9 text-sm shadow-sm transition-colors focus-visible:ring-2 focus-visible:outline-none"
         />
       </form>
 
       {open && value.trim().length >= 2 && (
         <div
           id="global-search-results"
-          className="absolute left-0 right-0 top-11 z-50 overflow-hidden rounded-lg border border-border bg-popover shadow-lg"
+          className="border-border bg-popover absolute top-11 right-0 left-0 z-50 overflow-hidden rounded-lg border shadow-lg"
         >
           {list.length === 0 ? (
-            <p className="px-3 py-4 text-sm text-muted-foreground">
+            <p className="text-muted-foreground px-3 py-4 text-sm">
               No matches. Press Enter to open full traceability search.
             </p>
           ) : (
@@ -78,11 +78,13 @@ export function GlobalSearch({ className }: { className?: string }) {
                       type="button"
                       onMouseDown={(e) => e.preventDefault()}
                       onClick={() => go(r.href)}
-                      className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm transition-colors hover:bg-accent"
+                      className="hover:bg-accent flex w-full items-center gap-3 px-3 py-2 text-left text-sm transition-colors"
                     >
-                      <Icon className="size-4 shrink-0 text-brand-blue" />
-                      <span className="font-medium text-foreground">{r.label}</span>
-                      <span className="ml-auto truncate text-xs text-muted-foreground">{r.sublabel}</span>
+                      <Icon className="text-brand-blue size-4 shrink-0" />
+                      <span className="text-foreground font-medium">{r.label}</span>
+                      <span className="text-muted-foreground ml-auto truncate text-xs">
+                        {r.sublabel}
+                      </span>
                     </button>
                   </li>
                 );

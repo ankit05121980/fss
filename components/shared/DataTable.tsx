@@ -73,18 +73,18 @@ export function DataTable<TData>({
     <div className="space-y-3">
       {enableSearch && (
         <div className="relative max-w-xs">
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
           <input
             value={globalFilter}
             onChange={(e) => setGlobalFilter(e.target.value)}
             placeholder={searchPlaceholder}
             aria-label="Filter table"
-            className="h-9 w-full rounded-md border border-input bg-card pl-9 pr-3 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="border-input bg-card placeholder:text-muted-foreground focus-visible:ring-ring h-9 w-full rounded-md border pr-3 pl-9 text-sm shadow-sm focus-visible:ring-2 focus-visible:outline-none"
           />
         </div>
       )}
 
-      <div className="rounded-lg border border-border">
+      <div className="border-border rounded-lg border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((hg) => (
@@ -98,7 +98,7 @@ export function DataTable<TData>({
                         <button
                           type="button"
                           onClick={header.column.getToggleSortingHandler()}
-                          className="inline-flex items-center gap-1 hover:text-foreground"
+                          className="hover:text-foreground inline-flex items-center gap-1"
                         >
                           {flexRender(header.column.columnDef.header, header.getContext())}
                           {sortDir === "asc" ? (
@@ -158,9 +158,9 @@ export function DataTable<TData>({
 
       {totalRows > pageSize && (
         <div className="flex items-center justify-between gap-2">
-          <p className="text-xs text-muted-foreground">
-            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()} ·{" "}
-            {totalRows} records
+          <p className="text-muted-foreground text-xs">
+            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()} · {totalRows}{" "}
+            records
           </p>
           <div className="flex gap-2">
             <Button

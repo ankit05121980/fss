@@ -26,12 +26,18 @@ interface ScatterTooltipPayload {
   payload: PartnerRiskPoint;
 }
 
-function PartnerTooltip({ active, payload }: { active?: boolean; payload?: ScatterTooltipPayload[] }) {
+function PartnerTooltip({
+  active,
+  payload,
+}: {
+  active?: boolean;
+  payload?: ScatterTooltipPayload[];
+}) {
   if (!active || !payload || payload.length === 0) return null;
   const p = payload[0].payload;
   return (
-    <div className="rounded-md border border-border bg-popover px-3 py-2 text-xs shadow-md">
-      <p className="font-semibold text-popover-foreground">{p.name}</p>
+    <div className="border-border bg-popover rounded-md border px-3 py-2 text-xs shadow-md">
+      <p className="text-popover-foreground font-semibold">{p.name}</p>
       <p className="text-muted-foreground">Risk score: {p.riskScore}</p>
       <p className="text-muted-foreground">Shipment volume: {p.volume}</p>
       <p className="text-muted-foreground">

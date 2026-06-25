@@ -15,7 +15,9 @@ export function InsightsView() {
 
   if (isLoading) return <GridSkeleton count={6} height={260} />;
   if (isError || !data)
-    return <EmptyState icon={Lightbulb} title="Couldn't load insights" description="Please retry." />;
+    return (
+      <EmptyState icon={Lightbulb} title="Couldn't load insights" description="Please retry." />
+    );
 
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -34,18 +36,18 @@ function InsightCard({ insight }: { insight: Insight }) {
           <Badge variant="secondary" className="gap-1">
             <Lightbulb className="size-3" /> Do You Know
           </Badge>
-          <span className="text-2xl font-bold tabular-nums text-brand-blue">{insight.value}</span>
+          <span className="text-brand-blue text-2xl font-bold tabular-nums">{insight.value}</span>
         </div>
         <CardTitle className="mt-2 text-sm">{insight.title}</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col">
-        <p className="text-sm font-medium text-foreground">{insight.headline}</p>
-        <p className="mt-1 text-xs text-muted-foreground">{insight.detail}</p>
+        <p className="text-foreground text-sm font-medium">{insight.headline}</p>
+        <p className="text-muted-foreground mt-1 text-xs">{insight.detail}</p>
         <div className="mt-3 flex-1">
           {insight.chart.length > 0 ? (
             <BarCompare data={insight.chart} colorByIndex height={180} />
           ) : (
-            <div className="flex h-[180px] items-center justify-center text-xs text-muted-foreground">
+            <div className="text-muted-foreground flex h-[180px] items-center justify-center text-xs">
               <TrendingUp className="mr-1 size-4" /> No data
             </div>
           )}

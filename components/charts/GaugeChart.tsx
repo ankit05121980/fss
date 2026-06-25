@@ -42,8 +42,10 @@ export function GaugeChart({
         </RadialBarChart>
       </ResponsiveContainer>
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-3xl font-bold tabular-nums text-foreground">{Math.round(clamped)}</span>
-        {label && <span className="text-xs text-muted-foreground">{label}</span>}
+        <span className="text-foreground text-3xl font-bold tabular-nums">
+          {Math.round(clamped)}
+        </span>
+        {label && <span className="text-muted-foreground text-xs">{label}</span>}
       </div>
     </div>
   );

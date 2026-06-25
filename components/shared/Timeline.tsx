@@ -32,25 +32,23 @@ export function Timeline({ items }: { items: TimelineItem[] }) {
             <div className="flex flex-col items-center">
               <span
                 className={cn(
-                  "mt-1 size-3 shrink-0 rounded-full border-2 ring-4 ring-background",
+                  "ring-background mt-1 size-3 shrink-0 rounded-full border-2 ring-4",
                   DOT_TONE[tone],
                 )}
               />
-              {!isLast && <span className="mt-1 w-px flex-1 bg-border" />}
+              {!isLast && <span className="bg-border mt-1 w-px flex-1" />}
             </div>
             <div className="min-w-0 flex-1 pb-1">
               <div className="flex flex-wrap items-center gap-2">
-                <p className="text-sm font-semibold text-foreground">{item.title}</p>
+                <p className="text-foreground text-sm font-semibold">{item.title}</p>
                 {item.badge}
               </div>
-              {item.subtitle && (
-                <p className="text-xs text-muted-foreground">{item.subtitle}</p>
-              )}
+              {item.subtitle && <p className="text-muted-foreground text-xs">{item.subtitle}</p>}
               {item.timestamp && (
-                <p className="mt-0.5 text-xs font-medium text-muted-foreground">{item.timestamp}</p>
+                <p className="text-muted-foreground mt-0.5 text-xs font-medium">{item.timestamp}</p>
               )}
               {item.note && (
-                <p className="mt-1 rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground">
+                <p className="bg-muted text-muted-foreground mt-1 rounded-md px-2 py-1 text-xs">
                   {item.note}
                 </p>
               )}

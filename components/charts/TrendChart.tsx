@@ -58,13 +58,7 @@ export function TrendChart({
           axisLine={{ stroke: "var(--border)" }}
           minTickGap={24}
         />
-        <YAxis
-          tick={axisStyle}
-          tickLine={false}
-          axisLine={false}
-          domain={yDomain}
-          width={44}
-        />
+        <YAxis tick={axisStyle} tickLine={false} axisLine={false} domain={yDomain} width={44} />
         {thresholdBand && (
           <ReferenceArea
             y1={thresholdBand.y1}

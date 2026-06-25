@@ -2,7 +2,12 @@ import puppeteer from "puppeteer-core";
 const browser = await puppeteer.launch({
   executablePath: "/usr/local/bin/google-chrome",
   headless: "new",
-  args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--window-size=1440,1000"],
+  args: [
+    "--no-sandbox",
+    "--disable-setuid-sandbox",
+    "--disable-dev-shm-usage",
+    "--window-size=1440,1000",
+  ],
 });
 const page = await browser.newPage();
 await page.setViewport({ width: 1440, height: 1000 });
@@ -15,7 +20,10 @@ await new Promise((r) => setTimeout(r, 600));
 const clicked = await page.evaluate(() => {
   const btns = [...document.querySelectorAll("button")];
   const target = btns.find((b) => /Trace serial number SN0008743/i.test(b.textContent || ""));
-  if (target) { target.click(); return true; }
+  if (target) {
+    target.click();
+    return true;
+  }
   return false;
 });
 await new Promise((r) => setTimeout(r, 1500));

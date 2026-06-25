@@ -49,37 +49,41 @@ export function KpiCard({
 }: KpiCardProps) {
   const deltaTone = (() => {
     if (!delta || delta.direction === "flat") return "text-muted-foreground";
-    const good = delta.goodWhenUp ?? true ? delta.direction === "up" : delta.direction === "down";
+    const good = (delta.goodWhenUp ?? true) ? delta.direction === "up" : delta.direction === "down";
     return good ? "text-success" : "text-danger";
   })();
 
   const DeltaIcon =
-    delta?.direction === "up" ? ArrowUpRight : delta?.direction === "down" ? ArrowDownRight : ArrowRight;
+    delta?.direction === "up"
+      ? ArrowUpRight
+      : delta?.direction === "down"
+        ? ArrowDownRight
+        : ArrowRight;
 
   const inner = (
     <Card
       className={cn(
         "relative h-full overflow-hidden p-4 transition-shadow",
-        "before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:content-['']",
+        "before:absolute before:top-0 before:left-0 before:h-full before:w-1 before:content-['']",
         STATUS_RING[status],
         href && "cursor-pointer hover:shadow-md",
       )}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
-        {Icon && <Icon className="size-4 shrink-0 text-muted-foreground" />}
+        <p className="text-muted-foreground text-xs font-medium tracking-wide uppercase">{label}</p>
+        {Icon && <Icon className="text-muted-foreground size-4 shrink-0" />}
       </div>
       <div className="mt-2 flex items-end justify-between gap-2">
         <div>
-          <p className="text-2xl font-bold tabular-nums tracking-tight text-foreground">{value}</p>
+          <p className="text-foreground text-2xl font-bold tracking-tight tabular-nums">{value}</p>
           {delta && (
             <p className={cn("mt-1 flex items-center gap-0.5 text-xs font-medium", deltaTone)}>
               <DeltaIcon className="size-3.5" />
               {Math.abs(delta.value)}
-              {hint ? <span className="ml-1 text-muted-foreground">{hint}</span> : null}
+              {hint ? <span className="text-muted-foreground ml-1">{hint}</span> : null}
             </p>
           )}
-          {!delta && hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}
+          {!delta && hint && <p className="text-muted-foreground mt-1 text-xs">{hint}</p>}
         </div>
         {sparkline && sparkline.length > 1 && (
           <div className="h-9 w-20 shrink-0">
@@ -92,7 +96,10 @@ export function KpiCard({
 
   if (href) {
     return (
-      <Link href={href} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:rounded-xl">
+      <Link
+        href={href}
+        className="focus-visible:ring-ring block focus-visible:rounded-xl focus-visible:ring-2 focus-visible:outline-none"
+      >
         {inner}
       </Link>
     );

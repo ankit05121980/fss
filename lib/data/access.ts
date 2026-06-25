@@ -164,7 +164,8 @@ export function getCustodyGaps(shipmentId?: string): CustodyGap[] {
     .filter((c) => !c.valid && (!shipmentId || c.shipmentId === shipmentId))
     .map((c) => {
       const carrierId = carrierByShipment.get(c.shipmentId) ?? "";
-      const toUnauthorized = ds.tradingPartners.find((p) => p.id === c.toPartyId)?.auth === "UNAUTHORIZED";
+      const toUnauthorized =
+        ds.tradingPartners.find((p) => p.id === c.toPartyId)?.auth === "UNAUTHORIZED";
       return {
         shipmentId: c.shipmentId,
         carrierId,
@@ -183,7 +184,12 @@ export function getCustodyGaps(shipmentId?: string): CustodyGap[] {
 // Traceability resolution
 // -----------------------------------------------------------------------------
 
-function buildTraceForShipment(shipment: Shipment, query: string, resolvedType: TraceQueryType, unit?: SerializedUnit): TraceResult {
+function buildTraceForShipment(
+  shipment: Shipment,
+  query: string,
+  resolvedType: TraceQueryType,
+  unit?: SerializedUnit,
+): TraceResult {
   const ds = getDataset();
   const product = ds.products.find((p) => p.id === shipment.productId);
   const batch = ds.batches.find((b) => b.batchNumber === shipment.batchNumber);
@@ -244,8 +250,7 @@ export function resolveTrace(rawQuery: string, type?: TraceQueryType): TraceResu
   if (!type || type === "serial") {
     const unit = getSerial(q);
     if (unit) {
-      const shipment =
-        shipmentForBatch(unit.batchNumber) ?? ds.shipments.find((s) => s.productId);
+      const shipment = shipmentForBatch(unit.batchNumber) ?? ds.shipments.find((s) => s.productId);
       if (shipment) return buildTraceForShipment(shipment, q, "serial", unit);
     }
   }
@@ -402,17 +407,17 @@ export function getControlTowerKpis(): ControlTowerKpis {
   const delivered = ships.filter((s) => s.status === "DELIVERED");
   const onTimeDelivered = delivered.filter((s) => s.delayHours === 0).length;
   const carrierScore = ds.carriers.length
-    ? round(
-        ds.carriers.reduce((a, c) => a + c.performanceScore, 0) / ds.carriers.length,
-        0,
-      )
+    ? round(ds.carriers.reduce((a, c) => a + c.performanceScore, 0) / ds.carriers.length, 0)
     : 0;
   return {
     activeShipments: active.length,
-    delayedShipments: ships.filter((s) => s.status === "DELAYED" || s.status === "CUSTOMS_HOLD").length,
+    delayedShipments: ships.filter((s) => s.status === "DELAYED" || s.status === "CUSTOMS_HOLD")
+      .length,
     inTransit: ships.filter((s) => s.status === "IN_TRANSIT").length,
     inventoryInMotion: active.reduce((a, s) => a + s.packageCount, 0),
-    onTimeDeliveryPct: delivered.length ? round((onTimeDelivered / delivered.length) * 100, 1) : 100,
+    onTimeDeliveryPct: delivered.length
+      ? round((onTimeDelivered / delivered.length) * 100, 1)
+      : 100,
     carrierPerformanceScore: carrierScore,
   };
 }
@@ -425,9 +430,7 @@ export function getColdChainKpis(): ColdChainKpis {
   });
   const readings = ds.temperatureReadings;
   const inRange = readings.filter((r) => !r.excursion).length;
-  const sensorFailShipments = new Set(
-    readings.filter((r) => !r.sensorOk).map((r) => r.shipmentId),
-  );
+  const sensorFailShipments = new Set(readings.filter((r) => !r.sensorOk).map((r) => r.shipmentId));
   return {
     temperatureExcursions: ds.shipments.filter((s) => s.hasExcursion).length,
     highRiskShipments: coldShipments.filter((s) => s.hasExcursion || s.delayHours > 12).length,
@@ -498,7 +501,9 @@ export function getComplianceTrend(points = 12): TrendPoint[] {
   return rampTo(getExecutiveKpis().overallComplianceScore, points, 9, 1.6);
 }
 
-export function getCoverageTrend(points = 12): { date: string; traceability: number; serialization: number }[] {
+export function getCoverageTrend(
+  points = 12,
+): { date: string; traceability: number; serialization: number }[] {
   const trace = rampTo(traceabilityCoveragePct(), points, 7, 1.2);
   const serial = rampTo(serializationCoveragePct(), points, 5, 1);
   return trace.map((p, i) => ({
@@ -563,7 +568,8 @@ export function getCarrierPerformance(): CarrierPerformance[] {
         onTimePct: c.onTimePct,
         performanceScore: c.performanceScore,
         totalDelayHours: own.reduce((a, s) => a + s.delayHours, 0),
-        delayedCount: own.filter((s) => s.status === "DELAYED" || s.status === "CUSTOMS_HOLD").length,
+        delayedCount: own.filter((s) => s.status === "DELAYED" || s.status === "CUSTOMS_HOLD")
+          .length,
         shipmentCount: own.length,
         custodyGaps,
       };
@@ -628,7 +634,9 @@ export function getPartnerRiskMatrix(): PartnerRiskPoint[] {
 // Rich shipment detail (used by Control Tower drill + Traceability)
 // -----------------------------------------------------------------------------
 
-export function getShipmentRows(filter: ShipmentFilter = {}): import("@/lib/data/types").ShipmentRow[] {
+export function getShipmentRows(
+  filter: ShipmentFilter = {},
+): import("@/lib/data/types").ShipmentRow[] {
   const ds = getDataset();
   const locById = new Map(ds.locations.map((l) => [l.id, l]));
   const carrierById = new Map(ds.carriers.map((c) => [c.id, c]));

@@ -28,15 +28,35 @@ export function ColdChainView() {
 
   const columns = React.useMemo<ColumnDef<ColdShipmentSummary, unknown>[]>(
     () => [
-      { accessorKey: "id", header: "Shipment", cell: ({ row }) => <span className="font-semibold">{row.original.id}</span> },
+      {
+        accessorKey: "id",
+        header: "Shipment",
+        cell: ({ row }) => <span className="font-semibold">{row.original.id}</span>,
+      },
       { accessorKey: "productName", header: "Product" },
-      { accessorKey: "primaryMode", header: "Mode", cell: ({ row }) => <Badge variant="muted">{MODE_META[row.original.primaryMode].label}</Badge> },
-      { accessorKey: "status", header: "Status", cell: ({ row }) => <StatusBadge kind="shipment" value={row.original.status} /> },
+      {
+        accessorKey: "primaryMode",
+        header: "Mode",
+        cell: ({ row }) => (
+          <Badge variant="muted">{MODE_META[row.original.primaryMode].label}</Badge>
+        ),
+      },
+      {
+        accessorKey: "status",
+        header: "Status",
+        cell: ({ row }) => <StatusBadge kind="shipment" value={row.original.status} />,
+      },
       {
         accessorKey: "maxTemp",
         header: "Max Temp",
         cell: ({ row }) => (
-          <span className={row.original.maxTemp > row.original.tempMaxC ? "font-semibold text-danger" : "text-foreground"}>
+          <span
+            className={
+              row.original.maxTemp > row.original.tempMaxC
+                ? "text-danger font-semibold"
+                : "text-foreground"
+            }
+          >
             {fmtTemp(row.original.maxTemp)}
           </span>
         ),
@@ -68,7 +88,13 @@ export function ColdChainView() {
     );
 
   if (isError || !data)
-    return <EmptyState icon={Snowflake} title="Couldn't load cold chain data" description="Please retry." />;
+    return (
+      <EmptyState
+        icon={Snowflake}
+        title="Couldn't load cold chain data"
+        description="Please retry."
+      />
+    );
 
   const { kpis, hero } = data;
 
@@ -119,50 +145,82 @@ export function ColdChainView() {
     <div className="space-y-6">
       <KpiStrip
         items={[
-          { label: "Temperature Excursions", value: kpis.temperatureExcursions, icon: ThermometerSun, status: kpis.temperatureExcursions > 0 ? "danger" : "success", hint: "shipments affected" },
-          { label: "High-Risk Shipments", value: kpis.highRiskShipments, icon: AlertTriangle, status: kpis.highRiskShipments > 0 ? "warning" : "success" },
-          { label: "Sensor Failures", value: kpis.sensorFailures, icon: Activity, status: kpis.sensorFailures > 0 ? "warning" : "success", hint: "shipments" },
-          { label: "Cold-Chain Compliance", value: fmtPct(kpis.compliancePct, 1), icon: Snowflake, status: kpis.compliancePct >= 95 ? "success" : "warning" },
+          {
+            label: "Temperature Excursions",
+            value: kpis.temperatureExcursions,
+            icon: ThermometerSun,
+            status: kpis.temperatureExcursions > 0 ? "danger" : "success",
+            hint: "shipments affected",
+          },
+          {
+            label: "High-Risk Shipments",
+            value: kpis.highRiskShipments,
+            icon: AlertTriangle,
+            status: kpis.highRiskShipments > 0 ? "warning" : "success",
+          },
+          {
+            label: "Sensor Failures",
+            value: kpis.sensorFailures,
+            icon: Activity,
+            status: kpis.sensorFailures > 0 ? "warning" : "success",
+            hint: "shipments",
+          },
+          {
+            label: "Cold-Chain Compliance",
+            value: fmtPct(kpis.compliancePct, 1),
+            icon: Snowflake,
+            status: kpis.compliancePct >= 95 ? "success" : "warning",
+          },
         ]}
       />
 
       {/* Root cause analysis (hero) */}
       {hero && (
-        <Card className="overflow-hidden border-l-4 border-l-danger">
+        <Card className="border-l-danger overflow-hidden border-l-4">
           <CardContent className="grid gap-4 p-5 lg:grid-cols-2">
             <div>
               <div className="flex items-center gap-2">
                 <Badge variant="danger" className="gap-1">
                   <AlertTriangle className="size-3.5" /> Root-Cause Analysis
                 </Badge>
-                <span className="text-sm font-semibold text-foreground">{hero.shipment.id} · {HERO.batchNumber}</span>
+                <span className="text-foreground text-sm font-semibold">
+                  {hero.shipment.id} · {HERO.batchNumber}
+                </span>
               </div>
-              <h3 className="mt-3 text-base font-bold text-foreground">
-                {fmtHours(hero.shipment.delayHours)} customs delay drove a {fmtTemp(heroMaxTemp)} cold-chain excursion
+              <h3 className="text-foreground mt-3 text-base font-bold">
+                {fmtHours(hero.shipment.delayHours)} customs delay drove a {fmtTemp(heroMaxTemp)}{" "}
+                cold-chain excursion
               </h3>
-              <p className="mt-2 text-sm text-muted-foreground">
+              <p className="text-muted-foreground mt-2 text-sm">
                 During a <strong>{fmtHours(hero.shipment.delayHours)}</strong> hold at{" "}
                 <strong>{customsEvent?.location?.name ?? "Customs Clearance — Newark"}</strong>
-                {customsEvent ? ` on ${fmtDate(customsEvent.timestamp)}` : ""}, active cooling lapsed and the
-                consignment of <strong>{product?.name}</strong> rose to <strong>{fmtTemp(heroMaxTemp)}</strong> —
-                breaching the required {product ? `${fmtTemp(product.tempMinC)}–${fmtTemp(product.tempMaxC)}` : "2–8°C"} range
-                across <strong>{heroExcursions.length}</strong> readings before recovering downstream.
+                {customsEvent ? ` on ${fmtDate(customsEvent.timestamp)}` : ""}, active cooling
+                lapsed and the consignment of <strong>{product?.name}</strong> rose to{" "}
+                <strong>{fmtTemp(heroMaxTemp)}</strong> — breaching the required{" "}
+                {product ? `${fmtTemp(product.tempMinC)}–${fmtTemp(product.tempMaxC)}` : "2–8°C"}{" "}
+                range across <strong>{heroExcursions.length}</strong> readings before recovering
+                downstream.
               </p>
               <ul className="mt-3 space-y-1.5 text-sm">
                 <li className="flex items-center gap-2">
-                  <span className="size-1.5 rounded-full bg-danger" /> Trigger: extended customs clearance dwell time
+                  <span className="bg-danger size-1.5 rounded-full" /> Trigger: extended customs
+                  clearance dwell time
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="size-1.5 rounded-full bg-warning" /> Effect: temperature breach to {fmtTemp(heroMaxTemp)} (limit {fmtTemp(product?.tempMaxC ?? 8)})
+                  <span className="bg-warning size-1.5 rounded-full" /> Effect: temperature breach
+                  to {fmtTemp(heroMaxTemp)} (limit {fmtTemp(product?.tempMaxC ?? 8)})
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="size-1.5 rounded-full bg-info" /> Consequence: batch {HERO.batchNumber} flagged for recall {HERO.recallId}
+                  <span className="bg-info size-1.5 rounded-full" /> Consequence: batch{" "}
+                  {HERO.batchNumber} flagged for recall {HERO.recallId}
                 </li>
               </ul>
             </div>
             <div>
-              <p className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                Temperature timeline · {product ? `${fmtTemp(product.tempMinC)}–${fmtTemp(product.tempMaxC)}` : "2–8°C"} band
+              <p className="text-muted-foreground mb-1 text-xs font-medium tracking-wide uppercase">
+                Temperature timeline ·{" "}
+                {product ? `${fmtTemp(product.tempMinC)}–${fmtTemp(product.tempMaxC)}` : "2–8°C"}{" "}
+                band
               </p>
               <TempChart
                 readings={heroTemps}
@@ -184,7 +242,12 @@ export function ColdChainView() {
           <MapView markers={heroMarkers} routes={heroRoutes} height={320} />
         </ChartCard>
         <ChartCard title="Excursion trend" description="Excursion readings detected per week">
-          <AreaTrend data={data.excursionTrend} name="Excursions" color="var(--danger)" height={320} />
+          <AreaTrend
+            data={data.excursionTrend}
+            name="Excursions"
+            color="var(--danger)"
+            height={320}
+          />
         </ChartCard>
       </div>
 

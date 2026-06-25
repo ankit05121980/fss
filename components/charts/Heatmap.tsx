@@ -29,13 +29,13 @@ export function Heatmap({ cells }: { cells: HeatmapCell[] }) {
         <div className="grid grid-cols-[170px_repeat(3,1fr)] gap-1.5">
           <div />
           {SEVERITIES.map((s) => (
-            <div key={s} className="pb-1 text-center text-xs font-semibold text-muted-foreground">
+            <div key={s} className="text-muted-foreground pb-1 text-center text-xs font-semibold">
               {SEVERITY_META[s].label}
             </div>
           ))}
           {categories.map((cat) => (
             <div key={cat} className="contents">
-              <div className="flex items-center pr-2 text-xs font-medium text-foreground">
+              <div className="text-foreground flex items-center pr-2 text-xs font-medium">
                 {RISK_TYPE_META[cat].label}
               </div>
               {SEVERITIES.map((sev) => {
@@ -45,7 +45,7 @@ export function Heatmap({ cells }: { cells: HeatmapCell[] }) {
                   <div
                     key={`${cat}-${sev}`}
                     className={cn(
-                      "flex h-12 items-center justify-center rounded-md border border-border text-sm font-semibold tabular-nums",
+                      "border-border flex h-12 items-center justify-center rounded-md border text-sm font-semibold tabular-nums",
                       count === 0 ? "text-muted-foreground" : "text-white",
                     )}
                     style={{

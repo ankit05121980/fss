@@ -39,22 +39,76 @@ export function ExecutiveView() {
     );
 
   if (isError || !data)
-    return <EmptyState icon={Gauge} title="Couldn't load executive summary" description="Please retry." />;
+    return (
+      <EmptyState
+        icon={Gauge}
+        title="Couldn't load executive summary"
+        description="Please retry."
+      />
+    );
 
   const { kpis } = data;
-  const complianceStatus = kpis.overallComplianceScore >= 85 ? "success" : kpis.overallComplianceScore >= 70 ? "info" : "warning";
+  const complianceStatus =
+    kpis.overallComplianceScore >= 85
+      ? "success"
+      : kpis.overallComplianceScore >= 70
+        ? "info"
+        : "warning";
 
   return (
     <div className="space-y-6">
       <KpiStrip
         items={[
-          { label: "Overall Compliance", value: kpis.overallComplianceScore, icon: ShieldCheck, status: complianceStatus, hint: "/ 100", href: "/insights" },
-          { label: "Traceability Coverage", value: fmtPct(kpis.traceabilityCoveragePct, 1), icon: PackageCheck, status: kpis.traceabilityCoveragePct >= 85 ? "success" : "warning", href: "/traceability" },
-          { label: "Serialization Coverage", value: fmtPct(kpis.serializationCoveragePct, 1), icon: BadgeCheck, status: kpis.serializationCoveragePct >= 90 ? "success" : "warning", href: "/traceability" },
-          { label: "Authorized Partners", value: fmtPct(kpis.authorizedPartnerPct, 1), icon: Users, status: kpis.authorizedPartnerPct >= 90 ? "success" : "warning", href: "/partners" },
-          { label: "Recall Readiness", value: fmtPct(kpis.recallReadinessScore, 1), icon: Activity, status: kpis.recallReadinessScore >= 95 ? "success" : "warning", href: "/recall" },
-          { label: "Open Compliance Risks", value: kpis.openComplianceRisks, icon: AlertTriangle, status: kpis.openComplianceRisks > 20 ? "danger" : "warning", href: "/control-tower" },
-          { label: "Active Excursions", value: kpis.activeExcursions, icon: ThermometerSun, status: kpis.activeExcursions > 0 ? "danger" : "success", href: "/cold-chain" },
+          {
+            label: "Overall Compliance",
+            value: kpis.overallComplianceScore,
+            icon: ShieldCheck,
+            status: complianceStatus,
+            hint: "/ 100",
+            href: "/insights",
+          },
+          {
+            label: "Traceability Coverage",
+            value: fmtPct(kpis.traceabilityCoveragePct, 1),
+            icon: PackageCheck,
+            status: kpis.traceabilityCoveragePct >= 85 ? "success" : "warning",
+            href: "/traceability",
+          },
+          {
+            label: "Serialization Coverage",
+            value: fmtPct(kpis.serializationCoveragePct, 1),
+            icon: BadgeCheck,
+            status: kpis.serializationCoveragePct >= 90 ? "success" : "warning",
+            href: "/traceability",
+          },
+          {
+            label: "Authorized Partners",
+            value: fmtPct(kpis.authorizedPartnerPct, 1),
+            icon: Users,
+            status: kpis.authorizedPartnerPct >= 90 ? "success" : "warning",
+            href: "/partners",
+          },
+          {
+            label: "Recall Readiness",
+            value: fmtPct(kpis.recallReadinessScore, 1),
+            icon: Activity,
+            status: kpis.recallReadinessScore >= 95 ? "success" : "warning",
+            href: "/recall",
+          },
+          {
+            label: "Open Compliance Risks",
+            value: kpis.openComplianceRisks,
+            icon: AlertTriangle,
+            status: kpis.openComplianceRisks > 20 ? "danger" : "warning",
+            href: "/control-tower",
+          },
+          {
+            label: "Active Excursions",
+            value: kpis.activeExcursions,
+            icon: ThermometerSun,
+            status: kpis.activeExcursions > 0 ? "danger" : "success",
+            href: "/cold-chain",
+          },
         ]}
       />
 
@@ -63,7 +117,7 @@ export function ExecutiveView() {
       <div className="grid gap-4 lg:grid-cols-3">
         <ChartCard title="Compliance score" description="Overall DSCSA readiness">
           <GaugeChart value={kpis.overallComplianceScore} label="readiness" height={220} />
-          <p className="mt-2 text-center text-xs text-muted-foreground">
+          <p className="text-muted-foreground mt-2 text-center text-xs">
             Weighted across coverage, partners, recall readiness and open risks.
           </p>
         </ChartCard>
@@ -88,7 +142,10 @@ export function ExecutiveView() {
           <Heatmap cells={data.riskHeatmap} />
         </ChartCard>
 
-        <ChartCard title="Traceability & serialization coverage" description="Coverage trend over time">
+        <ChartCard
+          title="Traceability & serialization coverage"
+          description="Coverage trend over time"
+        >
           <TrendChart
             data={data.coverageTrend}
             series={[
@@ -102,7 +159,10 @@ export function ExecutiveView() {
         </ChartCard>
       </div>
 
-      <ChartCard title="Compliance violations by category" description="Open and resolved risk events by type">
+      <ChartCard
+        title="Compliance violations by category"
+        description="Open and resolved risk events by type"
+      >
         <BarCompare data={data.violationsByCategory} colorByIndex height={280} barName="Events" />
       </ChartCard>
     </div>

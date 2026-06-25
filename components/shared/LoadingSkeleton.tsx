@@ -22,7 +22,13 @@ export function KpiStripSkeleton({ count = 4 }: { count?: number }) {
 }
 
 /** A single chart card skeleton. */
-export function ChartSkeleton({ className, height = 280 }: { className?: string; height?: number }) {
+export function ChartSkeleton({
+  className,
+  height = 280,
+}: {
+  className?: string;
+  height?: number;
+}) {
   return (
     <Card className={className}>
       <CardHeader className="pb-2">

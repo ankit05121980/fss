@@ -13,7 +13,12 @@ mkdirSync(outDir, { recursive: true });
 const browser = await puppeteer.launch({
   executablePath: CHROME,
   headless: "new",
-  args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--window-size=1440,1000"],
+  args: [
+    "--no-sandbox",
+    "--disable-setuid-sandbox",
+    "--disable-dev-shm-usage",
+    "--window-size=1440,1000",
+  ],
 });
 
 let totalErrors = 0;

@@ -78,32 +78,54 @@ export function ControlTowerView() {
     }
     const mks: MapMarker[] = [...usedLocations].map((id) => {
       const l = locById.get(id)!;
-      return { id: l.id, lat: l.lat, lng: l.lng, label: l.name, sublabel: l.type, color: "#1F3864" };
+      return {
+        id: l.id,
+        lat: l.lat,
+        lng: l.lng,
+        label: l.name,
+        sublabel: l.type,
+        color: "#1F3864",
+      };
     });
     return { markers: mks, routes: rts };
   }, [data, filtered]);
 
   const columns = React.useMemo<ColumnDef<ShipmentRow, unknown>[]>(
     () => [
-      { accessorKey: "id", header: "Shipment", cell: ({ row }) => <span className="font-semibold text-foreground">{row.original.id}</span> },
-      { accessorKey: "productName", header: "Product", cell: ({ row }) => <span className="text-sm">{row.original.productName}</span> },
+      {
+        accessorKey: "id",
+        header: "Shipment",
+        cell: ({ row }) => <span className="text-foreground font-semibold">{row.original.id}</span>,
+      },
+      {
+        accessorKey: "productName",
+        header: "Product",
+        cell: ({ row }) => <span className="text-sm">{row.original.productName}</span>,
+      },
       {
         accessorKey: "primaryMode",
         header: "Mode",
-        cell: ({ row }) => <Badge variant="muted">{MODE_META[row.original.primaryMode].label}</Badge>,
+        cell: ({ row }) => (
+          <Badge variant="muted">{MODE_META[row.original.primaryMode].label}</Badge>
+        ),
       },
       {
         accessorKey: "status",
         header: "Status",
         cell: ({ row }) => <StatusBadge kind="shipment" value={row.original.status} />,
       },
-      { accessorKey: "carrierName", header: "Carrier", cell: ({ row }) => <span className="text-sm">{row.original.carrierName}</span> },
+      {
+        accessorKey: "carrierName",
+        header: "Carrier",
+        cell: ({ row }) => <span className="text-sm">{row.original.carrierName}</span>,
+      },
       {
         id: "lane",
         header: "Lane",
         cell: ({ row }) => (
-          <span className="text-xs text-muted-foreground">
-            {row.original.originName.split("—")[0].trim()} → {row.original.destinationName.split("—")[0].trim()}
+          <span className="text-muted-foreground text-xs">
+            {row.original.originName.split("—")[0].trim()} →{" "}
+            {row.original.destinationName.split("—")[0].trim()}
           </span>
         ),
       },
@@ -112,7 +134,7 @@ export function ControlTowerView() {
         header: "Delay",
         cell: ({ row }) =>
           row.original.delayHours > 0 ? (
-            <span className="font-medium text-warning">{fmtHours(row.original.delayHours)}</span>
+            <span className="text-warning font-medium">{fmtHours(row.original.delayHours)}</span>
           ) : (
             <span className="text-muted-foreground">On time</span>
           ),
@@ -120,7 +142,9 @@ export function ControlTowerView() {
       {
         accessorKey: "etaAt",
         header: "ETA",
-        cell: ({ row }) => <span className="text-xs text-muted-foreground">{fromNow(row.original.etaAt)}</span>,
+        cell: ({ row }) => (
+          <span className="text-muted-foreground text-xs">{fromNow(row.original.etaAt)}</span>
+        ),
       },
     ],
     [],
@@ -153,12 +177,41 @@ export function ControlTowerView() {
     <div className="space-y-6">
       <KpiStrip
         items={[
-          { label: "Active Shipments", value: kpis.activeShipments, icon: Ship, status: "info", hint: "in motion" },
-          { label: "Delayed", value: kpis.delayedShipments, icon: Clock, status: kpis.delayedShipments > 8 ? "warning" : "neutral", hint: "delayed / held" },
+          {
+            label: "Active Shipments",
+            value: kpis.activeShipments,
+            icon: Ship,
+            status: "info",
+            hint: "in motion",
+          },
+          {
+            label: "Delayed",
+            value: kpis.delayedShipments,
+            icon: Clock,
+            status: kpis.delayedShipments > 8 ? "warning" : "neutral",
+            hint: "delayed / held",
+          },
           { label: "In Transit", value: kpis.inTransit, icon: Truck, status: "neutral" },
-          { label: "Inventory in Motion", value: fmtCompact(kpis.inventoryInMotion), icon: Package, status: "neutral", hint: "packages" },
-          { label: "On-Time Delivery", value: fmtPct(kpis.onTimeDeliveryPct, 1), icon: Activity, status: kpis.onTimeDeliveryPct >= 80 ? "success" : "warning" },
-          { label: "Carrier Score", value: kpis.carrierPerformanceScore, icon: Gauge, status: kpis.carrierPerformanceScore >= 80 ? "success" : "warning", hint: "/ 100" },
+          {
+            label: "Inventory in Motion",
+            value: fmtCompact(kpis.inventoryInMotion),
+            icon: Package,
+            status: "neutral",
+            hint: "packages",
+          },
+          {
+            label: "On-Time Delivery",
+            value: fmtPct(kpis.onTimeDeliveryPct, 1),
+            icon: Activity,
+            status: kpis.onTimeDeliveryPct >= 80 ? "success" : "warning",
+          },
+          {
+            label: "Carrier Score",
+            value: kpis.carrierPerformanceScore,
+            icon: Gauge,
+            status: kpis.carrierPerformanceScore >= 80 ? "success" : "warning",
+            hint: "/ 100",
+          },
         ]}
       />
 
@@ -167,16 +220,26 @@ export function ControlTowerView() {
       {/* Filters */}
       <Card>
         <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center">
-          <span className="text-sm font-medium text-muted-foreground">Filter</span>
-          <FilterSelect label="Mode" value={mode} onChange={setMode} options={MODES.map((m) => ({ value: m, label: MODE_META[m].label }))} />
-          <FilterSelect label="Status" value={status} onChange={setStatus} options={STATUSES.map((s) => ({ value: s, label: s.replaceAll("_", " ") }))} />
+          <span className="text-muted-foreground text-sm font-medium">Filter</span>
+          <FilterSelect
+            label="Mode"
+            value={mode}
+            onChange={setMode}
+            options={MODES.map((m) => ({ value: m, label: MODE_META[m].label }))}
+          />
+          <FilterSelect
+            label="Status"
+            value={status}
+            onChange={setStatus}
+            options={STATUSES.map((s) => ({ value: s, label: s.replaceAll("_", " ") }))}
+          />
           <FilterSelect
             label="Carrier"
             value={carrier}
             onChange={setCarrier}
             options={data.carrierPerformance.map((c) => ({ value: c.carrierId, label: c.name }))}
           />
-          <span className="text-xs text-muted-foreground sm:ml-auto">
+          <span className="text-muted-foreground text-xs sm:ml-auto">
             Showing {filtered.length} of {data.shipments.length} shipments
           </span>
         </CardContent>
@@ -191,7 +254,7 @@ export function ControlTowerView() {
           contentClassName="pt-0"
         >
           <MapView markers={markers} routes={routes} height={380} zoom={2} />
-          <div className="mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground">
+          <div className="text-muted-foreground mt-3 flex flex-wrap gap-3 text-xs">
             {STATUSES.map((s) => (
               <span key={s} className="inline-flex items-center gap-1.5">
                 <span className="size-2.5 rounded-full" style={{ background: STATUS_HEX[s] }} />
@@ -199,7 +262,11 @@ export function ControlTowerView() {
               </span>
             ))}
             <span className="inline-flex items-center gap-1.5">
-              <span className="h-0.5 w-5 border-t-2 border-dashed" style={{ borderColor: "#1F3864" }} /> Ocean lane
+              <span
+                className="h-0.5 w-5 border-t-2 border-dashed"
+                style={{ borderColor: "#1F3864" }}
+              />{" "}
+              Ocean lane
             </span>
           </div>
         </ChartCard>
@@ -210,12 +277,16 @@ export function ControlTowerView() {
           ) : (
             <ul className="space-y-2">
               {data.portCongestion.map((p) => (
-                <li key={p.locationId} className="rounded-md border border-border bg-muted/40 p-3">
+                <li key={p.locationId} className="border-border bg-muted/40 rounded-md border p-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-foreground">{p.name}</span>
-                    <Badge variant={p.shipmentsHeld > 2 ? "danger" : "warning"}>{p.shipmentsHeld} held</Badge>
+                    <span className="text-foreground text-sm font-medium">{p.name}</span>
+                    <Badge variant={p.shipmentsHeld > 2 ? "danger" : "warning"}>
+                      {p.shipmentsHeld} held
+                    </Badge>
                   </div>
-                  <p className="mt-1 text-xs text-muted-foreground">Avg dwell {fmtHours(p.avgDwellHours)}</p>
+                  <p className="text-muted-foreground mt-1 text-xs">
+                    Avg dwell {fmtHours(p.avgDwellHours)}
+                  </p>
                 </li>
               ))}
             </ul>
@@ -227,7 +298,10 @@ export function ControlTowerView() {
       <div className="grid gap-4 lg:grid-cols-2">
         <ChartCard title="Carrier performance" description="Performance score (0–100) by carrier">
           <BarCompare
-            data={data.carrierPerformance.map((c) => ({ name: c.name.split(" ")[0], value: c.performanceScore }))}
+            data={data.carrierPerformance.map((c) => ({
+              name: c.name.split(" ")[0],
+              value: c.performanceScore,
+            }))}
             layout="vertical"
             unit=""
             color="var(--brand-blue)"

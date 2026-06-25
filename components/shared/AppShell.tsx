@@ -21,11 +21,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex h-dvh overflow-hidden bg-background">
+    <div className="bg-background flex h-dvh overflow-hidden">
+      <a
+        href="#main-content"
+        className="bg-primary text-primary-foreground sr-only z-[60] rounded-md px-4 py-2 text-sm font-medium focus:not-sr-only focus:absolute focus:top-3 focus:left-4"
+      >
+        Skip to main content
+      </a>
       {/* Desktop sidebar */}
       <aside
         className={cn(
-          "hidden shrink-0 border-r border-sidebar-border transition-[width] duration-200 lg:block",
+          "border-sidebar-border hidden shrink-0 border-r transition-[width] duration-200 lg:block",
           collapsed ? "w-[72px]" : "w-64",
         )}
       >
@@ -42,7 +48,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar onToggleSidebar={toggleSidebar} />
-        <main className="scrollbar-thin flex-1 overflow-y-auto">
+        <main id="main-content" className="flex-1 scrollbar-thin overflow-y-auto">
           <div className="mx-auto w-full max-w-[1600px] space-y-6 p-4 md:p-6">{children}</div>
         </main>
       </div>

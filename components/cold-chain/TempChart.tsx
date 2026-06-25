@@ -61,10 +61,7 @@ export function TempChart({ readings, tempMinC, tempMaxC, height = 300 }: TempCh
           strokeOpacity={0.35}
           strokeDasharray="4 4"
         />
-        <Tooltip
-          content={<ChartTooltipContent unit="°C" />}
-          labelFormatter={() => ""}
-        />
+        <Tooltip content={<ChartTooltipContent unit="°C" />} labelFormatter={() => ""} />
         <Line
           type="monotone"
           dataKey="temperature"
@@ -74,7 +71,12 @@ export function TempChart({ readings, tempMinC, tempMaxC, height = 300 }: TempCh
           dot={false}
           isAnimationActive={false}
         />
-        <Scatter dataKey="excursion" name="Excursion" fill="var(--danger)" isAnimationActive={false} />
+        <Scatter
+          dataKey="excursion"
+          name="Excursion"
+          fill="var(--danger)"
+          isAnimationActive={false}
+        />
       </ComposedChart>
     </ResponsiveContainer>
   );

@@ -35,22 +35,41 @@ export interface AskMeExample {
 }
 
 export const ASKME_EXAMPLES: AskMeExample[] = [
-  { intent: "AT_RISK_SHIPMENTS", text: "Show all shipments currently at risk of DSCSA non-compliance" },
+  {
+    intent: "AT_RISK_SHIPMENTS",
+    text: "Show all shipments currently at risk of DSCSA non-compliance",
+  },
   { intent: "TRACE_SERIAL", text: "Trace serial number SN0008743" },
-  { intent: "EXCURSIONS_LAST_WEEK", text: "Which shipments experienced temperature excursions last week?" },
-  { intent: "TOP_DELAY_CARRIERS", text: "Which carriers contributed to the highest shipment delays?" },
+  {
+    intent: "EXCURSIONS_LAST_WEEK",
+    text: "Which shipments experienced temperature excursions last week?",
+  },
+  {
+    intent: "TOP_DELAY_CARRIERS",
+    text: "Which carriers contributed to the highest shipment delays?",
+  },
   { intent: "CUSTODY_GAPS", text: "Show custody gaps across all shipments" },
   { intent: "RECALL_IMPACT", text: "List products impacted by Recall RCL-2026-001" },
   { intent: "LATE_OCEAN_SHIPMENTS", text: "Which ocean shipments are likely to arrive late?" },
-  { intent: "UNAUTHORIZED_PARTNER_INTERACTIONS", text: "Show interactions involving unauthorized trading partners" },
-  { intent: "INCOMPLETE_TRACEABILITY", text: "What products currently have incomplete traceability chains?" },
+  {
+    intent: "UNAUTHORIZED_PARTNER_INTERACTIONS",
+    text: "Show interactions involving unauthorized trading partners",
+  },
+  {
+    intent: "INCOMPLETE_TRACEABILITY",
+    text: "What products currently have incomplete traceability chains?",
+  },
 ];
 
 const FALLBACK_MESSAGE =
   "I can answer questions about shipments, traceability, excursions, carriers, custody, recalls, and partners. Try one of the example questions below.";
 
 function normalize(q: string): string {
-  return q.toLowerCase().replace(/[^a-z0-9\s-]/g, " ").replace(/\s+/g, " ").trim();
+  return q
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function extractSerial(q: string): string | null {
@@ -69,7 +88,23 @@ function has(n: string, ...words: string[]): boolean {
 
 /** Token Jaccard similarity for fuzzy fallback matching. */
 function similarity(a: string, b: string): number {
-  const stop = new Set(["the", "a", "an", "of", "to", "for", "is", "are", "all", "show", "which", "what", "list", "me", "currently"]);
+  const stop = new Set([
+    "the",
+    "a",
+    "an",
+    "of",
+    "to",
+    "for",
+    "is",
+    "are",
+    "all",
+    "show",
+    "which",
+    "what",
+    "list",
+    "me",
+    "currently",
+  ]);
   const ta = new Set(a.split(" ").filter((t) => t && !stop.has(t)));
   const tb = new Set(b.split(" ").filter((t) => t && !stop.has(t)));
   let inter = 0;
@@ -81,16 +116,39 @@ function similarity(a: string, b: string): number {
 export function classifyIntent(question: string): AskMeIntent {
   const n = normalize(question);
 
-  if (extractSerial(question) || (has(n, "trace") && has(n, "serial", "sn", "unit"))) return "TRACE_SERIAL";
-  if (extractRecallId(question) || (has(n, "recall") && has(n, "product", "impact", "affect", "list"))) return "RECALL_IMPACT";
-  if (has(n, "unauthorized", "unauthorised") || (has(n, "suspect") && has(n, "partner"))) return "UNAUTHORIZED_PARTNER_INTERACTIONS";
-  if (has(n, "custody") && has(n, "gap", "missing", "broken", "documentation")) return "CUSTODY_GAPS";
-  if (has(n, "ocean") && has(n, "late", "delay", "arrive", "likely", "predict")) return "LATE_OCEAN_SHIPMENTS";
+  if (extractSerial(question) || (has(n, "trace") && has(n, "serial", "sn", "unit")))
+    return "TRACE_SERIAL";
+  if (
+    extractRecallId(question) ||
+    (has(n, "recall") && has(n, "product", "impact", "affect", "list"))
+  )
+    return "RECALL_IMPACT";
+  if (has(n, "unauthorized", "unauthorised") || (has(n, "suspect") && has(n, "partner")))
+    return "UNAUTHORIZED_PARTNER_INTERACTIONS";
+  if (has(n, "custody") && has(n, "gap", "missing", "broken", "documentation"))
+    return "CUSTODY_GAPS";
+  if (has(n, "ocean") && has(n, "late", "delay", "arrive", "likely", "predict"))
+    return "LATE_OCEAN_SHIPMENTS";
   if (has(n, "excursion", "temperature", "cold chain", "cold-chain")) return "EXCURSIONS_LAST_WEEK";
-  if (has(n, "carrier") && has(n, "delay", "highest", "contribut", "worst", "late")) return "TOP_DELAY_CARRIERS";
-  if (has(n, "incomplete", "missing", "broken", "gap") && has(n, "traceab")) return "INCOMPLETE_TRACEABILITY";
+  if (has(n, "carrier") && has(n, "delay", "highest", "contribut", "worst", "late"))
+    return "TOP_DELAY_CARRIERS";
+  if (has(n, "incomplete", "missing", "broken", "gap") && has(n, "traceab"))
+    return "INCOMPLETE_TRACEABILITY";
   if (has(n, "traceab") && has(n, "chain")) return "INCOMPLETE_TRACEABILITY";
-  if (has(n, "at risk", "at-risk", "non-compliance", "non compliance", "non-compliant", "noncompliant", "compliance risk", "risk of")) return "AT_RISK_SHIPMENTS";
+  if (
+    has(
+      n,
+      "at risk",
+      "at-risk",
+      "non-compliance",
+      "non compliance",
+      "non-compliant",
+      "noncompliant",
+      "compliance risk",
+      "risk of",
+    )
+  )
+    return "AT_RISK_SHIPMENTS";
   if (has(n, "custody")) return "CUSTODY_GAPS";
 
   // Fuzzy fallback to the closest reference question.
@@ -169,7 +227,9 @@ function answerTraceSerial(question: string): AskMeResult {
         { field: "Verified", value: trace.verified ? "Yes" : "No" },
       ],
     },
-    links: [{ label: `Open full trace for ${serial}`, href: `/traceability?type=serial&q=${serial}` }],
+    links: [
+      { label: `Open full trace for ${serial}`, href: `/traceability?type=serial&q=${serial}` },
+    ],
   };
 }
 

@@ -3,7 +3,12 @@ const CHROME = "/usr/local/bin/google-chrome";
 const browser = await puppeteer.launch({
   executablePath: CHROME,
   headless: "new",
-  args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage", "--window-size=1440,1000"],
+  args: [
+    "--no-sandbox",
+    "--disable-setuid-sandbox",
+    "--disable-dev-shm-usage",
+    "--window-size=1440,1000",
+  ],
 });
 const page = await browser.newPage();
 await page.setViewport({ width: 1440, height: 1000 });

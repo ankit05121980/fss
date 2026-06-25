@@ -15,8 +15,14 @@ function check(name: string, cond: boolean, detail?: string) {
 for (const ex of ASKME_EXAMPLES) {
   const intent = classifyIntent(ex.text);
   const res = answerQuestion(ex.text);
-  const hasContent = !!res.summary && (!!res.table?.rows.length || !!res.chart?.data.length || res.intent === "TRACE_SERIAL");
-  check(`Q "${ex.text.slice(0, 48)}…" -> ${ex.intent}`, intent === ex.intent && res.intent === ex.intent, intent);
+  const hasContent =
+    !!res.summary &&
+    (!!res.table?.rows.length || !!res.chart?.data.length || res.intent === "TRACE_SERIAL");
+  check(
+    `Q "${ex.text.slice(0, 48)}…" -> ${ex.intent}`,
+    intent === ex.intent && res.intent === ex.intent,
+    intent,
+  );
   check(`  …returns content`, hasContent);
 }
 

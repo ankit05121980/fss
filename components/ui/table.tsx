@@ -21,7 +21,7 @@ function TableBody({ className, ...props }: React.HTMLAttributes<HTMLTableSectio
 function TableFooter({ className, ...props }: React.HTMLAttributes<HTMLTableSectionElement>) {
   return (
     <tfoot
-      className={cn("border-t bg-muted/50 font-medium [&>tr]:last:border-b-0", className)}
+      className={cn("bg-muted/50 border-t font-medium [&>tr]:last:border-b-0", className)}
       {...props}
     />
   );
@@ -31,7 +31,7 @@ function TableRow({ className, ...props }: React.HTMLAttributes<HTMLTableRowElem
   return (
     <tr
       className={cn(
-        "border-b border-border transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted",
+        "border-border hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors",
         className,
       )}
       {...props}
@@ -43,7 +43,7 @@ function TableHead({ className, ...props }: React.ThHTMLAttributes<HTMLTableCell
   return (
     <th
       className={cn(
-        "h-10 px-3 text-left align-middle text-xs font-semibold uppercase tracking-wide text-muted-foreground [&:has([role=checkbox])]:pr-0",
+        "text-muted-foreground h-10 px-3 text-left align-middle text-xs font-semibold tracking-wide uppercase [&:has([role=checkbox])]:pr-0",
         className,
       )}
       {...props}
@@ -53,24 +53,12 @@ function TableHead({ className, ...props }: React.ThHTMLAttributes<HTMLTableCell
 
 function TableCell({ className, ...props }: React.TdHTMLAttributes<HTMLTableCellElement>) {
   return (
-    <td
-      className={cn("p-3 align-middle [&:has([role=checkbox])]:pr-0", className)}
-      {...props}
-    />
+    <td className={cn("p-3 align-middle [&:has([role=checkbox])]:pr-0", className)} {...props} />
   );
 }
 
 function TableCaption({ className, ...props }: React.HTMLAttributes<HTMLTableCaptionElement>) {
-  return <caption className={cn("mt-4 text-sm text-muted-foreground", className)} {...props} />;
+  return <caption className={cn("text-muted-foreground mt-4 text-sm", className)} {...props} />;
 }
 
-export {
-  Table,
-  TableHeader,
-  TableBody,
-  TableFooter,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableCaption,
-};
+export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };

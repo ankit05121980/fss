@@ -23,11 +23,37 @@ export function PredictiveView() {
 
   const columns = React.useMemo<ColumnDef<PredictiveScore, unknown>[]>(
     () => [
-      { accessorKey: "shipmentId", header: "Shipment", cell: ({ row }) => <span className="font-semibold">{row.original.shipmentId}</span> },
-      { accessorKey: "delayProbability", header: "Delay", cell: ({ row }) => <RiskScorePill score={row.original.delayProbability} showLabel={false} /> },
-      { accessorKey: "excursionProbability", header: "Excursion", cell: ({ row }) => <RiskScorePill score={row.original.excursionProbability} showLabel={false} /> },
-      { accessorKey: "recallExposure", header: "Recall", cell: ({ row }) => <RiskScorePill score={row.original.recallExposure} showLabel={false} /> },
-      { accessorKey: "traceabilityFailureRisk", header: "Traceability", cell: ({ row }) => <RiskScorePill score={row.original.traceabilityFailureRisk} showLabel={false} /> },
+      {
+        accessorKey: "shipmentId",
+        header: "Shipment",
+        cell: ({ row }) => <span className="font-semibold">{row.original.shipmentId}</span>,
+      },
+      {
+        accessorKey: "delayProbability",
+        header: "Delay",
+        cell: ({ row }) => (
+          <RiskScorePill score={row.original.delayProbability} showLabel={false} />
+        ),
+      },
+      {
+        accessorKey: "excursionProbability",
+        header: "Excursion",
+        cell: ({ row }) => (
+          <RiskScorePill score={row.original.excursionProbability} showLabel={false} />
+        ),
+      },
+      {
+        accessorKey: "recallExposure",
+        header: "Recall",
+        cell: ({ row }) => <RiskScorePill score={row.original.recallExposure} showLabel={false} />,
+      },
+      {
+        accessorKey: "traceabilityFailureRisk",
+        header: "Traceability",
+        cell: ({ row }) => (
+          <RiskScorePill score={row.original.traceabilityFailureRisk} showLabel={false} />
+        ),
+      },
       {
         id: "drivers",
         header: "Top drivers",
@@ -54,10 +80,18 @@ export function PredictiveView() {
     );
 
   if (isError || !data)
-    return <EmptyState icon={Radar} title="Couldn't load predictions" description="Please retry." />;
+    return (
+      <EmptyState icon={Radar} title="Couldn't load predictions" description="Please retry." />
+    );
 
   const highRisk = data.scores.filter(
-    (s) => Math.max(s.delayProbability, s.excursionProbability, s.recallExposure, s.traceabilityFailureRisk) >= 70,
+    (s) =>
+      Math.max(
+        s.delayProbability,
+        s.excursionProbability,
+        s.recallExposure,
+        s.traceabilityFailureRisk,
+      ) >= 70,
   ).length;
   const risingPartners = data.partnerScores.filter((p) => p.trend === "RISING").length;
 
@@ -65,9 +99,26 @@ export function PredictiveView() {
     <div className="space-y-6">
       <KpiStrip
         items={[
-          { label: "Scored Active Shipments", value: data.scores.length, icon: Radar, status: "info", hint: "5 risk types each" },
-          { label: "High-Risk Predictions", value: highRisk, icon: TrendingUp, status: highRisk > 0 ? "danger" : "success", hint: "≥ 70% any type" },
-          { label: "Rising Partner Risks", value: risingPartners, icon: ArrowUpRight, status: risingPartners > 0 ? "warning" : "success" },
+          {
+            label: "Scored Active Shipments",
+            value: data.scores.length,
+            icon: Radar,
+            status: "info",
+            hint: "5 risk types each",
+          },
+          {
+            label: "High-Risk Predictions",
+            value: highRisk,
+            icon: TrendingUp,
+            status: highRisk > 0 ? "danger" : "success",
+            hint: "≥ 70% any type",
+          },
+          {
+            label: "Rising Partner Risks",
+            value: risingPartners,
+            icon: ArrowUpRight,
+            status: risingPartners > 0 ? "warning" : "success",
+          },
         ]}
       />
 
@@ -85,13 +136,13 @@ export function PredictiveView() {
                 key={a.id}
                 type="button"
                 onClick={() => router.push(a.href)}
-                className="rounded-lg border border-border bg-card p-4 text-left transition-colors hover:border-brand-blue"
+                className="border-border bg-card hover:border-brand-blue rounded-lg border p-4 text-left transition-colors"
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-sm font-semibold text-foreground">{a.title}</span>
+                  <span className="text-foreground text-sm font-semibold">{a.title}</span>
                   <Badge variant={sev.variant}>{sev.label}</Badge>
                 </div>
-                <p className="mt-1 text-xs text-muted-foreground">{a.detail}</p>
+                <p className="text-muted-foreground mt-1 text-xs">{a.detail}</p>
               </button>
             );
           })}
@@ -115,7 +166,10 @@ export function PredictiveView() {
       </ChartCard>
 
       {/* Partner risk */}
-      <ChartCard title="Trading-partner risk" description="Predicted partner compliance risk with drivers">
+      <ChartCard
+        title="Trading-partner risk"
+        description="Predicted partner compliance risk with drivers"
+      >
         <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           {data.partnerScores.slice(0, 9).map((p) => (
             <PartnerRiskCard key={p.partnerId} partner={p} />
@@ -133,7 +187,7 @@ function PartnerRiskCard({ partner }: { partner: PartnerRiskScore }) {
     <Card>
       <CardContent className="p-3">
         <div className="flex items-center justify-between gap-2">
-          <span className="truncate text-sm font-medium text-foreground">{partner.name}</span>
+          <span className="text-foreground truncate text-sm font-medium">{partner.name}</span>
           <RiskScorePill score={partner.riskScore} showLabel={false} />
         </div>
         <div className={`mt-1 flex items-center gap-1 text-xs ${trendTone}`}>

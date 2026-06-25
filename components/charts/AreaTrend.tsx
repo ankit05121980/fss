@@ -50,7 +50,13 @@ export function AreaTrend({
           axisLine={{ stroke: "var(--border)" }}
           minTickGap={24}
         />
-        <YAxis tick={axisStyle} tickLine={false} axisLine={false} width={40} allowDecimals={false} />
+        <YAxis
+          tick={axisStyle}
+          tickLine={false}
+          axisLine={false}
+          width={40}
+          allowDecimals={false}
+        />
         <Tooltip content={<ChartTooltipContent unit={unit} />} />
         <Area
           type="monotone"

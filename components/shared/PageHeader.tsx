@@ -14,15 +14,15 @@ export function PageHeader({
   return (
     <div
       className={cn(
-        "flex flex-col gap-3 border-b border-border pb-4 md:flex-row md:items-end md:justify-between",
+        "border-border flex flex-col gap-3 border-b pb-4 md:flex-row md:items-end md:justify-between",
         className,
       )}
     >
       <div className="min-w-0">
-        <h1 className="truncate text-xl font-bold tracking-tight text-foreground sm:text-2xl">
+        <h1 className="text-foreground truncate text-xl font-bold tracking-tight sm:text-2xl">
           {title}
         </h1>
-        {subtitle && <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>}
+        {subtitle && <p className="text-muted-foreground mt-1 text-sm">{subtitle}</p>}
       </div>
       {children && <div className="flex flex-wrap items-center gap-2">{children}</div>}
     </div>

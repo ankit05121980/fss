@@ -66,7 +66,7 @@ export default function MapViewInner({
   center = [40, -30],
 }: MapViewProps) {
   return (
-    <div className="overflow-hidden rounded-lg border border-border" style={{ height }}>
+    <div className="border-border overflow-hidden rounded-lg border" style={{ height }}>
       <MapContainer
         center={center}
         zoom={zoom}

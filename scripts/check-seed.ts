@@ -87,7 +87,8 @@ check("RCL-2026-001 located = 24120", recall?.locatedPackages === 24120);
 check("RCL-2026-001 outstanding = 380", recall?.outstandingPackages === 380);
 check(
   "RCL-2026-001 reconciles (located + outstanding = impacted)",
-  (recall?.locatedPackages ?? 0) + (recall?.outstandingPackages ?? 0) === (recall?.impactedPackages ?? -1),
+  (recall?.locatedPackages ?? 0) + (recall?.outstandingPackages ?? 0) ===
+    (recall?.impactedPackages ?? -1),
 );
 
 // --- A7: expired & unauthorized partners ------------------------------------
@@ -117,8 +118,15 @@ for (const t of riskTypes) {
 
 // --- Reconciled KPIs are sane -----------------------------------------------
 const exec = getExecutiveKpis();
-check("Traceability coverage 0-100", exec.traceabilityCoveragePct > 0 && exec.traceabilityCoveragePct <= 100, `${exec.traceabilityCoveragePct}%`);
-check("Serialization coverage matches helper", exec.serializationCoveragePct === serializationCoveragePct());
+check(
+  "Traceability coverage 0-100",
+  exec.traceabilityCoveragePct > 0 && exec.traceabilityCoveragePct <= 100,
+  `${exec.traceabilityCoveragePct}%`,
+);
+check(
+  "Serialization coverage matches helper",
+  exec.serializationCoveragePct === serializationCoveragePct(),
+);
 check("Authorized partner % matches helper", exec.authorizedPartnerPct === authorizedPartnerPct());
 check("Active excursions >= 1 (hero)", activeExcursionCount() >= 1, `${activeExcursionCount()}`);
 check("Traceability helper consistent", exec.traceabilityCoveragePct === traceabilityCoveragePct());

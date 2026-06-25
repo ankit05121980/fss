@@ -78,7 +78,9 @@ export function getInsights(): Insight[] {
         "Delay hours concentrate at a single chokepoint — prioritising it would yield the largest on-time improvement.",
       value: `${share}%`,
       chartKind: "bar",
-      chart: ranked.slice(0, 5).map(([id, h]) => ({ name: locShort(locById.get(id), id), value: h })),
+      chart: ranked
+        .slice(0, 5)
+        .map(([id, h]) => ({ name: locShort(locById.get(id), id), value: h })),
     });
   }
 
@@ -156,7 +158,9 @@ export function getInsights(): Insight[] {
         "Serialization scan failures concentrate at specific distribution nodes — targeted scanner audits would close the gap.",
       value: top ? String(top[1]) : "0",
       chartKind: "bar",
-      chart: ranked.slice(0, 5).map(([id, c]) => ({ name: locShort(locById.get(id), id), value: c })),
+      chart: ranked
+        .slice(0, 5)
+        .map(([id, c]) => ({ name: locShort(locById.get(id), id), value: c })),
     });
   }
 
@@ -202,7 +206,8 @@ export function getInsights(): Insight[] {
         sorted.length >= 2
           ? `On-time delivery ranges from ${sorted[sorted.length - 1].value}% (${sorted[sorted.length - 1].name}) to ${sorted[0].value}% (${sorted[0].name})`
           : "On-time delivery performance varies across transport modes",
-      detail: "Mode choice materially affects reliability — ocean freight carries the greatest schedule risk.",
+      detail:
+        "Mode choice materially affects reliability — ocean freight carries the greatest schedule risk.",
       value: sorted.length ? `${sorted[0].value}%` : "—",
       chartKind: "bar",
       chart,
@@ -212,7 +217,9 @@ export function getInsights(): Insight[] {
   // 8. Trading-partner compliance posture
   {
     const partners = ds.tradingPartners;
-    const compliant = partners.filter((p) => p.auth === "AUTHORIZED" && p.license === "VALID").length;
+    const compliant = partners.filter(
+      (p) => p.auth === "AUTHORIZED" && p.license === "VALID",
+    ).length;
     const pct = round((compliant / partners.length) * 100, 0);
     insights.push({
       id: "partner-compliance",
@@ -226,7 +233,10 @@ export function getInsights(): Insight[] {
         { name: "Authorized + valid", value: compliant },
         { name: "Expired licence", value: partners.filter((p) => p.license === "EXPIRED").length },
         { name: "Unauthorized", value: partners.filter((p) => p.auth === "UNAUTHORIZED").length },
-        { name: "Expiring soon", value: partners.filter((p) => p.license === "EXPIRING_SOON").length },
+        {
+          name: "Expiring soon",
+          value: partners.filter((p) => p.license === "EXPIRING_SOON").length,
+        },
       ],
     });
   }

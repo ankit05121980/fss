@@ -111,7 +111,10 @@ export function useCarriers() {
 }
 
 export function useShipments() {
-  return useQuery({ queryKey: ["shipments"], queryFn: () => fetchJson<Shipment[]>("/api/shipments") });
+  return useQuery({
+    queryKey: ["shipments"],
+    queryFn: () => fetchJson<Shipment[]>("/api/shipments"),
+  });
 }
 
 export function usePredictive() {

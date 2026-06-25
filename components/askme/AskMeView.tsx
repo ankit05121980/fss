@@ -60,7 +60,9 @@ export function AskMeView() {
     scrollToBottom();
     try {
       const result = await ask.mutateAsync(q);
-      setMessages((m) => m.map((msg) => (msg.id === pendingMsg.id ? { ...msg, pending: false, result } : msg)));
+      setMessages((m) =>
+        m.map((msg) => (msg.id === pendingMsg.id ? { ...msg, pending: false, result } : msg)),
+      );
     } catch {
       setMessages((m) =>
         m.map((msg) =>
@@ -85,7 +87,7 @@ export function AskMeView() {
 
   return (
     <div className="flex h-[calc(100dvh-180px)] min-h-[520px] flex-col gap-4">
-      <div ref={scrollRef} className="scrollbar-thin flex-1 space-y-4 overflow-y-auto rounded-lg">
+      <div ref={scrollRef} className="flex-1 scrollbar-thin space-y-4 overflow-y-auto rounded-lg">
         {messages.length === 0 ? (
           <WelcomePanel onPick={submitQuestion} useLlm={useLlm} />
         ) : (
@@ -100,7 +102,7 @@ export function AskMeView() {
               key={ex.intent}
               type="button"
               onClick={() => submitQuestion(ex.text)}
-              className="rounded-full border border-border bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground transition-colors hover:border-brand-blue hover:bg-accent"
+              className="border-border bg-secondary text-secondary-foreground hover:border-brand-blue hover:bg-accent rounded-full border px-3 py-1 text-xs font-medium transition-colors"
             >
               {ex.text}
             </button>
@@ -110,13 +112,13 @@ export function AskMeView() {
 
       <form onSubmit={onSubmit} className="flex items-center gap-2">
         <div className="relative flex-1">
-          <Bot className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+          <Bot className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
           <input
             name="q"
             autoComplete="off"
             placeholder="Ask about shipments, traceability, excursions, carriers, custody, recalls, partners…"
             aria-label="Ask a question"
-            className="h-11 w-full rounded-lg border border-input bg-card pl-10 pr-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            className="border-input bg-card focus-visible:ring-ring h-11 w-full rounded-lg border pr-3 pl-10 text-sm shadow-sm focus-visible:ring-2 focus-visible:outline-none"
           />
         </div>
         <Button type="submit" size="lg" className="h-11" disabled={ask.isPending}>
@@ -129,14 +131,16 @@ export function AskMeView() {
 
 function WelcomePanel({ onPick, useLlm }: { onPick: (q: string) => void; useLlm: boolean }) {
   return (
-    <div className="flex h-full flex-col items-center justify-center rounded-lg border border-dashed border-border bg-muted/30 p-8 text-center">
-      <span className="mb-3 flex size-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
+    <div className="border-border bg-muted/30 flex h-full flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
+      <span className="bg-primary text-primary-foreground mb-3 flex size-12 items-center justify-center rounded-full">
         <Sparkles className="size-6" />
       </span>
-      <h2 className="text-lg font-bold text-foreground">AskMe — Conversational Compliance Intelligence</h2>
-      <p className="mt-1 max-w-lg text-sm text-muted-foreground">
-        Ask natural-language questions about your supply chain. Answers are computed from the unified
-        data model and reconcile with every dashboard.
+      <h2 className="text-foreground text-lg font-bold">
+        AskMe — Conversational Compliance Intelligence
+      </h2>
+      <p className="text-muted-foreground mt-1 max-w-lg text-sm">
+        Ask natural-language questions about your supply chain. Answers are computed from the
+        unified data model and reconcile with every dashboard.
         {useLlm ? " (LLM mode enabled)" : " (deterministic engine)"}
       </p>
       <div className="mt-5 grid w-full max-w-2xl gap-2 sm:grid-cols-2">
@@ -145,10 +149,10 @@ function WelcomePanel({ onPick, useLlm }: { onPick: (q: string) => void; useLlm:
             key={ex.intent}
             type="button"
             onClick={() => onPick(ex.text)}
-            className="flex items-center justify-between gap-2 rounded-lg border border-border bg-card px-3 py-2.5 text-left text-sm transition-colors hover:border-brand-blue hover:bg-accent"
+            className="border-border bg-card hover:border-brand-blue hover:bg-accent flex items-center justify-between gap-2 rounded-lg border px-3 py-2.5 text-left text-sm transition-colors"
           >
             <span className="text-foreground">{ex.text}</span>
-            <ArrowRight className="size-4 shrink-0 text-brand-blue" />
+            <ArrowRight className="text-brand-blue size-4 shrink-0" />
           </button>
         ))}
       </div>
@@ -160,10 +164,10 @@ function MessageBubble({ message }: { message: ChatMessage }) {
   if (message.role === "user") {
     return (
       <div className="flex justify-end gap-2">
-        <div className="max-w-[80%] rounded-2xl rounded-tr-sm bg-primary px-4 py-2.5 text-sm text-primary-foreground">
+        <div className="bg-primary text-primary-foreground max-w-[80%] rounded-2xl rounded-tr-sm px-4 py-2.5 text-sm">
           {message.text}
         </div>
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-secondary text-secondary-foreground">
+        <span className="bg-secondary text-secondary-foreground flex size-8 shrink-0 items-center justify-center rounded-full">
           <User className="size-4" />
         </span>
       </div>
@@ -172,18 +176,18 @@ function MessageBubble({ message }: { message: ChatMessage }) {
 
   return (
     <div className="flex gap-2">
-      <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground">
+      <span className="bg-primary text-primary-foreground flex size-8 shrink-0 items-center justify-center rounded-full">
         <Bot className="size-4" />
       </span>
       <div className="w-full max-w-[88%] space-y-3">
         {message.pending ? (
-          <div className="flex items-center gap-1.5 rounded-2xl rounded-tl-sm border border-border bg-card px-4 py-3">
+          <div className="border-border bg-card flex items-center gap-1.5 rounded-2xl rounded-tl-sm border px-4 py-3">
             <Dot /> <Dot delay="0.15s" /> <Dot delay="0.3s" />
           </div>
         ) : message.result ? (
           <ResultCard result={message.result} />
         ) : (
-          <div className="rounded-2xl rounded-tl-sm border border-border bg-card px-4 py-2.5 text-sm">
+          <div className="border-border bg-card rounded-2xl rounded-tl-sm border px-4 py-2.5 text-sm">
             {message.text}
           </div>
         )}
@@ -195,7 +199,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
 function Dot({ delay = "0s" }: { delay?: string }) {
   return (
     <span
-      className="size-2 animate-bounce rounded-full bg-muted-foreground"
+      className="bg-muted-foreground size-2 animate-bounce rounded-full"
       style={{ animationDelay: delay }}
     />
   );
@@ -205,18 +209,20 @@ function ResultCard({ result }: { result: AskMeResult }) {
   return (
     <Card className="space-y-3 p-4">
       <div className="flex items-start gap-2">
-        {result.intent !== "FALLBACK" && <Badge variant="secondary">{result.intent.replaceAll("_", " ")}</Badge>}
+        {result.intent !== "FALLBACK" && (
+          <Badge variant="secondary">{result.intent.replaceAll("_", " ")}</Badge>
+        )}
       </div>
-      <p className="text-sm text-foreground">{result.summary}</p>
+      <p className="text-foreground text-sm">{result.summary}</p>
 
       {result.chart && result.chart.data.length > 0 && (
-        <div className="rounded-lg border border-border p-2">
+        <div className="border-border rounded-lg border p-2">
           <BarCompare data={result.chart.data} unit={result.chart.unit} colorByIndex height={220} />
         </div>
       )}
 
       {result.table && result.table.rows.length > 0 && (
-        <div className="max-h-72 overflow-auto rounded-lg border border-border">
+        <div className="border-border max-h-72 overflow-auto rounded-lg border">
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent">

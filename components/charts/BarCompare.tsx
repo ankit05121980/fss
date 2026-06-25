@@ -50,7 +50,10 @@ export function BarCompare({
             axisLine={false}
             width={130}
           />
-          <Tooltip content={<ChartTooltipContent unit={unit} />} cursor={{ fill: "var(--muted)" }} />
+          <Tooltip
+            content={<ChartTooltipContent unit={unit} />}
+            cursor={{ fill: "var(--muted)" }}
+          />
           <Bar dataKey="value" name={barName} radius={[0, 4, 4, 0]} isAnimationActive={false}>
             {data.map((_, i) => (
               <Cell key={i} fill={colorByIndex ? CHART_COLORS[i % CHART_COLORS.length] : fill} />
@@ -65,7 +68,16 @@ export function BarCompare({
     <ResponsiveContainer width="100%" height={height}>
       <BarChart data={data} margin={{ top: 8, right: 12, bottom: 4, left: -8 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-        <XAxis dataKey="name" tick={axisStyle} tickLine={false} axisLine={{ stroke: "var(--border)" }} interval={0} angle={data.length > 6 ? -20 : 0} textAnchor={data.length > 6 ? "end" : "middle"} height={data.length > 6 ? 60 : 30} />
+        <XAxis
+          dataKey="name"
+          tick={axisStyle}
+          tickLine={false}
+          axisLine={{ stroke: "var(--border)" }}
+          interval={0}
+          angle={data.length > 6 ? -20 : 0}
+          textAnchor={data.length > 6 ? "end" : "middle"}
+          height={data.length > 6 ? 60 : 30}
+        />
         <YAxis tick={axisStyle} tickLine={false} axisLine={false} width={44} />
         <Tooltip content={<ChartTooltipContent unit={unit} />} cursor={{ fill: "var(--muted)" }} />
         <Bar dataKey="value" name={barName} radius={[4, 4, 0, 0]} isAnimationActive={false}>
