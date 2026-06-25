@@ -8,20 +8,18 @@ import { cn } from "@/lib/utils/cn";
  */
 
 export function LumenoreMark({ className }: { className?: string }) {
+  // Faithful rendition of the official "L" app-icon: a 3D-beveled L with a
+  // periwinkle upright (lighter left edge) and a teal foot with a darker fold.
   return (
     <svg viewBox="0 0 48 48" className={className} role="img" aria-label="Lumenore" fill="none">
-      <defs>
-        <linearGradient id="lumenore-mark" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#9FB8EA" />
-          <stop offset="100%" stopColor="#58C3D4" />
-        </linearGradient>
-      </defs>
-      {/* horizontal foot */}
-      <rect x="9" y="29" width="30" height="11" rx="2" fill="#58C3D4" />
-      {/* vertical bar with gradient */}
-      <rect x="9" y="5" width="12" height="35" rx="2" fill="url(#lumenore-mark)" />
-      {/* corner accent for depth */}
-      <rect x="9" y="29" width="12" height="11" rx="2" fill="#3CAFC6" />
+      {/* upright — front face */}
+      <rect x="16" y="6" width="9" height="28" rx="1.5" fill="#8C9EEB" />
+      {/* upright — left highlight edge (3D) */}
+      <rect x="16" y="6" width="2.6" height="28" rx="1.5" fill="#AAB6F1" />
+      {/* foot — top face */}
+      <rect x="16" y="33" width="20" height="8" rx="1.5" fill="#A4E7E9" />
+      {/* corner fold — darker teal bevel */}
+      <polygon points="16,33 24,33 16,41" fill="#62C5CE" />
     </svg>
   );
 }
