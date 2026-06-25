@@ -1,0 +1,286 @@
+"use client";
+
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import type { ColumnDef } from "@tanstack/react-table";
+import { Activity, Clock, Gauge, Package, Ship, Truck } from "lucide-react";
+
+import { useControlTower } from "@/lib/hooks/useAnalytics";
+import { fmtCompact, fmtHours, fmtPct } from "@/lib/utils/format";
+import { fromNow } from "@/lib/utils/date";
+import { MODE_META, STATUS_HEX } from "@/lib/utils/constants";
+import type { Mode, ShipmentRow, ShipmentStatus } from "@/lib/data/types";
+import { KpiStrip } from "@/components/shared/KpiStrip";
+import { ChartCard } from "@/components/shared/ChartCard";
+import { DataTable } from "@/components/shared/DataTable";
+import { StatusBadge } from "@/components/shared/StatusBadge";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { BarCompare } from "@/components/charts/BarCompare";
+import { MapView, type MapMarker, type MapRoute } from "@/components/shared/MapView";
+import {
+  ChartSkeleton,
+  KpiStripSkeleton,
+  TableSkeleton,
+} from "@/components/shared/LoadingSkeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+
+const MODES: Mode[] = ["OCEAN", "AIR", "TRUCK", "RAIL"];
+const STATUSES: ShipmentStatus[] = ["IN_TRANSIT", "DELAYED", "DELIVERED", "CUSTOMS_HOLD"];
+
+export function ControlTowerView() {
+  const router = useRouter();
+  const { data, isLoading, isError } = useControlTower();
+
+  const [mode, setMode] = React.useState<string>("ALL");
+  const [status, setStatus] = React.useState<string>("ALL");
+  const [carrier, setCarrier] = React.useState<string>("ALL");
+
+  const filtered = React.useMemo(() => {
+    if (!data) return [];
+    return data.shipments.filter(
+      (s) =>
+        (mode === "ALL" || s.primaryMode === mode) &&
+        (status === "ALL" || s.status === status) &&
+        (carrier === "ALL" || s.carrierId === carrier),
+    );
+  }, [data, mode, status, carrier]);
+
+  const { markers, routes } = React.useMemo(() => {
+    if (!data) return { markers: [] as MapMarker[], routes: [] as MapRoute[] };
+    const locById = new Map(data.locations.map((l) => [l.id, l]));
+    const usedLocations = new Set<string>();
+    const rts: MapRoute[] = [];
+    for (const s of filtered) {
+      const o = locById.get(s.originId);
+      const d = locById.get(s.destinationId);
+      if (!o || !d) continue;
+      usedLocations.add(o.id);
+      usedLocations.add(d.id);
+      rts.push({
+        id: s.id,
+        points: [
+          [o.lat, o.lng],
+          [d.lat, d.lng],
+        ],
+        color: STATUS_HEX[s.status],
+        emphasized: s.primaryMode === "OCEAN",
+        mode: s.primaryMode,
+      });
+    }
+    const mks: MapMarker[] = [...usedLocations].map((id) => {
+      const l = locById.get(id)!;
+      return { id: l.id, lat: l.lat, lng: l.lng, label: l.name, sublabel: l.type, color: "#1F3864" };
+    });
+    return { markers: mks, routes: rts };
+  }, [data, filtered]);
+
+  const columns = React.useMemo<ColumnDef<ShipmentRow, unknown>[]>(
+    () => [
+      { accessorKey: "id", header: "Shipment", cell: ({ row }) => <span className="font-semibold text-foreground">{row.original.id}</span> },
+      { accessorKey: "productName", header: "Product", cell: ({ row }) => <span className="text-sm">{row.original.productName}</span> },
+      {
+        accessorKey: "primaryMode",
+        header: "Mode",
+        cell: ({ row }) => <Badge variant="muted">{MODE_META[row.original.primaryMode].label}</Badge>,
+      },
+      {
+        accessorKey: "status",
+        header: "Status",
+        cell: ({ row }) => <StatusBadge kind="shipment" value={row.original.status} />,
+      },
+      { accessorKey: "carrierName", header: "Carrier", cell: ({ row }) => <span className="text-sm">{row.original.carrierName}</span> },
+      {
+        id: "lane",
+        header: "Lane",
+        cell: ({ row }) => (
+          <span className="text-xs text-muted-foreground">
+            {row.original.originName.split("—")[0].trim()} → {row.original.destinationName.split("—")[0].trim()}
+          </span>
+        ),
+      },
+      {
+        accessorKey: "delayHours",
+        header: "Delay",
+        cell: ({ row }) =>
+          row.original.delayHours > 0 ? (
+            <span className="font-medium text-warning">{fmtHours(row.original.delayHours)}</span>
+          ) : (
+            <span className="text-muted-foreground">On time</span>
+          ),
+      },
+      {
+        accessorKey: "etaAt",
+        header: "ETA",
+        cell: ({ row }) => <span className="text-xs text-muted-foreground">{fromNow(row.original.etaAt)}</span>,
+      },
+    ],
+    [],
+  );
+
+  if (isLoading)
+    return (
+      <div className="space-y-6">
+        <KpiStripSkeleton count={6} />
+        <div className="grid gap-4 lg:grid-cols-3">
+          <ChartSkeleton className="lg:col-span-2" height={360} />
+          <ChartSkeleton height={360} />
+        </div>
+        <TableSkeleton />
+      </div>
+    );
+
+  if (isError || !data)
+    return (
+      <EmptyState
+        icon={Activity}
+        title="Couldn't load control tower"
+        description="There was a problem retrieving shipment data. Please retry."
+      />
+    );
+
+  const { kpis } = data;
+
+  return (
+    <div className="space-y-6">
+      <KpiStrip
+        items={[
+          { label: "Active Shipments", value: kpis.activeShipments, icon: Ship, status: "info", hint: "in motion" },
+          { label: "Delayed", value: kpis.delayedShipments, icon: Clock, status: kpis.delayedShipments > 8 ? "warning" : "neutral", hint: "delayed / held" },
+          { label: "In Transit", value: kpis.inTransit, icon: Truck, status: "neutral" },
+          { label: "Inventory in Motion", value: fmtCompact(kpis.inventoryInMotion), icon: Package, status: "neutral", hint: "packages" },
+          { label: "On-Time Delivery", value: fmtPct(kpis.onTimeDeliveryPct, 1), icon: Activity, status: kpis.onTimeDeliveryPct >= 80 ? "success" : "warning" },
+          { label: "Carrier Score", value: kpis.carrierPerformanceScore, icon: Gauge, status: kpis.carrierPerformanceScore >= 80 ? "success" : "warning", hint: "/ 100" },
+        ]}
+      />
+
+      {/* Filters */}
+      <Card>
+        <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center">
+          <span className="text-sm font-medium text-muted-foreground">Filter</span>
+          <FilterSelect label="Mode" value={mode} onChange={setMode} options={MODES.map((m) => ({ value: m, label: MODE_META[m].label }))} />
+          <FilterSelect label="Status" value={status} onChange={setStatus} options={STATUSES.map((s) => ({ value: s, label: s.replaceAll("_", " ") }))} />
+          <FilterSelect
+            label="Carrier"
+            value={carrier}
+            onChange={setCarrier}
+            options={data.carrierPerformance.map((c) => ({ value: c.carrierId, label: c.name }))}
+          />
+          <span className="text-xs text-muted-foreground sm:ml-auto">
+            Showing {filtered.length} of {data.shipments.length} shipments
+          </span>
+        </CardContent>
+      </Card>
+
+      {/* Map + congestion */}
+      <div className="grid gap-4 lg:grid-cols-3">
+        <ChartCard
+          title="Global shipment map"
+          description="Lanes coloured by status · ocean freight emphasized"
+          className="lg:col-span-2"
+          contentClassName="pt-0"
+        >
+          <MapView markers={markers} routes={routes} height={380} zoom={2} />
+          <div className="mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground">
+            {STATUSES.map((s) => (
+              <span key={s} className="inline-flex items-center gap-1.5">
+                <span className="size-2.5 rounded-full" style={{ background: STATUS_HEX[s] }} />
+                {s.replaceAll("_", " ")}
+              </span>
+            ))}
+            <span className="inline-flex items-center gap-1.5">
+              <span className="h-0.5 w-5 border-t-2 border-dashed" style={{ borderColor: "#1F3864" }} /> Ocean lane
+            </span>
+          </div>
+        </ChartCard>
+
+        <ChartCard title="Port & customs congestion" description="Shipments held + dwell time">
+          {data.portCongestion.length === 0 ? (
+            <EmptyState title="No congestion" description="No ports are currently congested." />
+          ) : (
+            <ul className="space-y-2">
+              {data.portCongestion.map((p) => (
+                <li key={p.locationId} className="rounded-md border border-border bg-muted/40 p-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-foreground">{p.name}</span>
+                    <Badge variant={p.shipmentsHeld > 2 ? "danger" : "warning"}>{p.shipmentsHeld} held</Badge>
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">Avg dwell {fmtHours(p.avgDwellHours)}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </ChartCard>
+      </div>
+
+      {/* Carrier performance + delay analysis */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        <ChartCard title="Carrier performance" description="Performance score (0–100) by carrier">
+          <BarCompare
+            data={data.carrierPerformance.map((c) => ({ name: c.name.split(" ")[0], value: c.performanceScore }))}
+            layout="vertical"
+            unit=""
+            color="var(--brand-blue)"
+            height={300}
+          />
+        </ChartCard>
+        <ChartCard title="Delay analysis" description="Total delay hours by transport mode">
+          <BarCompare
+            data={data.delayByMode}
+            unit="h"
+            colorByIndex
+            height={300}
+            barName="Delay hours"
+          />
+        </ChartCard>
+      </div>
+
+      {/* Shipment table */}
+      <ChartCard title="Shipments" description="Select a row to open full traceability">
+        <DataTable
+          columns={columns}
+          data={filtered}
+          searchPlaceholder="Filter shipments…"
+          pageSize={10}
+          onRowClick={(row) => router.push(`/traceability?type=shipment&q=${row.id}`)}
+          emptyTitle="No shipments match the filters"
+        />
+      </ChartCard>
+    </div>
+  );
+}
+
+function FilterSelect({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger className="w-full sm:w-44" aria-label={label}>
+        <SelectValue placeholder={label} />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="ALL">All {label.toLowerCase()}s</SelectItem>
+        {options.map((o) => (
+          <SelectItem key={o.value} value={o.value}>
+            {o.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}

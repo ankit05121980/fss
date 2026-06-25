@@ -6,13 +6,13 @@ import {
   getDelayByMode,
   getLocations,
   getPortCongestion,
-  getShipments,
+  getShipmentRows,
 } from "@/lib/data/access";
 
 export function GET() {
   return NextResponse.json({
     kpis: getControlTowerKpis(),
-    shipments: getShipments(),
+    shipments: getShipmentRows(),
     carrierPerformance: getCarrierPerformance(),
     portCongestion: getPortCongestion(),
     delayByMode: getDelayByMode(),

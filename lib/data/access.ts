@@ -628,6 +628,31 @@ export function getPartnerRiskMatrix(): PartnerRiskPoint[] {
 // Rich shipment detail (used by Control Tower drill + Traceability)
 // -----------------------------------------------------------------------------
 
+export function getShipmentRows(filter: ShipmentFilter = {}): import("@/lib/data/types").ShipmentRow[] {
+  const ds = getDataset();
+  const locById = new Map(ds.locations.map((l) => [l.id, l]));
+  const carrierById = new Map(ds.carriers.map((c) => [c.id, c]));
+  return getShipments(filter).map((s) => ({
+    id: s.id,
+    batchNumber: s.batchNumber,
+    productName: getProduct(s.productId)?.name ?? s.productId,
+    primaryMode: s.primaryMode,
+    status: s.status,
+    carrierId: s.carrierId,
+    carrierName: carrierById.get(s.carrierId)?.name ?? s.carrierId,
+    originId: s.originId,
+    originName: locById.get(s.originId)?.name ?? s.originId,
+    destinationId: s.destinationId,
+    destinationName: locById.get(s.destinationId)?.name ?? s.destinationId,
+    delayHours: s.delayHours,
+    etaAt: s.etaAt,
+    departedAt: s.departedAt,
+    packageCount: s.packageCount,
+    hasExcursion: s.hasExcursion,
+    traceabilityComplete: s.traceabilityComplete,
+  }));
+}
+
 export interface ShipmentDetail {
   shipment: Shipment;
   product?: Product;

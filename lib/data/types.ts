@@ -440,9 +440,29 @@ export interface ExecutiveAnalytics {
   violationsByCategory: NamedValue[];
 }
 
+export interface ShipmentRow {
+  id: string;
+  batchNumber: string;
+  productName: string;
+  primaryMode: Mode;
+  status: ShipmentStatus;
+  carrierId: string;
+  carrierName: string;
+  originId: string;
+  originName: string;
+  destinationId: string;
+  destinationName: string;
+  delayHours: number;
+  etaAt: string;
+  departedAt: string;
+  packageCount: number;
+  hasExcursion: boolean;
+  traceabilityComplete: boolean;
+}
+
 export interface ControlTowerAnalytics {
   kpis: ControlTowerKpis;
-  shipments: Shipment[];
+  shipments: ShipmentRow[];
   carrierPerformance: CarrierPerformance[];
   portCongestion: PortCongestion[];
   delayByMode: NamedValue[];
