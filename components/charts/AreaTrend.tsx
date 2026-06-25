@@ -11,6 +11,7 @@ import {
 } from "recharts";
 
 import { ChartTooltipContent } from "@/components/charts/ChartTooltip";
+import type { TrendPoint } from "@/lib/data/types";
 
 const axisStyle = { fontSize: 11, fill: "var(--muted-foreground)" };
 
@@ -23,7 +24,7 @@ export function AreaTrend({
   xKey = "date",
   unit,
 }: {
-  data: Array<Record<string, number | string>>;
+  data: Array<TrendPoint | Record<string, number | string>>;
   dataKey?: string;
   name: string;
   color?: string;
