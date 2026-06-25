@@ -154,6 +154,7 @@ export function PredictiveView() {
         title="Risk leaderboard"
         description="Five predictive risk types per active shipment — select a row to investigate"
         action={<Badge variant="muted">POC heuristic models</Badge>}
+        dataFlow="risk-leaderboard"
       >
         <DataTable
           columns={columns}

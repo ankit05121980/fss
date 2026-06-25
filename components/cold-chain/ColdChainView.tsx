@@ -180,7 +180,7 @@ export function ColdChainView() {
 
       {/* Root cause analysis (hero) */}
       {hero && (
-        <Card className="border-l-danger overflow-hidden border-l-4">
+        <Card className="border-l-danger overflow-hidden border-l-4" data-flow="cc-rootcause">
           <CardContent className="grid gap-4 p-5 lg:grid-cols-2">
             <div>
               <div className="flex items-center gap-2">

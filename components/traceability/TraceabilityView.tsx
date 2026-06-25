@@ -204,7 +204,7 @@ function TraceDetail({ trace }: { trace: TraceResult }) {
   return (
     <div className="space-y-6">
       {/* Resolution banner */}
-      <Card className="border-l-brand-blue border-l-4">
+      <Card className="border-l-brand-blue border-l-4" data-flow="trace-result">
         <CardContent className="flex flex-col gap-4 p-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-start gap-4">
             <span className="bg-secondary text-secondary-foreground flex size-11 shrink-0 items-center justify-center rounded-lg">
@@ -248,7 +248,7 @@ function TraceDetail({ trace }: { trace: TraceResult }) {
       </Card>
 
       <Tabs defaultValue="overview" className="w-full">
-        <TabsList>
+        <TabsList data-flow="trace-tabs">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="journey">End-to-End Journey</TabsTrigger>
         </TabsList>

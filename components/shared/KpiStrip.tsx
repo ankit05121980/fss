@@ -11,10 +11,19 @@ const GRID_BY_COUNT: Record<number, string> = {
   7: "grid-cols-2 md:grid-cols-4 xl:grid-cols-7",
 };
 
-export function KpiStrip({ items, className }: { items: KpiCardProps[]; className?: string }) {
+export function KpiStrip({
+  items,
+  className,
+  dataFlow,
+}: {
+  items: KpiCardProps[];
+  className?: string;
+  dataFlow?: string;
+}) {
   const grid = GRID_BY_COUNT[items.length] ?? "grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
   return (
-    <div className={cn("grid gap-4", grid, className)}>
+    <div className={cn("grid gap-4", grid, className)} data-flow={dataFlow}>
+
       {items.map((item) => (
         <KpiCard key={item.label} {...item} />
       ))}

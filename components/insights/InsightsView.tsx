@@ -20,7 +20,7 @@ export function InsightsView() {
     );
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3" data-flow="insights">
       {data.map((insight) => (
         <InsightCard key={insight.id} insight={insight} />
       ))}

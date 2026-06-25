@@ -65,6 +65,7 @@ export function ExecutiveView() {
   return (
     <div className="space-y-6">
       <KpiStrip
+        dataFlow="kpis"
         items={[
           {
             label: "Overall Compliance",
@@ -133,7 +134,9 @@ export function ExecutiveView() {
         ]}
       />
 
-      <PredictiveAlertsStrip context="executive" />
+      <div data-flow="predictive-strip">
+        <PredictiveAlertsStrip context="executive" />
+      </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
         <ChartCard title="Compliance score" description="Overall DSCSA readiness">

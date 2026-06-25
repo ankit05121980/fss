@@ -86,7 +86,7 @@ export function AskMeView() {
   const useLlm = process.env.NEXT_PUBLIC_USE_LLM === "true";
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col" data-flow="askme">
       {/* Conversation — flows in the page's single scroll container */}
       {messages.length === 0 ? (
         <WelcomePanel onPick={submitQuestion} useLlm={useLlm} />

@@ -252,6 +252,7 @@ export function ControlTowerView() {
           description="Lanes coloured by status · ocean freight emphasized"
           className="lg:col-span-2"
           contentClassName="pt-0"
+          dataFlow="ct-map"
         >
           <MapView markers={markers} routes={routes} height={380} zoom={2} />
           <div className="text-muted-foreground mt-3 flex flex-wrap gap-3 text-xs">
@@ -326,7 +327,11 @@ export function ControlTowerView() {
       </div>
 
       {/* Shipment table */}
-      <ChartCard title="Shipments" description="Select a row to open full traceability">
+      <ChartCard
+        title="Shipments"
+        description="Select a row to open full traceability"
+        dataFlow="ct-table"
+      >
         <DataTable
           columns={columns}
           data={filtered}

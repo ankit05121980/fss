@@ -5,6 +5,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ToastProvider } from "@/components/shared/Toast";
+import { RoleProvider } from "@/components/shared/RoleProvider";
+import { FlowProvider } from "@/components/shared/FlowProvider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   // One QueryClient per browser session. Data is static (mock), so cache it hard.
@@ -30,7 +33,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
         enableSystem={false}
         disableTransitionOnChange
       >
-        <TooltipProvider delayDuration={150}>{children}</TooltipProvider>
+        <ToastProvider>
+          <RoleProvider>
+            <FlowProvider>
+              <TooltipProvider delayDuration={150}>{children}</TooltipProvider>
+            </FlowProvider>
+          </RoleProvider>
+        </ToastProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

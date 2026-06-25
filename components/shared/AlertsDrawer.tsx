@@ -37,7 +37,13 @@ export function AlertsDrawer() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" size="icon" aria-label="Open alerts" className="relative">
+        <Button
+          variant="outline"
+          size="icon"
+          aria-label="Open alerts"
+          data-flow="alerts-bell"
+          className="relative"
+        >
           <Bell className="size-4" />
           {open && count > 0 ? null : (
             <span className="absolute -top-1 -right-1 flex size-2.5">

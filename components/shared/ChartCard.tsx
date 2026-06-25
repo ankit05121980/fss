@@ -8,6 +8,7 @@ export function ChartCard({
   children,
   className,
   contentClassName,
+  dataFlow,
 }: {
   title: string;
   description?: string;
@@ -15,9 +16,11 @@ export function ChartCard({
   children: React.ReactNode;
   className?: string;
   contentClassName?: string;
+  dataFlow?: string;
 }) {
   return (
-    <Card className={cn("flex flex-col", className)}>
+    <Card className={cn("flex flex-col", className)} data-flow={dataFlow}>
+
       <CardHeader className="flex flex-row items-start justify-between gap-2 space-y-0 pb-2">
         <div className="min-w-0">
           <CardTitle className="text-sm font-semibold">{title}</CardTitle>

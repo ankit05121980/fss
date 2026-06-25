@@ -182,7 +182,7 @@ export function PartnersView() {
       </div>
 
       {/* Suspect Product Investigation */}
-      <Card className="border-l-danger border-l-4">
+      <Card className="border-l-danger border-l-4" data-flow="suspect">
         <CardContent className="p-5">
           <div className="mb-3 flex items-center gap-2">
             <AlertOctagon className="text-danger size-4" />

@@ -260,6 +260,27 @@
   background: var(--accent);
 }
 
+/* Guided-flow target highlight */
+.flow-highlight {
+  outline: 3px solid var(--ring);
+  outline-offset: 3px;
+  border-radius: 0.6rem;
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--ring) 22%, transparent);
+  transition:
+    outline-color 0.2s ease,
+    box-shadow 0.2s ease;
+  animation: flow-pulse 1.4s ease-in-out infinite;
+}
+@keyframes flow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--ring) 22%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--ring) 10%, transparent);
+  }
+}
+
 /* Thin, themed scrollbars */
 @layer utilities {
   .scrollbar-thin {

@@ -143,7 +143,7 @@ export function RecallView() {
 
       {/* Featured recall */}
       {heroRecall && (
-        <Card className="border-l-danger border-l-4">
+        <Card className="border-l-danger border-l-4" data-flow="recall-tracker">
           <CardContent className="grid gap-6 p-5 lg:grid-cols-2">
             <div>
               <div className="flex flex-wrap items-center gap-2">

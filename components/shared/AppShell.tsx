@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils/cn";
 import { Sidebar } from "@/components/shared/Sidebar";
 import { Topbar } from "@/components/shared/Topbar";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
+import { GuidedFlowDock } from "@/components/shared/GuidedFlowDock";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -56,6 +57,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </main>
       </div>
+
+      <GuidedFlowDock />
     </div>
   );
 }

@@ -3,6 +3,7 @@ import {
   Activity,
   Bot,
   ClipboardCheck,
+  Compass,
   Gauge,
   Lightbulb,
   Network,
@@ -44,6 +45,12 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: "Overview",
     items: [
+      {
+        title: "Getting Started",
+        href: "/getting-started",
+        icon: Compass,
+        description: "Guided end-to-end flow",
+      },
       {
         title: "Executive",
         href: "/executive",
