@@ -4,6 +4,7 @@ import {
   Bot,
   ClipboardCheck,
   Compass,
+  DatabaseZap,
   Gauge,
   Lightbulb,
   Network,
@@ -96,6 +97,17 @@ export const NAV_GROUPS: NavGroup[] = [
         href: "/partners",
         icon: Network,
         description: "Authorization & licence compliance",
+      },
+    ],
+  },
+  {
+    label: "Data",
+    items: [
+      {
+        title: "Integrations",
+        href: "/integrations",
+        icon: DatabaseZap,
+        description: "Upload files & connect source systems",
       },
     ],
   },
