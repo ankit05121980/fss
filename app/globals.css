@@ -1,0 +1,290 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Enable class-based dark mode (next-themes adds `.dark` on <html>) */
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Lumenore design tokens.
+ * Brand palette from the FSS delivery plan:
+ *   navy #1F3864, blue #2E75B6, light-blue #D9E2F3 / #EAF0FA,
+ *   text #222222, muted #595959, border #BFBFBF,
+ *   success #2E7D32, warning #ED6C02, danger #C62828, info #0277BD,
+ *   page bg #F7F9FC.
+ */
+:root {
+  --radius: 0.625rem;
+
+  /* Surfaces & text */
+  --background: #f7f9fc;
+  --foreground: #222222;
+  --card: #ffffff;
+  --card-foreground: #222222;
+  --popover: #ffffff;
+  --popover-foreground: #222222;
+
+  /* Brand */
+  --primary: #1f3864;
+  --primary-foreground: #ffffff;
+  --brand-navy: #1f3864;
+  --brand-blue: #2e75b6;
+  --brand-surface: #d9e2f3;
+  --brand-surface-2: #eaf0fa;
+
+  /* Secondary / muted / accent */
+  --secondary: #eaf0fa;
+  --secondary-foreground: #1f3864;
+  --muted: #eef2f8;
+  --muted-foreground: #595959;
+  --accent: #d9e2f3;
+  --accent-foreground: #1f3864;
+
+  /* Semantic status */
+  --success: #2e7d32;
+  --success-foreground: #ffffff;
+  --warning: #ed6c02;
+  --warning-foreground: #ffffff;
+  --danger: #c62828;
+  --danger-foreground: #ffffff;
+  --info: #0277bd;
+  --info-foreground: #ffffff;
+  --destructive: #c62828;
+  --destructive-foreground: #ffffff;
+
+  /* Lines & focus */
+  --border: #d7deea;
+  --border-strong: #bfbfbf;
+  --input: #cbd5e6;
+  --ring: #2e75b6;
+
+  /* Chart palette */
+  --chart-1: #2e75b6;
+  --chart-2: #1f3864;
+  --chart-3: #0277bd;
+  --chart-4: #2e7d32;
+  --chart-5: #ed6c02;
+
+  /* Sidebar */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #222222;
+  --sidebar-primary: #1f3864;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eaf0fa;
+  --sidebar-accent-foreground: #1f3864;
+  --sidebar-border: #e2e8f2;
+  --sidebar-ring: #2e75b6;
+}
+
+.dark {
+  --background: #0b1220;
+  --foreground: #e6ecf5;
+  --card: #111a2e;
+  --card-foreground: #e6ecf5;
+  --popover: #111a2e;
+  --popover-foreground: #e6ecf5;
+
+  --primary: #4f93d6;
+  --primary-foreground: #07101f;
+  --brand-navy: #2e75b6;
+  --brand-blue: #4f93d6;
+  --brand-surface: #1b2740;
+  --brand-surface-2: #16213a;
+
+  --secondary: #1b2740;
+  --secondary-foreground: #dce6f5;
+  --muted: #1a2438;
+  --muted-foreground: #9aa8bf;
+  --accent: #20304e;
+  --accent-foreground: #dce6f5;
+
+  --success: #4caf50;
+  --success-foreground: #07101f;
+  --warning: #ffa726;
+  --warning-foreground: #07101f;
+  --danger: #ef5350;
+  --danger-foreground: #07101f;
+  --info: #29b6f6;
+  --info-foreground: #07101f;
+  --destructive: #ef5350;
+  --destructive-foreground: #07101f;
+
+  --border: #243049;
+  --border-strong: #324061;
+  --input: #2b3954;
+  --ring: #4f93d6;
+
+  --chart-1: #4f93d6;
+  --chart-2: #7fb2e6;
+  --chart-3: #29b6f6;
+  --chart-4: #66bb6a;
+  --chart-5: #ffa726;
+
+  --sidebar: #0e1626;
+  --sidebar-foreground: #e6ecf5;
+  --sidebar-primary: #4f93d6;
+  --sidebar-primary-foreground: #07101f;
+  --sidebar-accent: #1b2740;
+  --sidebar-accent-foreground: #dce6f5;
+  --sidebar-border: #1d2941;
+  --sidebar-ring: #4f93d6;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-surface: var(--brand-surface);
+  --color-brand-surface-2: var(--brand-surface-2);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family:
+      var(--font-sans),
+      system-ui,
+      -apple-system,
+      "Segoe UI",
+      Roboto,
+      Arial,
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Visible focus ring for keyboard users (a11y) */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+/* Leaflet sizing helpers */
+.leaflet-container {
+  background: var(--muted);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  /* Contain Leaflet's internal high z-index panes/controls (up to ~1000) in
+     their own stacking context so portalled overlays (dropdowns, selects,
+     dialogs, tooltips) always render above the map. */
+  z-index: 0;
+  isolation: isolate;
+}
+
+/* Themed, branded Leaflet popups */
+.leaflet-popup-content-wrapper {
+  border-radius: 0.5rem;
+  border: 1px solid var(--border);
+  background: var(--popover);
+  color: var(--popover-foreground);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.18);
+}
+.leaflet-popup-tip {
+  background: var(--popover);
+  border: 1px solid var(--border);
+}
+.leaflet-popup-content {
+  margin: 0.6rem 0.75rem;
+}
+.leaflet-container a.leaflet-popup-close-button {
+  color: var(--muted-foreground);
+}
+.leaflet-bar a {
+  background: var(--card);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+.leaflet-bar a:hover {
+  background: var(--accent);
+}
+
+/* Guided-flow target highlight */
+.flow-highlight {
+  outline: 3px solid var(--ring);
+  outline-offset: 3px;
+  border-radius: 0.6rem;
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--ring) 22%, transparent);
+  transition:
+    outline-color 0.2s ease,
+    box-shadow 0.2s ease;
+  animation: flow-pulse 1.4s ease-in-out infinite;
+}
+@keyframes flow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--ring) 22%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--ring) 10%, transparent);
+  }
+}
+
+/* Thin, themed scrollbars */
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+}
