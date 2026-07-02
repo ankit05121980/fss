@@ -180,7 +180,7 @@ export const ARCH_LAYERS: ArchLayer[] = [
   { label: "Ingestion & connectors", detail: "API · file · DB extract, scheduled" },
   { label: "Unified data model", detail: "9 conformed entities, shared keys" },
   { label: "Analytics & rules", detail: "KPIs, exception & correlation logic" },
-  { label: "Intelligence", detail: "AskMe · Do You Know · Predictive" },
+  { label: "Intelligence", detail: "Ask Me · Do You Know · Predictive" },
   { label: "Presentation", detail: "Dashboards, alerts, guided flow" },
 ];
 
