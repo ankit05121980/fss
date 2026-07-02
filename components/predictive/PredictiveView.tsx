@@ -163,7 +163,7 @@ export function PredictiveView() {
           pageSize={10}
           onRowClick={(row) => router.push(`/traceability?type=shipment&q=${row.shipmentId}`)}
           initialSorting={[{ id: "delayProbability", desc: true }]}
-          exportFilename="lumenore-risk-leaderboard"
+          exportFilename="veritrace-risk-leaderboard"
         />
       </ChartCard>
 

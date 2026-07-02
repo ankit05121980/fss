@@ -79,7 +79,7 @@ export default function SettingsPage() {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base">Appearance</CardTitle>
-            <CardDescription>Choose how Lumenore looks.</CardDescription>
+            <CardDescription>Choose how Veritrace looks.</CardDescription>
           </CardHeader>
           <CardContent className="flex gap-2">
             {[
@@ -113,7 +113,7 @@ export default function SettingsPage() {
           <CardContent className="space-y-2 text-sm">
             <Row label="Environment" value="Demo — representative data" />
             <Row label="Data as of" value={`${fmtDateTime(DEMO_NOW.toISOString())} UTC`} />
-            <Row label="Product" value="Lumenore · Netlink's Flagship AI Product" />
+            <Row label="Product" value="Veritrace · Netlink's Flagship AI Product" />
             <Row label="Integration mode" value="Mock data-access layer (swappable)" />
             <div className="pt-2">
               <Button

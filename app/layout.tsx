@@ -16,11 +16,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Lumenore — FSS DSCSA Readiness",
-    template: "%s · Lumenore",
+    default: "Veritrace — FSS DSCSA Readiness",
+    template: "%s · Veritrace",
   },
   description:
-    "Pharmaceutical supply chain visibility & DSCSA readiness intelligence for Frontier Scientific Solutions, powered by Lumenore.",
+    "Pharmaceutical supply chain visibility & DSCSA readiness intelligence for Frontier Scientific Solutions, powered by Veritrace.",
 };
 
 export default function RootLayout({

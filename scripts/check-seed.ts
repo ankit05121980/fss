@@ -1,5 +1,5 @@
 /**
- * Deterministic-reconciliation check for the Lumenore dataset.
+ * Deterministic-reconciliation check for the Veritrace dataset.
  *
  * Run with: npm run seed:check
  *

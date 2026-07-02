@@ -121,7 +121,7 @@ export function Sidebar({
           collapsed && "justify-center px-2",
         )}
       >
-        <Link href="/executive" onClick={onNavigate} aria-label="Lumenore home">
+        <Link href="/executive" onClick={onNavigate} aria-label="Veritrace home">
           <Logo collapsed={collapsed} />
         </Link>
       </div>
@@ -171,7 +171,7 @@ export function Sidebar({
           <div className="bg-secondary rounded-lg px-3 py-2.5">
             <p className="text-secondary-foreground text-xs font-semibold">FSS POC</p>
             <p className="text-muted-foreground text-[11px]">
-              Powered by Lumenore intelligence layer
+              Powered by Veritrace intelligence layer
             </p>
           </div>
         </div>

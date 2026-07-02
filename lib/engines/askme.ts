@@ -1,5 +1,5 @@
 // =============================================================================
-// Lumenore — AskMe deterministic intent engine
+// Veritrace — AskMe deterministic intent engine
 //
 // Pattern-matches a natural-language question to one of nine reference intents,
 // runs a query over the unified dataset (via the access layer) and returns a

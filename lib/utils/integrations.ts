@@ -142,7 +142,7 @@ export const CONNECTORS: Connector[] = [
       { label: "Host", placeholder: "registry-db.fss.internal", required: true },
       { label: "Port", placeholder: "5432", required: true },
       { label: "Database", placeholder: "partner_registry", required: true },
-      { label: "Username", placeholder: "lumenore_ro", required: true },
+      { label: "Username", placeholder: "veritrace_ro", required: true },
       { label: "Password", placeholder: "••••••••", type: "password", required: true },
       { label: "Schema", placeholder: "public" },
     ],
