@@ -17,7 +17,7 @@ export interface FlowStep {
 export const FLOW_STEPS: FlowStep[] = [
   {
     id: "welcome",
-    title: "Welcome to Lumenore",
+    title: "Welcome to Veritrace",
     instruction:
       "This guided flow walks the complete business journey for Frontier Scientific — from onboarding data, to live operations, DSCSA traceability, a cold-chain recall, a counterfeit investigation, exception handling and AI.",
     whatToDo: "Press Next to begin. You can stop or resume at any time.",
@@ -29,7 +29,7 @@ export const FLOW_STEPS: FlowStep[] = [
     id: "connect-data",
     title: "1 · Connect your data",
     instruction:
-      "Lumenore sits above your systems of record. Upload an Excel/CSV file or connect NetSuite, Datex, EUPRY, carriers and the trading-partner registry — everything is conformed into one model.",
+      "Veritrace sits above your systems of record. Upload an Excel/CSV file or connect NetSuite, Datex, EUPRY, carriers and the trading-partner registry — everything is conformed into one model.",
     whatToDo: "Try the upload area, or 'Configure' a connector to see what's required.",
     href: "/integrations",
     target: "[data-flow='integration-upload']",
@@ -189,11 +189,11 @@ export const FLOW_STEPS: FlowStep[] = [
     id: "wrap",
     title: "You've seen the full journey",
     instruction:
-      "From data onboarding → readiness → operations → traceability → cold-chain recall → counterfeit investigation → exceptions → AI. That's end-to-end DSCSA readiness with Lumenore.",
+      "From data onboarding → readiness → operations → traceability → cold-chain recall → counterfeit investigation → exceptions → AI. That's end-to-end DSCSA readiness with Veritrace.",
     whatToDo: "Re-run any step from the Getting Started hub, or explore freely.",
     href: "/getting-started",
     target: "[data-flow='getting-started']",
   },
 ];
 
-export const FLOW_STORAGE_KEY = "lumenore-flow";
+export const FLOW_STORAGE_KEY = "veritrace-flow";

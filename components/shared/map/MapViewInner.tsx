@@ -86,7 +86,7 @@ function markerIcon(marker: MapMarker): L.DivIcon {
     ? "box-shadow:0 0 0 4px rgba(46,117,182,0.30),0 1px 4px rgba(0,0,0,0.45);"
     : "box-shadow:0 1px 4px rgba(0,0,0,0.45);";
   return L.divIcon({
-    className: "lumenore-marker",
+    className: "veritrace-marker",
     html: `<div style="display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:9999px;background:${color};border:2px solid #fff;${ring}font-size:15px;line-height:1">${emoji}</div>`,
     iconSize: [30, 30],
     iconAnchor: [15, 15],
@@ -96,7 +96,7 @@ function markerIcon(marker: MapMarker): L.DivIcon {
 
 function modeBadge(mode: Mode): L.DivIcon {
   return L.divIcon({
-    className: "lumenore-mode",
+    className: "veritrace-mode",
     html: `<div title="${MODE_META[mode].label}" style="display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:9999px;background:#fff;border:1px solid rgba(0,0,0,0.15);box-shadow:0 1px 3px rgba(0,0,0,0.35);font-size:13px;line-height:1">${MODE_EMOJI[mode]}</div>`,
     iconSize: [24, 24],
     iconAnchor: [12, 12],

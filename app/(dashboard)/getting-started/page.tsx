@@ -17,7 +17,7 @@ export default function GettingStartedPage() {
     <>
       <PageHeader
         title="Getting Started"
-        subtitle="A guided, end-to-end flow through the entire Lumenore platform."
+        subtitle="A guided, end-to-end flow through the entire Veritrace platform."
       >
         <Button onClick={() => start(0)} className="gap-1.5">
           <Play className="size-4" /> Start guided flow

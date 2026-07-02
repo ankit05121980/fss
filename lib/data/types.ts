@@ -1,5 +1,5 @@
 // =============================================================================
-// Lumenore — Unified Supply Chain Data Model
+// Veritrace — Unified Supply Chain Data Model
 // All TypeScript interfaces for the FSS DSCSA Readiness POC.
 // These types are the single contract shared by the seed, data-access layer,
 // engines, API route handlers, React Query hooks, and UI components.

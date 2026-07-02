@@ -1,5 +1,5 @@
 // =============================================================================
-// Lumenore — Predictive risk engine (POC heuristic models)
+// Veritrace — Predictive risk engine (POC heuristic models)
 //
 // Transparent, deterministic weighted-feature scoring. Every score is derived
 // from the seeded dataset and exposes its top drivers for explainability. No

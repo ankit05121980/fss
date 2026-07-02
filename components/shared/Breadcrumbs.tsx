@@ -30,7 +30,7 @@ export function Breadcrumbs() {
       <ol className="flex items-center gap-1.5">
         <li>
           <Link href="/executive" className="flex items-center gap-1 hover:text-foreground">
-            <Home className="size-3.5" /> Lumenore
+            <Home className="size-3.5" /> Veritrace
           </Link>
         </li>
         {group && (
