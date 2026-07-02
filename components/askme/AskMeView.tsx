@@ -149,7 +149,7 @@ function WelcomePanel({ onPick, useLlm }: { onPick: (q: string) => void; useLlm:
         <Sparkles className="size-6" />
       </span>
       <h2 className="text-foreground text-lg font-bold">
-        AskMe — Conversational Compliance Intelligence
+        Ask Me — Conversational Compliance Intelligence
       </h2>
       <p className="text-muted-foreground mt-1 max-w-lg text-sm">
         Ask natural-language questions about your supply chain. Answers are computed from the

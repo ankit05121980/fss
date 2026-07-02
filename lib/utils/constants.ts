@@ -115,7 +115,7 @@ export const NAV_GROUPS: NavGroup[] = [
     label: "Intelligence",
     items: [
       {
-        title: "AskMe",
+        title: "Ask Me",
         href: "/askme",
         icon: Bot,
         description: "Conversational compliance assistant",

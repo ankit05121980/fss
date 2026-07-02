@@ -25,7 +25,7 @@ vaccine batch (`VX‑2026‑001`) travelling from a German manufacturer to a US 
 | **Recall Readiness** | Live recall tracker (impacted / located / outstanding), distribution map and impacted-partner view. | Faster, more complete recalls; quantifies exposure and outstanding units in real time. |
 | **Trading Partner Compliance** | Authorization & licence status, partner risk matrix, and a **Suspect Product Investigation** panel surfacing counterfeit / diversion / unauthorized signals. | Reduces counterfeit and diversion risk; flags expired-licence and unauthorized partners before transactions. |
 | **Exception Management (Alerts)** | A global alerts drawer of open risk events — missing scans, delays, deviations, excursions, unauthorized transfers — each linked to the source. | Nothing slips through the cracks; exceptions are triaged and resolved proactively. |
-| **AskMe (Conversational AI)** | Natural-language questions answered from the unified model with structured tables/charts and drill-through — covering the nine reference DSCSA questions. | Non-technical users self-serve compliance answers; reduces reliance on analysts. |
+| **Ask Me (Conversational AI)** | Natural-language questions answered from the unified model with structured tables/charts and drill-through — covering the nine reference DSCSA questions. | Non-technical users self-serve compliance answers; reduces reliance on analysts. |
 | **Do You Know (Automated Insights)** | Auto-generated, data-derived insights (e.g. excursions after customs delays, the carrier driving custody gaps, missing-scan hotspots). | Surfaces systemic issues and improvement levers without manual analysis. |
 | **Predictive Analytics** | Explainable heuristic risk scoring per active shipment (delay, excursion, recall exposure, traceability failure) plus partner risk, with proactive alerts. | Shifts from reactive to **predictive** — intervene before delays, excursions or recalls occur. |
 | **Data Integration** | Upload Excel/CSV or connect source systems (NetSuite, Datex, EUPRY, transportation providers, trading-partner registry, HubSpot) with per-connector configuration. | Fast onboarding; proves the production integration pattern without ripping out systems of record. |
@@ -54,5 +54,5 @@ vaccine batch (`VX‑2026‑001`) travelling from a German manufacturer to a US 
 ## Suggested demo flow (≈15–17 min)
 
 Executive → Control Tower → Traceability (trace `SN0008743`) → Cold Chain (root cause) → Recall →
-Trading Partners → AskMe → Do You Know → Predictive — or simply press **Guided flow** to walk the
+Trading Partners → Ask Me → Do You Know → Predictive — or simply press **Guided flow** to walk the
 full 19-step business journey automatically.

@@ -12,11 +12,36 @@ import {
   YAxis,
 } from "recharts";
 
-import { ChartTooltipContent } from "@/components/charts/ChartTooltip";
 import type { TemperatureReading } from "@/lib/data/types";
 import { fmtDateTime } from "@/lib/utils/date";
 
 const axisStyle = { fontSize: 11, fill: "var(--muted-foreground)" };
+
+interface TempPoint {
+  label: string;
+  temperature: number;
+  excursion: number | null;
+}
+
+function TempTooltip({ active, payload }: { active?: boolean; payload?: { payload: TempPoint }[] }) {
+  if (!active || !payload || payload.length === 0) return null;
+  const d = payload[0].payload;
+  return (
+    <div className="rounded-md border border-border bg-popover px-3 py-2 text-xs shadow-md">
+      <p className="mb-1 font-semibold text-popover-foreground">{d.label}</p>
+      <div className="flex items-center gap-2">
+        <span className="size-2 rounded-full" style={{ background: "var(--brand-blue)" }} />
+        <span className="text-muted-foreground">Temperature</span>
+        <span className="text-popover-foreground ml-auto font-medium tabular-nums">
+          {d.temperature.toFixed(1)}°C
+        </span>
+      </div>
+      {d.excursion !== null && (
+        <p className="text-danger mt-1 font-medium">Excursion — outside safe range</p>
+      )}
+    </div>
+  );
+}
 
 export interface TempChartProps {
   readings: TemperatureReading[];
@@ -61,7 +86,7 @@ export function TempChart({ readings, tempMinC, tempMaxC, height = 300 }: TempCh
           strokeOpacity={0.35}
           strokeDasharray="4 4"
         />
-        <Tooltip content={<ChartTooltipContent unit="°C" />} labelFormatter={() => ""} />
+        <Tooltip content={<TempTooltip />} cursor={{ stroke: "var(--border-strong)", strokeWidth: 1 }} />
         <Line
           type="monotone"
           dataKey="temperature"
