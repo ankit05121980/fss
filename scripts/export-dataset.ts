@@ -10,6 +10,8 @@
  */
 import { mkdirSync, writeFileSync } from "node:fs";
 
+import * as XLSX from "xlsx";
+
 import { getDataset } from "@/lib/data/seed";
 import { ASKME_EXAMPLES, answerQuestion } from "@/lib/engines/askme";
 import { DEMO_NOW } from "@/lib/utils/date";
@@ -102,9 +104,65 @@ for (const [name, rows] of Object.entries(tables)) {
   writeFileSync(`${CSV_OUT}/${name}.csv`, toCsv(rows));
 }
 
+// ---- 4. Real multi-sheet Excel workbook ----
+function flattenForSheet(input: readonly unknown[]): Record<string, string | number | boolean>[] {
+  return (input as Record<string, unknown>[]).map((row) => {
+    const out: Record<string, string | number | boolean> = {};
+    for (const [k, v] of Object.entries(row)) {
+      if (v === null || v === undefined) out[k] = "";
+      else if (Array.isArray(v)) out[k] = v.join(" | ");
+      else if (typeof v === "object") out[k] = JSON.stringify(v);
+      else out[k] = v as string | number | boolean;
+    }
+    return out;
+  });
+}
+
+const wb = XLSX.utils.book_new();
+
+// Overview sheet
+const overviewRows = Object.entries(datasetFile.counts).map(([entity, count]) => ({
+  Entity: entity,
+  Records: count,
+}));
+XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(overviewRows), "Overview");
+
+// One sheet per entity (sheet names <= 31 chars)
+const SHEET_NAMES: Record<string, string> = {
+  products: "Products",
+  batches: "Batches",
+  serialized_units: "Serialized Units",
+  locations: "Locations",
+  carriers: "Carriers",
+  shipments: "Shipments",
+  shipment_events: "Shipment Events",
+  custody_events: "Custody Events",
+  ownership_events: "Ownership Events",
+  temperature_readings: "Temperature Readings",
+  trading_partners: "Trading Partners",
+  risk_events: "Risk Events",
+  recalls: "Recalls",
+};
+for (const [name, rows] of Object.entries(tables)) {
+  const ws = XLSX.utils.json_to_sheet(flattenForSheet(rows));
+  XLSX.utils.book_append_sheet(wb, ws, SHEET_NAMES[name] ?? name.slice(0, 31));
+}
+
+// Ask Me sheet
+const askmeRows = askmeFile.questions.map((q, i) => ({
+  "#": i + 1,
+  Question: q.question,
+  Intent: q.intent,
+  Answer: q.summary,
+}));
+XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(askmeRows), "Ask Me");
+
+XLSX.writeFile(wb, `${OUT}/veritrace-dataset.xlsx`);
+
 console.log(
   `Exported dataset (${Object.values(datasetFile.counts).reduce((a, b) => a + b, 0)} records) ->\n` +
     `  ${OUT}/veritrace-dataset.json\n` +
     `  ${OUT}/veritrace-askme-reference.json\n` +
+    `  ${OUT}/veritrace-dataset.xlsx (${Object.keys(tables).length + 2} sheets)\n` +
     `  ${CSV_OUT}/*.csv (${Object.keys(tables).length} tables)`,
 );
