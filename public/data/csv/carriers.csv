@@ -1,0 +1,9 @@
+id,name,modes,onTimePct,performanceScore
+car-a,Atlantic Ocean Lines,OCEAN,100,66
+car-b,Carrier B Freight,OCEAN|TRUCK,50,64
+car-c,SkyCargo Air,AIR,33,48
+car-d,TransContinental Trucking,TRUCK,50,52
+car-e,Pacific Maritime,OCEAN,75,80
+car-f,EuroRail Logistics,RAIL|TRUCK,100,62
+car-g,ABC Logistics,TRUCK|AIR,100,81
+car-h,Global Air Freight,AIR,75,63

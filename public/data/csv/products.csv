@@ -1,0 +1,11 @@
+id,name,drugCategory,storageRequirement,tempMinC,tempMaxC,gtin
+prod-covid,COVID-19 mRNA Vaccine,Vaccine (Biologic),Cold chain 2–8°C,2,8,03000000000017
+prod-insulin,Insulin Glargine Injection,Biologic (Antidiabetic),Cold chain 2–8°C,2,8,03000000000024
+prod-mab,Monoclonal Antibody Infusion,Biologic (Oncology),Cold chain 2–8°C,2,8,03000000000031
+prod-flu,Influenza Vaccine,Vaccine,Cold chain 2–8°C,2,8,03000000000048
+prod-amox,Amoxicillin Capsules,Antibiotic,Ambient 15–25°C,15,25,03000000000055
+prod-atorva,Atorvastatin Tablets,Cardiovascular,Ambient 15–30°C,15,30,03000000000062
+prod-metformin,Metformin Tablets,Antidiabetic,Ambient 15–30°C,15,30,03000000000079
+prod-ibuprofen,Ibuprofen Tablets,Analgesic,Ambient 15–25°C,15,25,03000000000086
+prod-omeprazole,Omeprazole Capsules,Gastrointestinal,Ambient 15–25°C,15,25,03000000000093
+prod-salbutamol,Salbutamol Inhaler,Respiratory,Controlled room 15–25°C,15,25,03000000000109

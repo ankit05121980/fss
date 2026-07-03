@@ -1,0 +1,19 @@
+id,name,type,lat,lng,country
+loc-mfg-de,BioNTech Manufacturing — Marburg,MANUFACTURER,50.8093,8.7708,Germany
+loc-whse-de,Frankfurt Manufacturing Warehouse,WAREHOUSE,50.1109,8.6821,Germany
+loc-port-hamburg,Port of Hamburg,PORT,53.5413,9.9326,Germany
+loc-port-newark,Port of Newark,PORT,40.6895,-74.1745,United States
+loc-customs-newark,Customs Clearance — Newark,CUSTOMS,40.709,-74.1726,United States
+loc-3pl-nj,3PL Warehouse — Edison NJ,3PL,40.5187,-74.4121,United States
+loc-dc-nj,Regional Distribution Center — Secaucus NJ,DC,40.7895,-74.0565,United States
+loc-hospital-ny,Mount Sinai Hospital Network — New York,HOSPITAL,40.7903,-73.9527,United States
+loc-port-shanghai,Port of Shanghai,PORT,31.2304,121.4737,China
+loc-port-rotterdam,Port of Rotterdam,PORT,51.9496,4.1453,Netherlands
+loc-port-la,Port of Los Angeles,PORT,33.7395,-118.2597,United States
+loc-air-fra,Frankfurt Air Cargo Hub,PORT,50.0379,8.5622,Germany
+loc-air-jfk,JFK Air Cargo Hub,PORT,40.6413,-73.7781,United States
+loc-air-lhr,Heathrow Air Cargo Hub,PORT,51.47,-0.4543,United Kingdom
+loc-dc-chicago,Midwest Distribution Center — Chicago,DC,41.8781,-87.6298,United States
+loc-3pl-dallas,3PL Warehouse — Dallas TX,3PL,32.7767,-96.797,United States
+loc-hospital-atl,Emory Hospital Network — Atlanta,HOSPITAL,33.749,-84.388,United States
+loc-mfg-in,Generic Pharma Manufacturing — Mumbai,MANUFACTURER,19.076,72.8777,India

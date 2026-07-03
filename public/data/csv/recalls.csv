@@ -1,0 +1,3 @@
+id,batchNumber,reason,openedAt,impactedPackages,locatedPackages,outstandingPackages,status,impactedPartnerIds
+RCL-2026-001,VX-2026-001,Potential potency loss following a confirmed cold-chain temperature excursion (10°C vs 2–8°C limit) during US customs clearance.,2026-06-23T12:00:00.000Z,24500,24120,380,OPEN,tp-3pl-edison|tp-dist-northeast|tp-disp-nyhealth|tp-carrierb
+RCL-2025-014,BN-2026-005,Mislabeled secondary packaging — minor; all units recovered.,2026-03-22T12:00:00.000Z,5200,5200,0,CLOSED,tp-dist-valuemeds
