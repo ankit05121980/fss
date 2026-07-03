@@ -385,6 +385,13 @@ export interface AskMeResult {
 // Do You Know insights
 // -----------------------------------------------------------------------------
 
+export type InsightCategory =
+  | "Cold Chain"
+  | "Logistics"
+  | "Compliance"
+  | "Operations"
+  | "Partners";
+
 export interface Insight {
   id: string;
   title: string;
@@ -393,6 +400,11 @@ export interface Insight {
   value: string;
   chartKind: "bar" | "line";
   chart: NamedValue[];
+  /** Presentation metadata (derived, not underlying data). */
+  category: InsightCategory;
+  severity: Severity;
+  recommendedAction: string;
+  href: string;
 }
 
 // -----------------------------------------------------------------------------
