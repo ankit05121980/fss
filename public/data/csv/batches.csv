@@ -1,0 +1,21 @@
+batchNumber,productId,manufacturingDate,expirationDate,manufacturerName,manufacturerCountry,unitCount
+VX-2026-001,prod-covid,2026-04-26T12:00:00.000Z,2027-04-26T12:00:00.000Z,BioNTech Marburg GmbH,Germany,24500
+BN-2026-002,prod-atorva,2026-02-09T12:00:00.000Z,2026-11-01T12:00:00.000Z,Generic Pharma Mumbai Ltd,India,34000
+BN-2026-003,prod-flu,2026-05-03T12:00:00.000Z,2027-06-08T12:00:00.000Z,BioNTech Marburg GmbH,Germany,36000
+BN-2026-004,prod-atorva,2026-04-10T12:00:00.000Z,2027-11-12T12:00:00.000Z,Atlantic Pharmaceuticals,United States,20000
+BN-2026-005,prod-salbutamol,2026-02-01T12:00:00.000Z,2027-03-21T12:00:00.000Z,BioNTech Marburg GmbH,Germany,5000
+BN-2026-006,prod-mab,2026-01-17T12:00:00.000Z,2027-01-21T12:00:00.000Z,Generic Pharma Mumbai Ltd,India,14000
+BN-2026-007,prod-insulin,2026-04-26T12:00:00.000Z,2027-04-12T12:00:00.000Z,Atlantic Pharmaceuticals,United States,7000
+BN-2026-008,prod-flu,2026-05-08T12:00:00.000Z,2027-08-04T12:00:00.000Z,BioNTech Marburg GmbH,Germany,8000
+BN-2026-009,prod-atorva,2026-06-01T12:00:00.000Z,2027-12-11T12:00:00.000Z,EuroPharma Manufacturing,Netherlands,7000
+BN-2026-010,prod-metformin,2026-03-04T12:00:00.000Z,2027-05-28T12:00:00.000Z,BioNTech Marburg GmbH,Germany,36000
+BN-2026-011,prod-metformin,2026-03-09T12:00:00.000Z,2026-12-28T12:00:00.000Z,Generic Pharma Mumbai Ltd,India,24000
+BN-2026-012,prod-insulin,2026-05-19T12:00:00.000Z,2027-04-15T12:00:00.000Z,BioNTech Marburg GmbH,Germany,4000
+BN-2026-013,prod-omeprazole,2026-05-31T12:00:00.000Z,2028-01-27T12:00:00.000Z,EuroPharma Manufacturing,Netherlands,39000
+BN-2026-014,prod-amox,2026-03-05T12:00:00.000Z,2028-01-09T12:00:00.000Z,Pacific Biologics Co,China,19000
+BN-2026-015,prod-salbutamol,2026-05-07T12:00:00.000Z,2027-05-25T12:00:00.000Z,BioNTech Marburg GmbH,Germany,15000
+BN-2026-016,prod-omeprazole,2026-04-04T12:00:00.000Z,2026-12-31T12:00:00.000Z,Generic Pharma Mumbai Ltd,India,5000
+BN-2026-017,prod-mab,2026-04-26T12:00:00.000Z,2027-07-18T12:00:00.000Z,EuroPharma Manufacturing,Netherlands,32000
+BN-2026-018,prod-ibuprofen,2026-03-20T12:00:00.000Z,2028-02-27T12:00:00.000Z,EuroPharma Manufacturing,Netherlands,27000
+BN-2026-019,prod-salbutamol,2026-04-27T12:00:00.000Z,2027-12-08T12:00:00.000Z,Pacific Biologics Co,China,30000
+BN-2026-020,prod-amox,2026-02-10T12:00:00.000Z,2027-10-07T12:00:00.000Z,BioNTech Marburg GmbH,Germany,35000

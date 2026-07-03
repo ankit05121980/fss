@@ -1,0 +1,753 @@
+{
+  "product": "Veritrace — Ask Me",
+  "note": "The nine reference questions and the deterministic answers computed from the dataset above. These reconcile with the dashboards.",
+  "dataAsOf": "2026-06-25T12:00:00.000Z",
+  "questions": [
+    {
+      "question": "Show all shipments currently at risk of DSCSA non-compliance",
+      "intent": "AT_RISK_SHIPMENTS",
+      "summary": "24 shipments are currently at risk of DSCSA non-compliance — flagged for custody gaps, temperature excursions or open risk events.",
+      "table": {
+        "columns": [
+          {
+            "key": "Shipment",
+            "label": "Shipment"
+          },
+          {
+            "key": "Product",
+            "label": "Product"
+          },
+          {
+            "key": "Mode",
+            "label": "Mode"
+          },
+          {
+            "key": "Status",
+            "label": "Status"
+          },
+          {
+            "key": "Reason",
+            "label": "Risk reason"
+          }
+        ],
+        "rows": [
+          {
+            "Shipment": "SHP-001",
+            "Product": "COVID-19 mRNA Vaccine",
+            "Mode": "OCEAN",
+            "Status": "IN TRANSIT",
+            "Reason": "Temperature excursion"
+          },
+          {
+            "Shipment": "SHP-002",
+            "Product": "Monoclonal Antibody Infusion",
+            "Mode": "OCEAN",
+            "Status": "DELAYED",
+            "Reason": "Open risk event"
+          },
+          {
+            "Shipment": "SHP-003",
+            "Product": "Salbutamol Inhaler",
+            "Mode": "AIR",
+            "Status": "DELIVERED",
+            "Reason": "Custody gap"
+          },
+          {
+            "Shipment": "SHP-005",
+            "Product": "Salbutamol Inhaler",
+            "Mode": "AIR",
+            "Status": "CUSTOMS HOLD",
+            "Reason": "Open risk event"
+          },
+          {
+            "Shipment": "SHP-007",
+            "Product": "Influenza Vaccine",
+            "Mode": "OCEAN",
+            "Status": "CUSTOMS HOLD",
+            "Reason": "Open risk event"
+          },
+          {
+            "Shipment": "SHP-012",
+            "Product": "Salbutamol Inhaler",
+            "Mode": "TRUCK",
+            "Status": "IN TRANSIT",
+            "Reason": "Custody gap"
+          },
+          {
+            "Shipment": "SHP-013",
+            "Product": "Metformin Tablets",
+            "Mode": "AIR",
+            "Status": "DELAYED",
+            "Reason": "Open risk event"
+          },
+          {
+            "Shipment": "SHP-014",
+            "Product": "Monoclonal Antibody Infusion",
+            "Mode": "OCEAN",
+            "Status": "DELIVERED",
+            "Reason": "Temperature excursion"
+          },
+          {
+            "Shipment": "SHP-020",
+            "Product": "Influenza Vaccine",
+            "Mode": "TRUCK",
+            "Status": "DELAYED",
+            "Reason": "Open risk event"
+          },
+          {
+            "Shipment": "SHP-021",
+            "Product": "Insulin Glargine Injection",
+            "Mode": "AIR",
+            "Status": "DELAYED",
+            "Reason": "Temperature excursion"
+          },
+          {
+            "Shipment": "SHP-022",
+            "Product": "Monoclonal Antibody Infusion",
+            "Mode": "OCEAN",
+            "Status": "IN TRANSIT",
+            "Reason": "Temperature excursion"
+          },
+          {
+            "Shipment": "SHP-026",
+            "Product": "Influenza Vaccine",
+            "Mode": "OCEAN",
+            "Status": "DELIVERED",
+            "Reason": "Custody gap"
+          },
+          {
+            "Shipment": "SHP-027",
+            "Product": "Metformin Tablets",
+            "Mode": "AIR",
+            "Status": "DELAYED",
+            "Reason": "Open risk event"
+          },
+          {
+            "Shipment": "SHP-028",
+            "Product": "Atorvastatin Tablets",
+            "Mode": "TRUCK",
+            "Status": "IN TRANSIT",
+            "Reason": "Custody gap"
+          },
+          {
+            "Shipment": "SHP-029",
+            "Product": "Salbutamol Inhaler",
+            "Mode": "AIR",
+            "Status": "DELAYED",
+            "Reason": "Open risk event"
+          },
+          {
+            "Shipment": "SHP-032",
+            "Product": "Amoxicillin Capsules",
+            "Mode": "TRUCK",
+            "Status": "DELAYED",
+            "Reason": "Custody gap"
+          },
+          {
+            "Shipment": "SHP-033",
+            "Product": "Metformin Tablets",
+            "Mode": "AIR",
+            "Status": "DELAYED",
+            "Reason": "Open risk event"
+          },
+          {
+            "Shipment": "SHP-035",
+            "Product": "Insulin Glargine Injection",
+            "Mode": "RAIL",
+            "Status": "DELAYED",
+            "Reason": "Open risk event"
+          },
+          {
+            "Shipment": "SHP-038",
+            "Product": "Insulin Glargine Injection",
+            "Mode": "OCEAN",
+            "Status": "DELAYED",
+            "Reason": "Open risk event"
+          },
+          {
+            "Shipment": "SHP-041",
+            "Product": "Salbutamol Inhaler",
+            "Mode": "AIR",
+            "Status": "DELAYED",
+            "Reason": "Open risk event"
+          },
+          {
+            "Shipment": "SHP-044",
+            "Product": "Atorvastatin Tablets",
+            "Mode": "TRUCK",
+            "Status": "DELAYED",
+            "Reason": "Open risk event"
+          },
+          {
+            "Shipment": "SHP-045",
+            "Product": "Metformin Tablets",
+            "Mode": "AIR",
+            "Status": "DELAYED",
+            "Reason": "Open risk event"
+          },
+          {
+            "Shipment": "SHP-047",
+            "Product": "Insulin Glargine Injection",
+            "Mode": "AIR",
+            "Status": "DELIVERED",
+            "Reason": "Temperature excursion"
+          },
+          {
+            "Shipment": "SHP-050",
+            "Product": "Metformin Tablets",
+            "Mode": "TRUCK",
+            "Status": "IN TRANSIT",
+            "Reason": "Custody gap"
+          }
+        ]
+      },
+      "chart": null,
+      "links": [
+        {
+          "label": "Open Control Tower",
+          "href": "/control-tower"
+        }
+      ]
+    },
+    {
+      "question": "Trace serial number SN0008743",
+      "intent": "TRACE_SERIAL",
+      "summary": "Serial SN0008743 is verified — COVID-19 mRNA Vaccine from batch VX-2026-001, currently at 3PL Warehouse — Edison NJ. Traceability is complete with 0 custody gap(s).",
+      "table": {
+        "columns": [
+          {
+            "key": "field",
+            "label": "Field"
+          },
+          {
+            "key": "value",
+            "label": "Value"
+          }
+        ],
+        "rows": [
+          {
+            "field": "Product",
+            "value": "COVID-19 mRNA Vaccine"
+          },
+          {
+            "field": "Batch",
+            "value": "VX-2026-001"
+          },
+          {
+            "field": "Shipment",
+            "value": "SHP-001"
+          },
+          {
+            "field": "Current location",
+            "value": "3PL Warehouse — Edison NJ"
+          },
+          {
+            "field": "Custody events",
+            "value": 6
+          },
+          {
+            "field": "Ownership transfers",
+            "value": 2
+          },
+          {
+            "field": "Temperature readings",
+            "value": 97
+          },
+          {
+            "field": "Verified",
+            "value": "Yes"
+          }
+        ]
+      },
+      "chart": null,
+      "links": [
+        {
+          "label": "Open full trace for SN0008743",
+          "href": "/traceability?type=serial&q=SN0008743"
+        }
+      ]
+    },
+    {
+      "question": "Which shipments experienced temperature excursions last week?",
+      "intent": "EXCURSIONS_LAST_WEEK",
+      "summary": "2 shipment(s) experienced temperature excursions in the last 7 days, including the hero consignment SHP-001.",
+      "table": {
+        "columns": [
+          {
+            "key": "Shipment",
+            "label": "Shipment"
+          },
+          {
+            "key": "Product",
+            "label": "Product"
+          },
+          {
+            "key": "Mode",
+            "label": "Mode"
+          },
+          {
+            "key": "Status",
+            "label": "Status"
+          }
+        ],
+        "rows": [
+          {
+            "Shipment": "SHP-001",
+            "Product": "COVID-19 mRNA Vaccine",
+            "Mode": "OCEAN",
+            "Status": "IN TRANSIT"
+          },
+          {
+            "Shipment": "SHP-021",
+            "Product": "Insulin Glargine Injection",
+            "Mode": "AIR",
+            "Status": "DELAYED"
+          }
+        ]
+      },
+      "chart": null,
+      "links": [
+        {
+          "label": "Open Cold Chain Intelligence",
+          "href": "/cold-chain"
+        }
+      ]
+    },
+    {
+      "question": "Which carriers contributed to the highest shipment delays?",
+      "intent": "TOP_DELAY_CARRIERS",
+      "summary": "EuroRail Logistics contributed the most delay (147h across 8 shipments). The top contributors are shown below.",
+      "table": {
+        "columns": [
+          {
+            "key": "Carrier",
+            "label": "Carrier"
+          },
+          {
+            "key": "DelayHours",
+            "label": "Total delay (h)"
+          },
+          {
+            "key": "Delayed",
+            "label": "Delayed shipments"
+          },
+          {
+            "key": "OnTime",
+            "label": "On-time %"
+          }
+        ],
+        "rows": [
+          {
+            "Carrier": "EuroRail Logistics",
+            "DelayHours": 147,
+            "Delayed": 4,
+            "OnTime": "100%"
+          },
+          {
+            "Carrier": "Global Air Freight",
+            "DelayHours": 132,
+            "Delayed": 5,
+            "OnTime": "75%"
+          },
+          {
+            "Carrier": "SkyCargo Air",
+            "DelayHours": 102,
+            "Delayed": 3,
+            "OnTime": "33%"
+          },
+          {
+            "Carrier": "Carrier B Freight",
+            "DelayHours": 83,
+            "Delayed": 2,
+            "OnTime": "50%"
+          },
+          {
+            "Carrier": "TransContinental Trucking",
+            "DelayHours": 73,
+            "Delayed": 1,
+            "OnTime": "50%"
+          },
+          {
+            "Carrier": "Atlantic Ocean Lines",
+            "DelayHours": 54,
+            "Delayed": 2,
+            "OnTime": "100%"
+          }
+        ]
+      },
+      "chart": {
+        "kind": "bar",
+        "unit": "h",
+        "data": [
+          {
+            "name": "EuroRail",
+            "value": 147
+          },
+          {
+            "name": "Global",
+            "value": 132
+          },
+          {
+            "name": "SkyCargo",
+            "value": 102
+          },
+          {
+            "name": "Carrier",
+            "value": 83
+          },
+          {
+            "name": "TransContinental",
+            "value": 73
+          },
+          {
+            "name": "Atlantic",
+            "value": 54
+          }
+        ]
+      },
+      "links": [
+        {
+          "label": "Open Control Tower",
+          "href": "/control-tower"
+        }
+      ]
+    },
+    {
+      "question": "Show custody gaps across all shipments",
+      "intent": "CUSTODY_GAPS",
+      "summary": "9 custody gap(s) detected across all shipments, with Carrier B Freight accounting for the largest share (6).",
+      "table": {
+        "columns": [
+          {
+            "key": "Shipment",
+            "label": "Shipment"
+          },
+          {
+            "key": "Carrier",
+            "label": "Carrier"
+          },
+          {
+            "key": "Reason",
+            "label": "Gap reason"
+          },
+          {
+            "key": "When",
+            "label": "When"
+          }
+        ],
+        "rows": [
+          {
+            "Shipment": "SHP-003",
+            "Carrier": "Global Air Freight",
+            "Reason": "Missing custody documentation (ValueMeds Distribution → Mount Sinai Health Pharmacy)",
+            "When": "21 Jun 2026"
+          },
+          {
+            "Shipment": "SHP-012",
+            "Carrier": "EuroRail Logistics",
+            "Reason": "Missing custody documentation (TransContinental Trucking → Newark Customs Brokers LLC)",
+            "When": "23 Jun 2026"
+          },
+          {
+            "Shipment": "SHP-012",
+            "Carrier": "EuroRail Logistics",
+            "Reason": "Unauthorized transfer to GreyMarket Distributors Inc",
+            "When": "24 Jun 2026"
+          },
+          {
+            "Shipment": "SHP-026",
+            "Carrier": "Carrier B Freight",
+            "Reason": "Missing custody documentation (Carrier B Freight → Newark Customs Brokers LLC)",
+            "When": "18 Jun 2026"
+          },
+          {
+            "Shipment": "SHP-028",
+            "Carrier": "Carrier B Freight",
+            "Reason": "Missing custody documentation (BioNTech Marburg GmbH → GlobalLink Forwarders)",
+            "When": "16 Jun 2026"
+          },
+          {
+            "Shipment": "SHP-028",
+            "Carrier": "Carrier B Freight",
+            "Reason": "Missing custody documentation (Carrier B Freight → Newark Customs Brokers LLC)",
+            "When": "19 Jun 2026"
+          },
+          {
+            "Shipment": "SHP-028",
+            "Carrier": "Carrier B Freight",
+            "Reason": "Missing custody documentation (Newark Customs Brokers LLC → Edison 3PL Solutions)",
+            "When": "21 Jun 2026"
+          },
+          {
+            "Shipment": "SHP-032",
+            "Carrier": "Carrier B Freight",
+            "Reason": "Missing custody documentation (BioNTech Marburg GmbH → Hanseatic Freight Forwarding)",
+            "When": "19 Jun 2026"
+          },
+          {
+            "Shipment": "SHP-050",
+            "Carrier": "Carrier B Freight",
+            "Reason": "Missing custody documentation (Hanseatic Freight Forwarding → Carrier B Freight)",
+            "When": "21 Jun 2026"
+          }
+        ]
+      },
+      "chart": null,
+      "links": [
+        {
+          "label": "Open Trading Partners",
+          "href": "/partners"
+        }
+      ]
+    },
+    {
+      "question": "List products impacted by Recall RCL-2026-001",
+      "intent": "RECALL_IMPACT",
+      "summary": "Recall RCL-2026-001 affects batch VX-2026-001 (COVID-19 mRNA Vaccine): 24,500 packages impacted, 24,120 located, 380 outstanding. 4 trading partners are involved.",
+      "table": {
+        "columns": [
+          {
+            "key": "Partner",
+            "label": "Impacted partner"
+          },
+          {
+            "key": "Role",
+            "label": "Role"
+          },
+          {
+            "key": "License",
+            "label": "Licence"
+          }
+        ],
+        "rows": [
+          {
+            "Partner": "Edison 3PL Solutions",
+            "Role": "3PL",
+            "License": "VALID"
+          },
+          {
+            "Partner": "Northeast Pharma Distribution",
+            "Role": "DISTRIBUTOR",
+            "License": "VALID"
+          },
+          {
+            "Partner": "Mount Sinai Health Pharmacy",
+            "Role": "DISPENSER",
+            "License": "VALID"
+          },
+          {
+            "Partner": "Carrier B Freight",
+            "Role": "CARRIER",
+            "License": "VALID"
+          }
+        ]
+      },
+      "chart": null,
+      "links": [
+        {
+          "label": "Open Recall Readiness",
+          "href": "/recall"
+        }
+      ]
+    },
+    {
+      "question": "Which ocean shipments are likely to arrive late?",
+      "intent": "LATE_OCEAN_SHIPMENTS",
+      "summary": "6 ocean shipment(s) have a 50%+ predicted probability of arriving late (POC heuristic model).",
+      "table": {
+        "columns": [
+          {
+            "key": "Shipment",
+            "label": "Shipment"
+          },
+          {
+            "key": "DelayProb",
+            "label": "Delay probability"
+          },
+          {
+            "key": "Driver",
+            "label": "Top driver"
+          }
+        ],
+        "rows": [
+          {
+            "Shipment": "SHP-001",
+            "DelayProb": "99%",
+            "Driver": "Batch under active recall"
+          },
+          {
+            "Shipment": "SHP-002",
+            "DelayProb": "99%",
+            "Driver": "In delayed status"
+          },
+          {
+            "Shipment": "SHP-007",
+            "DelayProb": "99%",
+            "Driver": "Expected customs delay"
+          },
+          {
+            "Shipment": "SHP-038",
+            "DelayProb": "99%",
+            "Driver": "In delayed status"
+          },
+          {
+            "Shipment": "SHP-022",
+            "DelayProb": "79%",
+            "Driver": "Active excursion detected"
+          },
+          {
+            "Shipment": "SHP-030",
+            "DelayProb": "67%",
+            "Driver": "Ocean freight transit"
+          }
+        ]
+      },
+      "chart": {
+        "kind": "bar",
+        "unit": "%",
+        "data": [
+          {
+            "name": "SHP-001",
+            "value": 99
+          },
+          {
+            "name": "SHP-002",
+            "value": 99
+          },
+          {
+            "name": "SHP-007",
+            "value": 99
+          },
+          {
+            "name": "SHP-038",
+            "value": 99
+          },
+          {
+            "name": "SHP-022",
+            "value": 79
+          },
+          {
+            "name": "SHP-030",
+            "value": 67
+          }
+        ]
+      },
+      "links": [
+        {
+          "label": "Open Predictive Analytics",
+          "href": "/predictive"
+        }
+      ]
+    },
+    {
+      "question": "Show interactions involving unauthorized trading partners",
+      "intent": "UNAUTHORIZED_PARTNER_INTERACTIONS",
+      "summary": "1 custody interaction(s) involve unauthorized trading partners — a potential counterfeit/diversion signal requiring investigation.",
+      "table": {
+        "columns": [
+          {
+            "key": "Shipment",
+            "label": "Shipment"
+          },
+          {
+            "key": "From",
+            "label": "From"
+          },
+          {
+            "key": "To",
+            "label": "To"
+          },
+          {
+            "key": "When",
+            "label": "When"
+          }
+        ],
+        "rows": [
+          {
+            "Shipment": "SHP-012",
+            "From": "TransContinental Trucking",
+            "To": "GreyMarket Distributors Inc",
+            "When": "24 Jun 2026"
+          }
+        ]
+      },
+      "chart": null,
+      "links": [
+        {
+          "label": "Open Trading Partners",
+          "href": "/partners"
+        }
+      ]
+    },
+    {
+      "question": "What products currently have incomplete traceability chains?",
+      "intent": "INCOMPLETE_TRACEABILITY",
+      "summary": "6 shipment(s) across 5 product(s) currently have incomplete traceability chains (missing custody handoffs).",
+      "table": {
+        "columns": [
+          {
+            "key": "Product",
+            "label": "Product"
+          },
+          {
+            "key": "Shipments",
+            "label": "Affected shipments"
+          }
+        ],
+        "rows": [
+          {
+            "Product": "Salbutamol Inhaler",
+            "Shipments": 2
+          },
+          {
+            "Product": "Influenza Vaccine",
+            "Shipments": 1
+          },
+          {
+            "Product": "Atorvastatin Tablets",
+            "Shipments": 1
+          },
+          {
+            "Product": "Amoxicillin Capsules",
+            "Shipments": 1
+          },
+          {
+            "Product": "Metformin Tablets",
+            "Shipments": 1
+          }
+        ]
+      },
+      "chart": {
+        "kind": "bar",
+        "data": [
+          {
+            "name": "Salbutamol",
+            "value": 2
+          },
+          {
+            "name": "Influenza",
+            "value": 1
+          },
+          {
+            "name": "Atorvastatin",
+            "value": 1
+          },
+          {
+            "name": "Amoxicillin",
+            "value": 1
+          },
+          {
+            "name": "Metformin",
+            "value": 1
+          }
+        ]
+      },
+      "links": [
+        {
+          "label": "Open Traceability",
+          "href": "/traceability"
+        }
+      ]
+    }
+  ]
+}

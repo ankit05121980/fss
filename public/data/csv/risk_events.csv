@@ -1,0 +1,33 @@
+id,shipmentId,type,severity,timestamp,description,resolved
+rsk-0001,SHP-001,DELAY,HIGH,2026-06-22T12:00:00.000Z,18h customs clearance delay at Port of Newark on SHP-001,false
+rsk-0002,SHP-001,TEMPERATURE_EXCURSION,HIGH,2026-06-22T16:00:00.000Z,Temperature reached 10°C (limit 8°C) following the customs delay on SHP-001,false
+rsk-0003,SHP-002,DELAY,LOW,2026-06-23T21:00:00.000Z,Transit delay of 23h on SHP-002,true
+rsk-0004,SHP-002,ROUTE_DEVIATION,LOW,2026-06-24T20:00:00.000Z,Unexpected route deviation detected on SHP-002,false
+rsk-0005,SHP-005,DELAY,MEDIUM,2026-06-24T22:00:00.000Z,Customs hold of 17h on SHP-005,false
+rsk-0006,SHP-007,DELAY,LOW,2026-06-23T21:00:00.000Z,Customs hold of 13h on SHP-007,false
+rsk-0007,SHP-008,DELAY,HIGH,2026-06-23T23:00:00.000Z,Transit delay of 60h on SHP-008,true
+rsk-0008,SHP-012,UNAUTHORIZED_TRANSFER,HIGH,2026-06-24T00:00:00.000Z,Custody transferred to unauthorized trading partner (GreyMarket Distributors Inc) on SHP-012,false
+rsk-0009,SHP-012,ROUTE_DEVIATION,MEDIUM,2026-06-24T09:00:00.000Z,Unexpected route deviation detected on SHP-012,false
+rsk-0010,SHP-013,DELAY,HIGH,2026-06-24T17:00:00.000Z,Transit delay of 53h on SHP-013,false
+rsk-0011,SHP-014,TEMPERATURE_EXCURSION,MEDIUM,2026-06-23T03:00:00.000Z,Cold-chain temperature excursion detected on SHP-014,false
+rsk-0012,SHP-014,ROUTE_DEVIATION,MEDIUM,2026-06-22T02:00:00.000Z,Unexpected route deviation detected on SHP-014,true
+rsk-0013,SHP-016,DELAY,MEDIUM,2026-06-24T06:00:00.000Z,Customs hold of 34h on SHP-016,true
+rsk-0014,SHP-020,DELAY,LOW,2026-06-23T14:00:00.000Z,Transit delay of 59h on SHP-020,false
+rsk-0015,SHP-021,DELAY,LOW,2026-06-22T21:00:00.000Z,Transit delay of 38h on SHP-021,false
+rsk-0016,SHP-021,TEMPERATURE_EXCURSION,LOW,2026-06-24T12:00:00.000Z,Cold-chain temperature excursion detected on SHP-021,true
+rsk-0017,SHP-022,TEMPERATURE_EXCURSION,HIGH,2026-06-21T21:00:00.000Z,Cold-chain temperature excursion detected on SHP-022,false
+rsk-0018,SHP-022,ROUTE_DEVIATION,LOW,2026-06-22T08:00:00.000Z,Unexpected route deviation detected on SHP-022,true
+rsk-0019,SHP-025,DELAY,MEDIUM,2026-06-23T12:00:00.000Z,Customs hold of 10h on SHP-025,true
+rsk-0020,SHP-026,MISSING_SCAN,LOW,2026-06-23T15:00:00.000Z,Custody documentation gap / missing scan on SHP-026 (carrier Carrier B Freight),false
+rsk-0021,SHP-027,DELAY,LOW,2026-06-22T16:00:00.000Z,Transit delay of 24h on SHP-027,false
+rsk-0022,SHP-028,MISSING_SCAN,LOW,2026-06-25T04:00:00.000Z,Custody documentation gap / missing scan on SHP-028 (carrier Carrier B Freight),false
+rsk-0023,SHP-029,DELAY,HIGH,2026-06-24T16:00:00.000Z,Transit delay of 42h on SHP-029,false
+rsk-0024,SHP-032,DELAY,LOW,2026-06-24T18:00:00.000Z,Transit delay of 29h on SHP-032,false
+rsk-0025,SHP-032,MISSING_SCAN,MEDIUM,2026-06-21T22:00:00.000Z,Custody documentation gap / missing scan on SHP-032 (carrier Carrier B Freight),false
+rsk-0026,SHP-033,DELAY,LOW,2026-06-24T15:00:00.000Z,Transit delay of 26h on SHP-033,false
+rsk-0027,SHP-035,DELAY,LOW,2026-06-23T20:00:00.000Z,Transit delay of 27h on SHP-035,false
+rsk-0028,SHP-038,DELAY,HIGH,2026-06-22T19:00:00.000Z,Transit delay of 51h on SHP-038,false
+rsk-0029,SHP-041,DELAY,LOW,2026-06-22T13:00:00.000Z,Transit delay of 14h on SHP-041,false
+rsk-0030,SHP-044,DELAY,LOW,2026-06-24T14:00:00.000Z,Transit delay of 26h on SHP-044,false
+rsk-0031,SHP-045,DELAY,LOW,2026-06-23T05:00:00.000Z,Transit delay of 11h on SHP-045,false
+rsk-0032,SHP-047,TEMPERATURE_EXCURSION,LOW,2026-06-23T18:00:00.000Z,Cold-chain temperature excursion detected on SHP-047,false
