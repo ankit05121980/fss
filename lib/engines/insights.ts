@@ -9,7 +9,70 @@
 import { getCarrierPerformance, getProduct } from "@/lib/data/access";
 import { getDataset } from "@/lib/data/seed";
 import { round } from "@/lib/utils/prng";
-import type { Insight, LocationNode, NamedValue } from "@/lib/data/types";
+import type {
+  Insight,
+  InsightCategory,
+  LocationNode,
+  NamedValue,
+  Severity,
+} from "@/lib/data/types";
+
+type BaseInsight = Omit<Insight, "category" | "severity" | "recommendedAction" | "href">;
+
+/** Presentation metadata per insight (derived — does not alter underlying data). */
+const INSIGHT_META: Record<
+  string,
+  { category: InsightCategory; severity: Severity; recommendedAction: string; href: string }
+> = {
+  "excursions-after-customs": {
+    category: "Cold Chain",
+    severity: "MEDIUM",
+    recommendedAction: "Prioritise expedited customs clearance and pre-clearance for cold-chain lanes.",
+    href: "/cold-chain",
+  },
+  "port-delay-share": {
+    category: "Logistics",
+    severity: "HIGH",
+    recommendedAction: "Add schedule buffer or alternate routing around the dominant chokepoint.",
+    href: "/control-tower",
+  },
+  "carrier-custody-gaps": {
+    category: "Compliance",
+    severity: "HIGH",
+    recommendedAction: "Audit the carrier's scan/handoff process and enforce EPCIS custody capture.",
+    href: "/partners",
+  },
+  "crossdock-exceptions": {
+    category: "Operations",
+    severity: "MEDIUM",
+    recommendedAction: "Reduce dwell time at the highest-exception cross-dock site.",
+    href: "/control-tower",
+  },
+  "dc-missing-scans": {
+    category: "Compliance",
+    severity: "MEDIUM",
+    recommendedAction: "Run scanner/serialization audits at the top distribution centre.",
+    href: "/traceability",
+  },
+  "biologic-excursions": {
+    category: "Cold Chain",
+    severity: "HIGH",
+    recommendedAction: "Increase sensor density and alerting on biologic / vaccine lanes.",
+    href: "/cold-chain",
+  },
+  "otd-by-mode": {
+    category: "Logistics",
+    severity: "MEDIUM",
+    recommendedAction: "Rebalance the mode mix toward higher on-time options where feasible.",
+    href: "/control-tower",
+  },
+  "partner-compliance": {
+    category: "Partners",
+    severity: "MEDIUM",
+    recommendedAction: "Remediate expired-licence and unauthorized partners before further transactions.",
+    href: "/partners",
+  },
+};
 
 function shortName(name: string): string {
   return name.split("—")[0].split("(")[0].trim();
@@ -25,7 +88,7 @@ function locShort(loc: LocationNode | undefined, id: string): string {
 
 export function getInsights(): Insight[] {
   const ds = getDataset();
-  const insights: Insight[] = [];
+  const insights: BaseInsight[] = [];
   const locById = new Map(ds.locations.map((l) => [l.id, l]));
   const eventsByShipment = new Map<string, typeof ds.shipmentEvents>();
   for (const e of ds.shipmentEvents) {
@@ -241,5 +304,14 @@ export function getInsights(): Insight[] {
     });
   }
 
-  return insights;
+  // Attach presentation metadata (category, impact, action, drill-through).
+  return insights.map((i) => ({
+    ...i,
+    ...(INSIGHT_META[i.id] ?? {
+      category: "Operations" as InsightCategory,
+      severity: "LOW" as Severity,
+      recommendedAction: "Review this insight in the relevant dashboard.",
+      href: "/insights",
+    }),
+  }));
 }
