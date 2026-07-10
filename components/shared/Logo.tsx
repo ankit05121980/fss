@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils/cn";
+import { LumenoreLogo } from "@/components/shared/LumenoreLogo";
 
 /**
  * NetTrace brand logo — a "verified trace" mark (a route/check with an
@@ -41,8 +42,8 @@ export function Logo({ collapsed = false, className }: { collapsed?: boolean; cl
             NET
             <span className="text-[#5A6B82] dark:text-slate-300">TRACE</span>
           </span>
-          <span className="mt-1 text-[10px] font-medium tracking-tight text-muted-foreground">
-            Netlink&rsquo;s Flagship AI Product
+          <span className="mt-1 flex items-center gap-1 text-[9px] font-medium text-muted-foreground">
+            powered by <LumenoreLogo className="text-[9px]" />
           </span>
         </div>
       )}
