@@ -122,7 +122,7 @@ export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
-                document.cookie = "nettrace_auth=; path=/; max-age=0";
+                localStorage.removeItem("nettrace_auth");
                 window.location.assign("/login");
               }}
             >

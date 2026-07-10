@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ROLE_STORAGE_KEY } from "@/lib/utils/roles";
+import { AUTH_STORAGE_KEY } from "@/lib/utils/auth";
 
 // netlink.com sign-in IDs mapped to workspace roles.
 const LOGIN_IDS: { email: string; role: string; label: string }[] = [
@@ -31,11 +32,10 @@ export default function LoginPage() {
     const email = (document.getElementById("email") as HTMLInputElement | null)?.value ?? "";
     try {
       localStorage.setItem(ROLE_STORAGE_KEY, roleForEmail(email));
+      localStorage.setItem(AUTH_STORAGE_KEY, "1");
     } catch {
       /* ignore */
     }
-    // Set the gate cookie and enter the app.
-    document.cookie = `nettrace_auth=1; path=/; max-age=${60 * 60 * 8}; samesite=lax`;
     window.location.assign("/executive");
   }
 
