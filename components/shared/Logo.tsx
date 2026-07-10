@@ -35,17 +35,17 @@ export function BrandMark({ className }: { className?: string }) {
 export function Logo({ collapsed = false, className }: { collapsed?: boolean; className?: string }) {
   return (
     <div className={cn("flex items-center gap-2.5", className)}>
-      <BrandMark className="size-8 shrink-0" />
+      <BrandMark className="size-9 shrink-0" />
       {!collapsed && (
         <div className="flex flex-col leading-none">
-          <span className="text-lg font-bold tracking-[0.16em] text-[#1F3864] dark:text-white">
+          <span className="text-xl font-bold tracking-[0.16em] text-[#1F3864] dark:text-white">
             NET
             <span className="text-[#5A6B82] dark:text-slate-300">TRACE</span>
           </span>
-          <span className="mt-1 flex items-center gap-1 text-[9px] font-medium text-muted-foreground">
+          <span className="mt-1.5 flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground">
             powered by
-            <span className="inline-flex rounded bg-white/90 px-1 py-0.5 dark:bg-white/90">
-              <PoweredByLumenore className="h-4 w-auto" />
+            <span className="inline-flex rounded bg-white/90 px-1.5 py-0.5 dark:bg-white/90">
+              <PoweredByLumenore className="h-5 w-auto" />
             </span>
           </span>
         </div>
