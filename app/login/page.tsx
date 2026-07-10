@@ -7,7 +7,20 @@ import { Logo } from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
+import { ROLE_STORAGE_KEY } from "@/lib/utils/roles";
+
+// netlink.com sign-in IDs mapped to workspace roles.
+const LOGIN_IDS: { email: string; role: string; label: string }[] = [
+  { email: "admin@netlink.com", role: "ADMIN", label: "Administrator" },
+  { email: "executive@netlink.com", role: "EXECUTIVE", label: "Executive" },
+  { email: "compliance@netlink.com", role: "COMPLIANCE", label: "Compliance Officer" },
+  { email: "operations@netlink.com", role: "OPERATIONS", label: "Operations Manager" },
+];
+
+function roleForEmail(email: string): string {
+  const match = LOGIN_IDS.find((l) => l.email.toLowerCase() === email.trim().toLowerCase());
+  return match?.role ?? "ADMIN";
+}
 
 export default function LoginPage() {
   const [loading, setLoading] = React.useState(false);
@@ -15,7 +28,13 @@ export default function LoginPage() {
   function signIn(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    // Demo auth — accept any credentials; set the gate cookie and enter the app.
+    const email = (document.getElementById("email") as HTMLInputElement | null)?.value ?? "";
+    try {
+      localStorage.setItem(ROLE_STORAGE_KEY, roleForEmail(email));
+    } catch {
+      /* ignore */
+    }
+    // Set the gate cookie and enter the app.
     document.cookie = `nettrace_auth=1; path=/; max-age=${60 * 60 * 8}; samesite=lax`;
     window.location.assign("/executive");
   }
@@ -57,9 +76,6 @@ export default function LoginPage() {
               ))}
             </ul>
           </div>
-          <Badge variant="warning" className="w-fit">
-            Demo — representative data
-          </Badge>
         </div>
 
         {/* Right: sign-in form */}
@@ -80,8 +96,8 @@ export default function LoginPage() {
                 <Input
                   id="email"
                   type="email"
-                  defaultValue="compliance@fss.example"
-                  placeholder="you@company.com"
+                  defaultValue="admin@netlink.com"
+                  placeholder="name@netlink.com"
                   className="pl-9"
                   autoComplete="username"
                 />
@@ -118,9 +134,29 @@ export default function LoginPage() {
               <KeyRound className="size-4" /> Continue with SSO
             </Button>
 
-            <p className="text-center text-xs text-muted-foreground">
-              Demo environment — any credentials will sign you in.
-            </p>
+            <div className="rounded-lg border border-border bg-muted/40 p-3">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                Sign-in IDs
+              </p>
+              <ul className="mt-1.5 space-y-1 text-xs">
+                {LOGIN_IDS.map((l) => (
+                  <li key={l.email} className="flex items-center justify-between gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const el = document.getElementById("email") as HTMLInputElement | null;
+                        if (el) el.value = l.email;
+                      }}
+                      className="font-medium text-brand-blue hover:underline"
+                    >
+                      {l.email}
+                    </button>
+                    <span className="text-muted-foreground">{l.label}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-1.5 text-[11px] text-muted-foreground">Password: any value.</p>
+            </div>
           </form>
         </div>
       </div>
