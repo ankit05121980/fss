@@ -1,8 +1,11 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils/cn";
+import { AUTH_STORAGE_KEY } from "@/lib/utils/auth";
+import { Logo } from "@/components/shared/Logo";
 import { Sidebar } from "@/components/shared/Sidebar";
 import { Topbar } from "@/components/shared/Topbar";
 import { Breadcrumbs } from "@/components/shared/Breadcrumbs";
@@ -10,8 +13,28 @@ import { GuidedFlowDock } from "@/components/shared/GuidedFlowDock";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
   const [collapsed, setCollapsed] = React.useState(false);
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  // Client-side auth gate (works in direct, proxied and iframe/preview contexts).
+  const [authed, setAuthed] = React.useState<boolean | null>(null);
+  React.useEffect(() => {
+    const ok = localStorage.getItem(AUTH_STORAGE_KEY) === "1";
+    if (!ok) router.replace("/login");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setAuthed(ok);
+  }, [router]);
+
+  if (authed !== true) {
+    return (
+      <div className="bg-background flex h-dvh flex-col items-center justify-center gap-3">
+        <Logo />
+        <p className="text-muted-foreground text-sm">
+          {authed === null ? "Loading your workspace…" : "Redirecting to sign in…"}
+        </p>
+      </div>
+    );
+  }
 
   // On small screens the toggle opens a drawer; on desktop it collapses.
   function toggleSidebar() {
