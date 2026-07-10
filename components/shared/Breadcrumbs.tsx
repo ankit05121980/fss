@@ -5,8 +5,7 @@ import { usePathname } from "next/navigation";
 import { ChevronRight, Home } from "lucide-react";
 
 import { NAV_GROUPS } from "@/lib/utils/constants";
-import { fmtDateTime } from "@/lib/utils/date";
-import { DEMO_NOW } from "@/lib/utils/date";
+import { DataAsOf } from "@/components/shared/DataAsOf";
 
 export function Breadcrumbs() {
   const pathname = usePathname();
@@ -30,7 +29,7 @@ export function Breadcrumbs() {
       <ol className="flex items-center gap-1.5">
         <li>
           <Link href="/executive" className="flex items-center gap-1 hover:text-foreground">
-            <Home className="size-3.5" /> Veritrace
+            <Home className="size-3.5" /> NetTrace
           </Link>
         </li>
         {group && (
@@ -46,9 +45,7 @@ export function Breadcrumbs() {
           </li>
         )}
       </ol>
-      <span className="hidden sm:inline" title="The demo dataset is a fixed point-in-time snapshot">
-        Data as of {fmtDateTime(DEMO_NOW.toISOString())} UTC
-      </span>
+      <DataAsOf className="hidden sm:inline" />
     </nav>
   );
 }

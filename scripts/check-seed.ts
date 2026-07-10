@@ -1,5 +1,5 @@
 /**
- * Deterministic-reconciliation check for the Veritrace dataset.
+ * Deterministic-reconciliation check for the NetTrace dataset.
  *
  * Run with: npm run seed:check
  *

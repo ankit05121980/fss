@@ -9,7 +9,7 @@ export default function IntegrationsPage() {
     <>
       <PageHeader
         title="Data Integration"
-        subtitle="Upload data files or connect FSS source systems. Veritrace conforms everything into one unified supply chain model."
+        subtitle="Upload data files or connect FSS source systems. NetTrace conforms everything into one unified supply chain model."
       >
         <Badge variant="muted">Read-only intelligence layer</Badge>
       </PageHeader>

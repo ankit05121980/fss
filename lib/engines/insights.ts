@@ -1,5 +1,5 @@
 // =============================================================================
-// Veritrace — "Do You Know" automated insight generator
+// NetTrace — "Do You Know" automated insight generator
 //
 // Each insight is COMPUTED from the seeded dataset (never hard-coded). The
 // dataset is shaped so credible patterns emerge naturally (excursions after

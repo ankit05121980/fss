@@ -76,4 +76,4 @@ export const ROLES: Record<RoleId, RoleDef> = {
 
 export const ROLE_LIST: RoleDef[] = Object.values(ROLES);
 export const DEFAULT_ROLE: RoleId = "ADMIN";
-export const ROLE_STORAGE_KEY = "veritrace-role";
+export const ROLE_STORAGE_KEY = "nettrace-role";

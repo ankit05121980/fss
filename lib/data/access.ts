@@ -1,5 +1,5 @@
 // =============================================================================
-// Veritrace — Data Access Layer
+// NetTrace — Data Access Layer
 //
 // THE single way the application reads data. API route handlers call these
 // functions exclusively; the UI calls the API. To connect real systems

@@ -21,7 +21,7 @@ import { useFlow } from "@/components/shared/FlowProvider";
 import { useRole } from "@/components/shared/RoleProvider";
 import { useToast } from "@/components/shared/Toast";
 import { ROLE_LIST } from "@/lib/utils/roles";
-import { fmtDateTime, DEMO_NOW } from "@/lib/utils/date";
+import { DataAsOf } from "@/components/shared/DataAsOf";
 
 export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
   const router = useRouter();
@@ -110,9 +110,7 @@ export function Topbar({ onToggleSidebar }: { onToggleSidebar: () => void }) {
                 Environment
               </p>
               <p className="text-foreground mt-0.5 text-xs">Demo — representative data</p>
-              <p className="text-muted-foreground text-[11px]">
-                Data as of {fmtDateTime(DEMO_NOW.toISOString())} UTC
-              </p>
+              <DataAsOf className="text-muted-foreground text-[11px]" />
             </div>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => router.push("/settings")}>
