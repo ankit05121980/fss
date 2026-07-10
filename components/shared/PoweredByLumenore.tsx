@@ -6,7 +6,7 @@ import { LumenoreLogo } from "@/components/shared/LumenoreLogo";
 
 // Candidate paths for the official Lumenore logo. Drop the file you provided at
 // one of these locations in `public/` and it will be used exactly as-is.
-const CANDIDATES = ["/lumenore-logo.svg", "/lumenore-logo.png"];
+const CANDIDATES = ["/lumenore-logo.png", "/lumenore-logo.svg"];
 
 /**
  * Renders the official Lumenore logo from `public/` exactly as-is (height
