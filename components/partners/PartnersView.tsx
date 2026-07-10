@@ -225,7 +225,7 @@ export function PartnersView() {
           searchPlaceholder="Filter partners…"
           pageSize={10}
           initialSorting={[{ id: "riskScore", desc: true }]}
-          exportFilename="veritrace-trading-partners"
+          exportFilename="nettrace-trading-partners"
         />
       </ChartCard>
     </div>

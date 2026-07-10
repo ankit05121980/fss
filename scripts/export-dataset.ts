@@ -5,7 +5,7 @@
  * Ask Me answer is derived from this same data.
  *
  * Run: npm run export:data
- * Output: public/data/veritrace-dataset.json, veritrace-askme-reference.json,
+ * Output: public/data/nettrace-dataset.json, nettrace-askme-reference.json,
  *         and per-entity CSVs under public/data/csv/.
  */
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -31,9 +31,9 @@ const ds = getDataset();
 
 // ---- 1. Full unified dataset (canonical JSON) ----
 const datasetFile = {
-  product: "Veritrace — Netlink's Flagship AI Product",
+  product: "NetTrace — Netlink's Flagship AI Product",
   description:
-    "Unified supply-chain dataset powering Veritrace and its Ask Me assistant. Deterministic snapshot; matches the application end-to-end.",
+    "Unified supply-chain dataset powering NetTrace and its Ask Me assistant. Deterministic snapshot; matches the application end-to-end.",
   dataAsOf: DEMO_NOW.toISOString(),
   counts: {
     products: ds.products.length,
@@ -52,11 +52,11 @@ const datasetFile = {
   },
   data: ds,
 };
-writeFileSync(`${OUT}/veritrace-dataset.json`, JSON.stringify(datasetFile, null, 2));
+writeFileSync(`${OUT}/nettrace-dataset.json`, JSON.stringify(datasetFile, null, 2));
 
 // ---- 2. Ask Me reference: the 9 questions + engine-computed answers ----
 const askmeFile = {
-  product: "Veritrace — Ask Me",
+  product: "NetTrace — Ask Me",
   note: "The nine reference questions and the deterministic answers computed from the dataset above. These reconcile with the dashboards.",
   dataAsOf: DEMO_NOW.toISOString(),
   questions: ASKME_EXAMPLES.map((ex) => {
@@ -71,7 +71,7 @@ const askmeFile = {
     };
   }),
 };
-writeFileSync(`${OUT}/veritrace-askme-reference.json`, JSON.stringify(askmeFile, null, 2));
+writeFileSync(`${OUT}/nettrace-askme-reference.json`, JSON.stringify(askmeFile, null, 2));
 
 // ---- 3. Per-entity CSVs (open in Excel) ----
 function toCsv(input: readonly unknown[]): string {
@@ -272,13 +272,13 @@ const askmeRows = askmeFile.questions.map((q, i) => ({
 }));
 XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(askmeRows), "Ask Me");
 
-XLSX.writeFile(wb, `${OUT}/veritrace-dataset.xlsx`);
+XLSX.writeFile(wb, `${OUT}/nettrace-dataset.xlsx`);
 
 console.log(
   `Exported dataset (${Object.values(datasetFile.counts).reduce((a, b) => a + b, 0)} records) ->\n` +
-    `  ${OUT}/veritrace-dataset.json\n` +
-    `  ${OUT}/veritrace-askme-reference.json\n` +
-    `  ${OUT}/veritrace-dataset.xlsx (${Object.keys(tables).length + 3} sheets)\n` +
+    `  ${OUT}/nettrace-dataset.json\n` +
+    `  ${OUT}/nettrace-askme-reference.json\n` +
+    `  ${OUT}/nettrace-dataset.xlsx (${Object.keys(tables).length + 3} sheets)\n` +
     `  ${OUT}/shipments_denormalized.csv (${denormShipments.length} rows, ${Object.keys(denormShipments[0] ?? {}).length} columns)\n` +
     `  ${CSV_OUT}/*.csv (${Object.keys(tables).length} tables)`,
 );

@@ -1,6 +1,6 @@
 {
-  "product": "Veritrace — Netlink's Flagship AI Product",
-  "description": "Unified supply-chain dataset powering Veritrace and its Ask Me assistant. Deterministic snapshot; matches the application end-to-end.",
+  "product": "NetTrace — Netlink's Flagship AI Product",
+  "description": "Unified supply-chain dataset powering NetTrace and its Ask Me assistant. Deterministic snapshot; matches the application end-to-end.",
   "dataAsOf": "2026-06-25T12:00:00.000Z",
   "counts": {
     "products": 10,

@@ -107,7 +107,7 @@ export function IntegrationsView() {
       {/* Upload */}
       <ChartCard
         title="Upload data file"
-        description="Bring data in directly from Excel or CSV — Veritrace maps it into the unified model."
+        description="Bring data in directly from Excel or CSV — NetTrace maps it into the unified model."
         dataFlow="integration-upload"
       >
         <input
@@ -266,7 +266,7 @@ export function IntegrationsView() {
       {/* Architecture flow */}
       <ChartCard
         title="How it fits together"
-        description="Veritrace conforms every source into one model — without replacing your systems of record."
+        description="NetTrace conforms every source into one model — without replacing your systems of record."
       >
         <div className="flex flex-col gap-2 overflow-x-auto md:flex-row md:items-stretch">
           {ARCH_LAYERS.map((layer, i) => {
@@ -358,7 +358,7 @@ function ConfigureDialog({
             </form>
 
             <div className="bg-muted/50 text-muted-foreground rounded-md px-3 py-2 text-[11px]">
-              Credentials are read-only and used solely to pull data into the unified model. Veritrace
+              Credentials are read-only and used solely to pull data into the unified model. NetTrace
               never writes back to your systems of record.
             </div>
 

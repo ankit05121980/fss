@@ -1,6 +1,6 @@
-# Veritrace — FSS Pharmaceutical Supply Chain Visibility & DSCSA Readiness (POC)
+# NetTrace — FSS Pharmaceutical Supply Chain Visibility & DSCSA Readiness (POC)
 
-A production-quality proof-of-concept that demonstrates how **Veritrace** gives Frontier
+A production-quality proof-of-concept that demonstrates how **NetTrace** gives Frontier
 Scientific Solutions (FSS) end-to-end pharmaceutical supply-chain visibility and **DSCSA
 readiness**. It delivers six analytics dashboards plus three intelligence experiences
 (AskMe, Do You Know, Predictive), all driven by a single deterministic, internally-reconciled

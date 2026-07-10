@@ -379,7 +379,7 @@ export function ControlTowerView() {
           pageSize={10}
           onRowClick={(row) => router.push(`/traceability?type=shipment&q=${row.id}`)}
           emptyTitle="No shipments match the filters"
-          exportFilename="veritrace-shipments"
+          exportFilename="nettrace-shipments"
         />
       </ChartCard>
     </div>

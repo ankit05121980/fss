@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils/cn";
 import { useRole } from "@/components/shared/RoleProvider";
 import { useToast } from "@/components/shared/Toast";
 import { ROLE_LIST } from "@/lib/utils/roles";
-import { fmtDateTime, DEMO_NOW } from "@/lib/utils/date";
+import { DataAsOf } from "@/components/shared/DataAsOf";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -79,7 +79,7 @@ export default function SettingsPage() {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base">Appearance</CardTitle>
-            <CardDescription>Choose how Veritrace looks.</CardDescription>
+            <CardDescription>Choose how NetTrace looks.</CardDescription>
           </CardHeader>
           <CardContent className="flex gap-2">
             {[
@@ -112,8 +112,11 @@ export default function SettingsPage() {
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             <Row label="Environment" value="Demo — representative data" />
-            <Row label="Data as of" value={`${fmtDateTime(DEMO_NOW.toISOString())} UTC`} />
-            <Row label="Product" value="Veritrace · Netlink's Flagship AI Product" />
+            <div className="flex items-center justify-between gap-4 border-b border-border py-1.5">
+              <span className="text-muted-foreground">Data as of</span>
+              <DataAsOf className="text-foreground font-medium" />
+            </div>
+            <Row label="Product" value="NetTrace · Netlink's Flagship AI Product" />
             <Row label="Integration mode" value="Mock data-access layer (swappable)" />
             <div className="pt-2">
               <Button

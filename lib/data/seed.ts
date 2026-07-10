@@ -1,5 +1,5 @@
 // =============================================================================
-// Veritrace — Deterministic dataset generator
+// NetTrace — Deterministic dataset generator
 //
 // The ENTIRE application is driven by the dataset produced here. It is generated
 // exactly once (memoized) using a single seeded PRNG so every run — and every

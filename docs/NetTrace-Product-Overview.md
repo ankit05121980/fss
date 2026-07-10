@@ -1,8 +1,8 @@
-# Veritrace — Product Overview
+# NetTrace — Product Overview
 
 **Netlink's Flagship AI Product** · Pharmaceutical Supply Chain Visibility & DSCSA Readiness
 
-Veritrace sits above existing systems of record (ERP, WMS, temperature monitoring, transportation
+NetTrace sits above existing systems of record (ERP, WMS, temperature monitoring, transportation
 and trading-partner data) as a read-only **intelligence layer**. It unifies fragmented data into one
 supply-chain model and exposes it through visibility dashboards, a conversational assistant,
 automated insights, and predictive risk — so compliance investigation, recall response and risk
@@ -37,7 +37,7 @@ vaccine batch (`VX‑2026‑001`) travelling from a German manufacturer to a US 
 
 - **Single source of truth** — nine conformed entities (product, batch, serialized unit, shipment,
   custody, ownership, temperature, trading partner, risk event) reconcile across every view.
-- **Read-only intelligence layer** — Veritrace never writes back to systems of record.
+- **Read-only intelligence layer** — NetTrace never writes back to systems of record.
 - **Swappable connectors** — the data-access layer is isolated, so moving from the POC dataset to
   live feeds is a contained, low-risk change.
 - **Explainable & consistent** — every KPI, insight and prediction is computed from the data and

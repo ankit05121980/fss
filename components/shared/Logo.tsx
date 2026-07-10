@@ -1,16 +1,16 @@
 import { cn } from "@/lib/utils/cn";
 
 /**
- * Veritrace brand logo — a "verified trace" mark (a route/check with an
- * end node) plus the VERITRACE wordmark and the "Netlink's Flagship AI Product"
+ * NetTrace brand logo — a "verified trace" mark (a route/check with an
+ * end node) plus the NETTRACE wordmark and the "Netlink's Flagship AI Product"
  * tagline. Theme-aware, with `mark` / full layouts via `collapsed`.
  */
 
 export function BrandMark({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 48 48" className={className} role="img" aria-label="Veritrace" fill="none">
+    <svg viewBox="0 0 48 48" className={className} role="img" aria-label="NetTrace" fill="none">
       <defs>
-        <linearGradient id="veritrace-mark" x1="0" y1="0" x2="1" y2="1">
+        <linearGradient id="nettrace-mark" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stopColor="#9FB8EA" />
           <stop offset="100%" stopColor="#58C3D4" />
         </linearGradient>
@@ -18,7 +18,7 @@ export function BrandMark({ className }: { className?: string }) {
       {/* traced route ending in a verified check */}
       <path
         d="M8 22 L20 34 L40 9"
-        stroke="url(#veritrace-mark)"
+        stroke="url(#nettrace-mark)"
         strokeWidth="6"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -38,7 +38,7 @@ export function Logo({ collapsed = false, className }: { collapsed?: boolean; cl
       {!collapsed && (
         <div className="flex flex-col leading-none">
           <span className="text-lg font-bold tracking-[0.16em] text-[#1F3864] dark:text-white">
-            VERI
+            NET
             <span className="text-[#5A6B82] dark:text-slate-300">TRACE</span>
           </span>
           <span className="mt-1 text-[10px] font-medium tracking-tight text-muted-foreground">
