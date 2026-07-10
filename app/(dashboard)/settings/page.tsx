@@ -122,7 +122,10 @@ export default function SettingsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => toast("Sign-out is disabled in the demo environment", "info")}
+                onClick={() => {
+                  document.cookie = "nettrace_auth=; path=/; max-age=0";
+                  window.location.assign("/login");
+                }}
               >
                 <LogOut className="size-4" /> Sign out
               </Button>
